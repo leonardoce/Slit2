@@ -126,8 +126,6 @@ var
   macroName:String;
   temporaryStream:TSlitStream;
 begin
-  writeln('Leggo ', FNomeFile);
-
   while (not Eof) do
   begin
     lineBuffer := NextLine();

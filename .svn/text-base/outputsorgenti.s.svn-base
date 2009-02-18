@@ -63,8 +63,6 @@ var
     begin
       if store.GetRecord(i).macroType = FileMacro then
       begin
-        writeln('Scrivo ', store.GetRecord(i).macroName);
-
         Assign(streamOutput, Trim(store.GetRecord(i).macroName));
         Rewrite(streamOutput);
         ScriviScrapEspanso(store.GetRecord(i).macroName);
