@@ -81,7 +81,6 @@ La documentazione viene elaborata attraverso un metodo dello stream in ingresso:
 stream.Driver := driverMagazzinoMacro;
 stream.Process();
 stream.ResetStream();
-writeln(store.MacroCount, ' macro processate');
 @}
 
 Dopo aver popolato il magazino delle macro vengono calcolati i riferimenti:
