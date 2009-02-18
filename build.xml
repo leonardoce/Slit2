@@ -1,0 +1,11 @@
+<project name="slit2" default="compile">
+  <target name="compile">
+    <exec executable="slit">
+      <arg value="slit.s"/>
+    </exec>
+    
+    <exec executable="fpc">
+      <arg value="slit.pas"/>
+    </exec>
+  </target>
+</project>
