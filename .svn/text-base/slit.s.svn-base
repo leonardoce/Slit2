@@ -46,6 +46,7 @@ begin
     @<slit preparazione dell'ambiente@>
     @<slit riempimento del magazzino delle macro@>
     @<slit calcola riferimenti@>
+    @<slit controlla macro non utilizzate@>
     @<slit generazione della documentazione@>
     @<slit generazione del codice sorgente@>
     @<slit pulizia@>
@@ -89,6 +90,35 @@ Dopo aver popolato il magazino delle macro vengono calcolati i riferimenti:
 @{
 store.CalcolaRiferimenti();
 @}
+
+Una volta calcolati i riferimenti è possibile controllare la presenza di macro
+mai utilizzate:
+
+@d slit controlla macro non utilizzate
+@{
+ControllaMacroNonUtilizzate();
+@}
+
+Il controllo viene fatto scorrendo tutto il magazzino della macro.
+
+@d slit ControllaMacroNonUtilizzate
+@{
+procedure ControllaMacroNonUtilizzate;
+var
+  tempMacro : TMacroRecord;
+  i : integer;
+begin
+  for i := 0 to store.MacroCount-1 do
+  begin
+    tempMacro := store.GetRecord( i );
+    if (tempMacro.macroUsersCount = 0) and (tempMacro.macroType <> FileMacro) then
+    begin
+      writeln(StdErr, 'La macro ', tempMacro.macroName, ' non è mai stata utilizzata.');
+    end;
+  end;
+end;
+@}
+
 
 Viene adesso avviata la generazione della documentazione:
 

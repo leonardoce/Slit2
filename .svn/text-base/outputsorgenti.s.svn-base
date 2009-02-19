@@ -53,7 +53,7 @@ begin
   if rec.macroName = '' then
   begin
     writeln(streamOutput, '<', nome, '>');
-    writeln(2, 'Attenzione: macro ', nome, ' sconosciuta');
+    writeln(StdErr, 'Attenzione: macro ', nome, ' sconosciuta');
   end
   else
   begin
@@ -103,6 +103,8 @@ var
   @<procedure ScriviScrapEspanso@>
   
   @<procedure ProcessaFiles@>  
+  
+  @<slit ControllaMacroNonUtilizzate@>
   
   @<slit procedura principale@>
 @}

@@ -13,14 +13,25 @@ begin
 end;
 @}
 
-Alla ricezione di una definizione di macro questa viene direttamente
-inserita nel magazzino:
+Alla ricezione di una definizione di macro viene controllato se esiste
+già una macro con questo nome, e nel caso viene dato uno warning, altrimenti
+questa viene direttamente inserita nel magazzino:
 
 @d TSlitStreamDriverMagazzino.ProcessaDefinizioneMacro
 @{
 procedure TSlitStreamDriverMagazzino.ProcessaDefinizioneMacro(nomeMacro:String; scrap:String); 
+var
+  tempMacro : TMacroRecord;
 begin
-  FMacroStore.StoreMacro(nomeMacro, scrap, ScrapMacro);
+  tempMacro := FMacroStore.GetMacro(nomeMacro);
+  if tempMacro.macroName <> '' then
+  begin
+    writeln(StdErr, 'Macro ', nomeMacro, ' definita più volte');
+  end
+  else
+  begin
+    FMacroStore.StoreMacro(nomeMacro, scrap, ScrapMacro);
+  end;
 end;
 @}
 
@@ -30,8 +41,18 @@ inserita nel magazzino:
 @d TSlitStreamDriverMagazzino.ProcessaDefinizioneFile
 @{
 procedure TSlitStreamDriverMagazzino.ProcessaDefinizioneFile(nomeMacro:String; scrap:String); 
+var
+  tempMacro : TMacroRecord;
 begin
-  FMacroStore.StoreMacro(nomeMacro , scrap, FileMacro);
+  tempMacro := FMacroStore.GetMacro(nomeMacro);
+  if tempMacro.macroName <> '' then
+  begin
+    writeln(StdErr, 'Macro ', nomeMacro, ' definita più volte');
+  end
+  else
+  begin
+    FMacroStore.StoreMacro(nomeMacro , scrap, FileMacro);
+  end;
 end;
 @}
 
