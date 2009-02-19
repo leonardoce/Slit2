@@ -53,7 +53,7 @@ begin
   if rec.macroName = '' then
   begin
     writeln(streamOutput, '<', nome, '>');
-    writeln('Attenzione: macro ', nome, ' sconosciuta');
+    writeln(2, 'Attenzione: macro ', nome, ' sconosciuta');
   end
   else
   begin

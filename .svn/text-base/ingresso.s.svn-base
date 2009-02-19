@@ -115,6 +115,9 @@ di macro e lo stesso output:
   FreeAndNil(temporaryStream);
 @}
 
+La direttiva ""@#"" ignora tutto quello che segue e può venire utilizzata
+come commento.
+
 Se la riga letta non e' una direttiva allora questa viene direttamente scritta sull'output.
 
 @d TSlitStream.Process
@@ -142,6 +145,10 @@ begin
     else if AnsiStartsStr('@i ', lineBuffer) then
     begin
       @<processa direttiva i@>
+    end
+    else if AnsiStartsStr('@# ', lineBuffer) then
+    begin
+      { no-op }
     end
     else
     begin
