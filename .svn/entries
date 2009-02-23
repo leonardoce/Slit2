@@ -1,14 +1,14 @@
 10
 
 dir
-32
+36
 file:///C:/SvnRepository/slit2
 file:///C:/SvnRepository
 
 
 
-2009-02-23T13:26:56.000000Z
-32
+2009-02-23T14:37:51.671875Z
+36
 lcecchi
 has-props
 
@@ -168,10 +168,10 @@ file
 
 
 
-2011-09-13T06:57:40.062500Z
-a71d8043c9e928e7bb62e4256f2be3ee
-2009-02-23T13:26:56.000000Z
-32
+2011-09-13T06:57:40.515625Z
+6db6ee06d3157b9c81c81fc4e732041f
+2009-02-23T14:37:51.671875Z
+36
 lcecchi
 
 
@@ -194,7 +194,7 @@ lcecchi
 
 
 
-6902
+6930
 
 drivermagazzino.s
 file
