@@ -109,11 +109,14 @@ di macro e lo stesso output:
 @d processa direttiva i
 @{
   macroName := Trim(MidStr(lineBuffer, 3, Length(lineBuffer)-2));
-  temporaryStream := TSlitStream.CreateForFile(macroName);
+  temporaryStream := TSlitStream.CreateForFile(
+    ExtractFilePath(FNomeFile) + macroName);
   temporaryStream.Driver := FDriver;
   temporaryStream.Process();
   FreeAndNil(temporaryStream);
 @}
+
+Il nome del file viene interpretato in modo relativo al file corrente.
 
 La direttiva ""@#"" ignora tutto quello che segue e può venire utilizzata
 come commento.

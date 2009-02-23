@@ -47,7 +47,7 @@ Il file creato ha l'estensione "".html"" aggiunta al nome del file di documentaz
 @{
   constructor TSlitOutputHtml.CreateForFile(fileName:String);
   begin
-    Assign(handle, fileName+'.html');
+    Assign(handle, ExtractFileName(fileName)+'.html');
     Rewrite(handle);
   end;
 @}
@@ -148,7 +148,7 @@ Al file di documentazione viene aggiunta l'estensione ".txt":
 @{
 constructor TSlitOutputTxt.CreateForFile(fileName:String);
 begin
-  Assign(handle, fileName+'.txt');
+  Assign(handle, ExtractFileName(fileName)+'.txt');
   Rewrite(handle);
 end;
 @}
@@ -257,7 +257,7 @@ che viene aggiunta alla documentazione e' "".lout"".
 @{
 constructor TSlitOutputLout.CreateForFileAndStore(fileName:String; store:TMacroStore);
 begin
-  Assign(handle, fileName+'.lout');
+  Assign(handle, ExtractFileName(fileName)+'.lout');
   Rewrite(handle);
   FStore := store;
 end;
