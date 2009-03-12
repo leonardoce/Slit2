@@ -1,12 +1,17 @@
+# :folding=explicit:mode=slitpascal:
+@Chapter
+@Title { Utilità per la gestione dei files html }
+@Begin @LP
+
 Slit produce output anche in formato HTML e il formato HTML prevede, per il testo
-in esso contenuto, una sintassi particolare.
+in esso contenuto, una sintassi particolare. @PP
 
-Il testo, in HTML, e' composto da una serie di carattere oppure di entita'. I
+Il testo, in HTML, è composto da una serie di carattere oppure di entità. I
 caratteri che devono essere trattati in modo articolare sono il maggiore, il minore,
-e la "e commerciale".
+e la "e commerciale". @PP
 
-Per questo motivo esiste una funzione il cui scopo e' di implementare
-questa politica:
+Per questo motivo esiste una funzione il cui scopo è di implementare
+questa politica: 
 
 @d text2html dichiarazione
 @{
@@ -80,3 +85,5 @@ end.
 @{
   @<unit htmlutils@>
 @}
+
+@End @Chapter

@@ -1,7 +1,10 @@
-% :mode=slitpascal:folding=explicit:
+# :mode=slitpascal:folding=explicit:
+@Chapter 
+@Title { Driver per il riempimento del magazzino delle macro }
+@Begin @LP
 
 Questo driver viene agganciato al parser di Slit per riempire un magazzino
-con le macro.
+con le macro. @PP
 
 Il driver viene creato collegandolo ad un magazzino di macro:
 
@@ -98,6 +101,6 @@ implementation
   @<TSlitStreamDriverMagazzino.ProcessaRigaDocumentazione@>
   
 end.
-
 @}
 
+@End @Chapter

@@ -1,40 +1,50 @@
-Slit
-Simple Literate Tool
+# :folding=explicit:mode=slitpascal:
+@SysInclude { tbl }
+@Include { book }
 
-% :folding=explicit:mode=slitpascal:
-%!target:html
-%!options: --toc
+@Book 
+  @Title { Slit - Simple Literate Tool }
+  @Author { Leonardo Cecchi }
+//
 
-%%TOC
+# Introduzione {{{
+@Introduction
+@Title { Introduzione }
+@Begin @PP
 
-== Introduzione ==
-
-Slit e' un programma che permette di scrivere codice e documentazione all'interno dello stesso
-file. Il rapporto fra il codice e la documentazione e' pero' ribaltato: se normalmente si
+Slit è un programma che permette di scrivere codice e documentazione all'interno dello stesso
+file. Il rapporto fra il codice e la documentazione è però ribaltato: se normalmente si
 scrive il codice e all'interno di questo si inserisce la documentazione usando Slit si
-scrive la documentazione e all'interno di questa il codice.
+scrive la documentazione e all'interno di questa il codice. @PP
 
-Inoltre a questo il codice puo' essere diviso in frammenti che si richiamano per comporre
-l'intero programma. Per avere maggiori informazioni su questa modalita' di lavoro
-si puo' consultare la pagina:
+Inoltre a questo il codice può essere diviso in frammenti che si richiamano per comporre
+l'intero programma. Per avere maggiori informazioni su questa modalità di lavoro
+si può consultare la pagina: @PP
 
-http://en.wikipedia.org/wiki/Literate_programming
+@F { @Verbatim {http://en.wikipedia.org/wiki/Literate_programming}}
 
-== Il comando Slit ==
+@End @Introduction
+# }}}
+
+# Il comando Slit {{{
+@Chapter
+@Title { Il comando Slit }
+@Begin @LP
 
 I programmi vengono normalmente scritti in file di testo che possono avere qualunque esensione.
-Per separare il codice dalla documentazione di utilizza il comando "slit":
+Per separare il codice dalla documentazione di utilizza il comando @F {slit}: @PP
 
-```
+@Display @F @Verbatim {
 slit <nomefile>
-```
+}
 
 Questo comando processa il file con il nome passato e ne interpreta le direttive. Dal file
-passato vengono quindi generati:
+passato vengono quindi generati: @PP
 
-+ i file della documentazione;
-+ i vari file che sono il codice sorgente.
-
+@BulletList
+@ListItem { i file della documentazione; }
+@ListItem { i vari file che sono il codice sorgente. }
+@EndList
 
 La procedura principale infatti recita:
 
@@ -58,9 +68,9 @@ begin
 end.
 @}
 
-Il file di ingresso e' rappresentato da un oggetto della classe ""TSlitStream""
-mentre il file di uscita della documentazione e' rappresentato da una classe
-della famiglia ""TSlitOutputTxt"".
+Il file di ingresso è rappresentato da un oggetto della classe @F TSlitStream
+mentre il file di uscita della documentazione è rappresentato da una classe
+della famiglia @F { TSlitOutputTxt }.
 
 Le macro vengono memorizzate all'interno di un "magazzino" dal quale vengono
 poi riprese per scrivere i files sorgenti.
@@ -119,7 +129,6 @@ begin
 end;
 @}
 
-
 Viene adesso avviata la generazione della documentazione:
 
 @d slit generazione della documentazione
@@ -148,30 +157,13 @@ Poi vengono deallocati gli oggetti creati:
   FreeAndNil(store);
 @}
 
-== Il formato dei files di ingresso ==
+@End @Chapter
+# }}}
 
 @i ingresso.s
-
-== Il magazzino delle macro ==
-
 @i magazzino.s
-
-== Driver per il riempimento del magazzino delle macro ==
-
 @i drivermagazzino.s
-
-== Driver per la generazione della documentazione ==
-
 @i drivergenerazionedoc.s
-
-== Backend di generazione della documentazione ==
-
 @i outputdocumentazione.s
-
-== Creazione dei files sorgenti ==
-
 @i outputsorgenti.s
-
-== Utilita' per la gestione dei files html ==
-
 @i utilita.s

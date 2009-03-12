@@ -1,7 +1,10 @@
 # :folding=explicit:mode=slitpascal: 
+@Chapter
+@Title { Backend di generazione della documentazione }
+@Begin @LP
 
 # {{{
-Slit e' pensato per avere piu' formati per la documentazione. Per questo
+Slit è pensato per avere più formati per la documentazione. Per questo
 l'oggetto che gestisce l'output della documentazione viene modellato
 nel seguente modo:
 
@@ -14,7 +17,7 @@ public
 end;
 @}
 
-Con il metodo ""ScriviScrap"" e' possibile scrivere sulla documentazione uno
+Con il metodo "ScriviScrap" è possibile scrivere sulla documentazione uno
 "scrap" di codice.
 
 @o slitoutput.pas
@@ -36,12 +39,17 @@ end.
 @}
 # }}}
 
-=== Output in formato HTML ===
-# {{{
+@BeginSections
+
+# Output in formato HTML {{{
+@Section
+@Title { Output in formato HTML }
+@Begin @PP
+
 L'output in formato HTML permette di creare un file HTML per la documentazione.
 I tag devono essere immessi manualmente (eccetto quegli che gestiscono gli scrap).
 
-Il file creato ha l'estensione "".html"" aggiunta al nome del file di documentazione:
+Il file creato ha l'estensione @F {.html} aggiunta al nome del file di documentazione:
 
 @d TSlitOutputHtml.CreateForFile
 @{
@@ -134,15 +142,18 @@ implementation
 
 end.
 @}
+@End @Section
+# }}}
 
-= }}}
+# Output in formato testo {{{
+@Section
+@Title { Output in formato testo }
+@Begin @PP
 
-=== Output in formato testo ===
-# {{{
-Slit puo' anche lavorare con file in formato testo. In questo caso i file sono
-pensati per essere utilizzati con txt2tags.
+Slit può anche lavorare con file in formato testo. In questo caso i file sono
+pensati per essere utilizzati con txt2tags. @PP
 
-Al file di documentazione viene aggiunta l'estensione ".txt":
+Al file di documentazione viene aggiunta l'estensione ".txt": 
 
 @d TSlitOutputTxt.CreateForFile
 @{
@@ -174,7 +185,7 @@ end;
 @}
 
 La testata viene scritta in modo che prima e dopo di essa ci sia una
-linea orizzontale. Il titolo della testata viene scritto in grassetto.
+linea orizzontale. Il titolo della testata viene scritto in grassetto. @PP
 
 Gli scrap vengono scritti fra blocchi di testo in modo che non vengono
 interpretati da txt2tags:
@@ -239,16 +250,20 @@ implementation
 
 end.
 @}
+@End @Section
 # }}}
 
-=== Output in formato Lout ===
-# {{{
-LOut e' un sistema di typesetting di spirito simile a TeX ma di sintassi piu' semplice e piu'
-facilmente programmabile.
+# Output in formato Lout {{{
+@Section
+@Title { Output in formato Lout }
+@Begin @PP
 
-Uno dei vantaggi di LOut e' la programmabilita' e la leggerezza.
+LOut è un sistema di typesetting di spirito simile a TeX ma di sintassi più semplice e più
+facilmente programmabile. @PP
 
-Slit puo' creare documentazione in formato LOut.
+Uno dei vantaggi di LOut è la programmabilità e la leggerezza.
+
+Slit può creare documentazione in formato LOut. @PP
 
 I file di lout non hanno una estensione determinata. Per quanto riguarda slit l'estensione
 che viene aggiunta alla documentazione e' "".lout"".
@@ -287,29 +302,29 @@ end;
 
 Per quanto riguarda i settori di codice, questi devono essere
 scritti in un formato particolare, che permette a Lout di formattarli
-in modo corretto.
+in modo corretto. @PP
 
-Questo e' un estratto di un esempio di codice formattato correttamente
+Questo è un estratto di un esempio di codice formattato correttamente
 per usarlo con Lout:
 
-```
+@F @Verbatim {
 @LeftDisplay lines @Break {
 @Sym angleleft @I @Verbatim @Begin definizione di ciao @End @Verbatim @Sym angleright @Sym equivalence
     @Verbatim @Begin while(true) { @End @Verbatim 
       @Verbatim @Begin putstrln("ciao!"); @End @Verbatim
     @Verbatim @Begin } @End @Verbatim
 }
-```
+}
 
 Il nome della definizione viene scritto fra parentesi angolate in italico
-(@I). 
+@Verbatim {(@I)}. @PP 
 
 La testata viene scritta così:
 
 @d TSlitOutputLout scrivi testata
 @{
-write(handle, '@Sym angleleft { BoldSlope } @Font @Verbatim @Begin ');
-write(handle, nome, ' @End @Verbatim ');
+write(handle, '@Sym angleleft { BoldSlope } @Font @','Verbatim @Begin ');
+write(handle, nome, ' @','End @','Verbatim ');
 
 write(handle, '@I {', currentMacro.macroProgr, ' } ');
 
@@ -317,12 +332,12 @@ writeln(handle, ' @Sym angleright @Sym equivalence');
 @}
 
 Per ogni testata viene scritto un tag che serve per generare i link che portano
-alla definizione della macro.
+alla definizione della macro. @PP
 
 Ad ogni tag corrisponde un nome che non deve avere caratteri che non siano
-alfanumerici oppure underscore. 
+alfanumerici oppure underscore. @PP
 
-Per questo motivo viene usato, come tag, il progressivo della macro.
+Per questo motivo viene usato, come tag, il progressivo della macro. @PP
 
 @d TSlitOutputLout scrivi tag
 @{
@@ -330,14 +345,14 @@ writeln(handle, '@PageMark { ', currentMacro.macroProgr, ' } ');
 @}
 
 Il codice scritto dall'utente viene inserito fra blocchi
-verbatim ovvero fra "@Verbatim @Begin" e "@End @Verbatim".
+verbatim ovvero fra @Verbatim { "@Verbatim @Begin" } e @Verbatim { "@End @Verbatim" }. @PP 
 
-Tutto il codice e' racchiuso fra "@LeftDisplay lines @Break", che permette
-di rendere l'indentazione significativa.
+Tutto il codice è racchiuso fra @Verbatim { "@LeftDisplay lines @Break" }, che permette
+di rendere l'indentazione significativa. @PP
 
 Il codice viene prima diviso in linee e gli spazi che vengono prima del
 primo scritto vengono isolati dal codice perche' sono significativi per
-la versione:
+la versione: @PP
 
 @d TSlitOutputLout scrivi codice
 @{
@@ -353,11 +368,11 @@ FreeAndNil(stringhe);
 @}
 
 Per ogni linea vengono separati gli spazi iniziali dal resto della stringa
-e gli spazi iniziali vengono inseriti prima del blocchi verbatim.
+e gli spazi iniziali vengono inseriti prima del blocchi verbatim. @PP
 
-Se la riga che si va a scrivere e' un riferimento ad una macro
+Se la riga che si va a scrivere è un riferimento ad una macro
 allora viene evidenziata in grassetto e viene inserito un link alla
-definizione della macro.
+definizione della macro. 
 
 @d TSlitOutputLout.ScriviScrap processa linea
 @{
@@ -379,13 +394,13 @@ begin
   stringaPulita := '<' + nomeDefinizione + ' ' + IntToStr(macroTemp.macroProgr) + '>';
 end;
 
-write(handle, '@Verbatim @Begin ');
+write(handle, '@','Verbatim @','Begin ');
 write(handle, stringaPulita);
-writeln(handle, '@End @Verbatim'); 
+writeln(handle, '@','End @','Verbatim'); 
 @}
 
 Dopo aver scritto il codice viene scritto anche i riferimenti alle macro
-che usano questa.
+che usano questa. 
 
 @d TSlitOutputLout scrivi riferimenti
 @{
@@ -426,7 +441,7 @@ begin
 end;
 @}
 
-Riassumendo, il codice di gestione del formato Lout e' il seguente:
+Riassumendo, il codice di gestione del formato Lout è il seguente:
 
 @o slitlout.pas
 @{
@@ -459,4 +474,8 @@ implementation
 
 end.
 @}
+@End @Section
 # }}}
+
+@EndSections
+@End @Chapter

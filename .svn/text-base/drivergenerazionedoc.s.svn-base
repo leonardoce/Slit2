@@ -1,7 +1,10 @@
-% :mode=slitpascal:folding=explicit:
+# :mode=slitpascal:folding=explicit:
+@Chapter
+@Title { Driver per la generazione della documentazione }
+@Begin @LP
 
 Questo driver viene agganciato al parser di Slit per generare la documentazione
-utilizzando uno fra i vari back-end disponibili.
+utilizzando uno fra i vari back-end disponibili. @PP
 
 Il driver viene creato collegandolo ad un magazzino di macro:
 
@@ -45,7 +48,7 @@ begin
 end;
 @}
 
-La definizione della classe ""TSlitStreamDriverGenerazioneDoc"" e del file
+La definizione della classe @F "TSlitStreamDriverGenerazioneDoc" e del file
 dove è contenuta è quindi la seguente:
 
 @o driverdoc.pas
@@ -80,3 +83,4 @@ end.
 
 @}
 
+@End @Chapter

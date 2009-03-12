@@ -1,11 +1,16 @@
-% :folding=explicit:mode=slitpascal:
+# :folding=explicit:mode=slitpascal:
+
+@Chapter
+@Title { Il formato dei files di ingresso }
+@Begin @LP
 
 Slit legge dei file di testo che sono composti da righe di testo normale e da direttive.
-Le direttive sono delle righe che iniziano con il prefisso "@" e che possono essere
-seguite da uno "scrap".
+Le direttive sono delle righe che iniziano con il prefisso @Verbatim {@} e che possono essere
+seguite da uno @I {scrap}. @PP
 
-Uno "scrap" e' una parte del corpo della macro (oppure l'intera macro) 
-e che inizia con la riga "@{" e termina con la riga "@}".
+Uno @I {scrap} è una parte del corpo della macro (oppure l'intera macro) 
+e che inizia con la riga @F @Verbatim @Begin @{ @End @Verbatim e termina con la riga @F @Verbatim @Begin @} @End @Verbatim .
+@PP
 
 Uno scrap viene quindi letto con il codice seguente:
 
@@ -36,11 +41,16 @@ begin
 end;
 @}
 
-=== Il driver del parser ===
+@BeginSections
+
+# Il driver del parser {{{
+@Section
+@Title { Il driver del parser }
+@Begin @PP
 
 Il parser dei files di Slit interpreta direttamente i file e chiama un driver
 per processare le direttive. In questo modo è possibile sfruttare il parser
-per effettuare più operazioni in fasi diverse del processo.
+per effettuare più operazioni in fasi diverse del processo. @PP
 
 Il driver del parser è una classe che ha la seguente struttura:
 
@@ -57,12 +67,18 @@ public
 end;
 @}
 
-=== Direttive ===
+@End @Section
+# }}}
 
-La direttiva di definizione ""@d"" permette di definire una nuova macro, il cui
-nome segue la direttiva, con il contenuto dello scrap che segue.
+# Direttive {{{
+@Section 
+@Title { Direttive }
+@Begin @PP
 
-Per questo viene processata cosi':
+La direttiva di definizione @F @Verbatim {@d} permette di definire una nuova macro, il cui
+nome segue la direttiva, con il contenuto dello scrap che segue. @PP
+
+Per questo viene processata così:
 
 @d processa direttiva d
 @{
@@ -75,16 +91,16 @@ begin
 end;
 @}
 
-All'interno di ogni definizione si puo' richiamare un'altra macro con la sintassi
-"@<nomemacro@>". Per ulteriori informazioni consultare il capitolo relativo all'output
-dei file sorgenti.
+All'interno di ogni definizione si può richiamare un'altra macro con la sintassi
+@F @Verbatim { @<nomemacro@> }. Per ulteriori informazioni consultare il capitolo relativo all'output
+dei file sorgenti. @PP
 
-La direttiva ""@o"" e' equivalente ma la macro viene utilizzata per scrivere un file
-il cui nome e' quello della macro.
+La direttiva @F @Verbatim { @o } è equivalente ma la macro viene utilizzata per scrivere un file
+il cui nome è quello della macro. @PP
 
-L'unica cosa da osservare e' che il nome del file potrebeb essere racchiuso fra
-virtolette ("\""). In questo caso le virgolette devono essere rimosse
-dalla stringa del nome della macro.
+L'unica cosa da osservare è che il nome del file potrebbe essere racchiuso fra
+virtolette @F @Verbatim { "" }. In questo caso le virgolette devono essere rimosse
+dalla stringa del nome della macro. @PP
 
 @d processa direttiva o
 @{
@@ -102,9 +118,9 @@ begin
 end;  
 @}
 
-La direttiva ""@i"" permette invece di includere un file in un'altro e quindi
+La direttiva @F @Verbatim { @i } permette invece di includere un file in un'altro e quindi
 richiama la lettura di un altro file sorgente utilizzando lo stesso magazzino
-di macro e lo stesso output:
+di macro e lo stesso output: @PP
 
 @d processa direttiva i
 @{
@@ -116,12 +132,12 @@ di macro e lo stesso output:
   FreeAndNil(temporaryStream);
 @}
 
-Il nome del file viene interpretato in modo relativo al file corrente.
+Il nome del file viene interpretato in modo relativo al file corrente. @PP
 
 La direttiva ""@#"" ignora tutto quello che segue e può venire utilizzata
-come commento.
+come commento. @PP
 
-Se la riga letta non e' una direttiva allora questa viene direttamente scritta sull'output.
+Se la riga letta non è una direttiva allora questa viene direttamente scritta sull'output. @PP
 
 @d TSlitStream.Process
 @{
@@ -164,9 +180,15 @@ begin
 end;
 @}
 
-=== Gestione del file di input ===
+@End @Section
+# }}}
 
-Il file viene aperto quando il flusso viene costruito:
+# Gestione del file di input {{{
+@Section
+@Title { Gestione del file di input }
+@Begin @PP
+
+Il file viene aperto quando il flusso viene costruito: 
 
 @d TSlitStream.CreateForFile
 @{
@@ -245,10 +267,16 @@ begin
 end;
 @}
 
-=== Segnalazione degli errori ===
+@End @Section
+# }}}
+
+# Segnalazione degli errori {{{
+@Section
+@Title { Segnalazione degli errori }
+@Begin @PP
 
 Gli errori vengono segnalati in riferimento alla riga correntemente
-processata il cui progressivo viene tenuto in "currentLine":
+processata il cui progressivo viene tenuto in @F { currentLine }:
 
 @d TSlitStream.LogError
 @{
@@ -257,8 +285,13 @@ begin
   writeln(FNomeFile, ' errore: ', msg, ' alla riga ', currentLine);
 end;
 @}
+@End @Section
+# }}}
 
-=== Definizione dei flussi di ingresso ===
+# Definizione dei flussi di ingresso {{{
+@Section
+@Title { Definizione dei flussi di ingresso }
+@Begin @PP
 
 @o slitstream.pas
 @{
@@ -284,3 +317,8 @@ implementation
   @<TSlitStream altre@>
 end.
 @}
+@End @Section
+# }}}
+
+@EndSections
+@End @Chapter

@@ -1,7 +1,10 @@
-% :folding=explicit:mode=slitpascal:
+# :folding=explicit:mode=slitpascal:
 
-=== Formato delle macro in memoria ===
+@Chapter
+@Title { Il magazzino delle macro }
+@Begin @PP
 
+# Introduzione al capitolo {{{
 Snit conserva le macro all'interno della memoria. 
 
 @d TMacroRecord
@@ -20,14 +23,16 @@ end;
 
 Per ogni macro viene memorizzato:
 
-+ il nome;
-+ il numero progressivo;
-+ il contenuto;
-+ il tipo (permette di distinguere 
-  le macro che generano dei file dalle macro pure)
-+ le macro dove questa macro viene utilizzata (vettore ""macroUsers"")
-+ il numero delle macro dove questa macro viene utilizzata (vettore 
-  ""macroUsersCount"")
+@BulletList
+@ListItem { il nome; }
+@ListItem { il numero progressivo; }
+@ListItem { il contenuto; }
+@ListItem { il tipo (permette di distinguere le macro che generano 
+dei file dalle macro pure); }
+@ListItem { le macro dove questa macro viene utilizzata (vettore "macroUsers") }
+@ListItem { il numero delle macro dove questa macro viene utilizzata 
+(vettore "macroUsersCount") }
+@EndList
 
 Le macro vengono conservate in un vettore dinamico la cui dimensione viene
 fissata, inizialmente, a 50.
@@ -42,14 +47,14 @@ end;
 @}
 
 Per memorizzare una macro viene controllato lo spazio disponibile nel vettore
-(che e' memorizzato nella variabile ""count""). Se c'e' spazio a sufficienza
+(che è memorizzato nella variabile "count"). Se c'è spazio a sufficienza
 allora la macro viene memorizzata altrimenti prima di essere memorizzata
-il vettore viene ampliato per far posto ad altre 50 macro.
+il vettore viene ampliato per far posto ad altre 50 macro. @PP
 
-Una macro non puo' essere ripetuta all'interno dello stesso file.
+Una macro non può essere ripetuta all'interno dello stesso file.
 Per questo motivo, prima di memorizzare la macro, viene controllata l'esistenza
 di una macro con lo stesso nome e, caso mai, viene segnalato un errore
-all'utente.
+all'utente. 
 
 @d TMacroStore.StoreMacro
 @{
@@ -74,7 +79,7 @@ begin
 end;
 @}
 
-Per localizzare una macro per nome e' necessario scorrere tutto il vettore
+Per localizzare una macro per nome è necessario scorrere tutto il vettore
 delle macro presenti:
 
 @d TMacroStore.GetMacro
@@ -106,7 +111,7 @@ begin
 end;
 @}
 
-C'e' anche una chiamata per ottenere una macro dal numero progressivo.
+C'è anche una chiamata per ottenere una macro dal numero progressivo.
 (TODO: quando viene usata?):
 
 @d TMacroStore.GetRecord
@@ -116,18 +121,24 @@ begin
   Result := store[i];
 end;
 @}
+# }}}
 
-=== Calcolo dei riferimenti ===
+@BeginSections
+
+# Calcolo dei riferimenti {{{
+@Section
+@Title { Calcolo dei riferimenti }
+@Begin @PP 
 
 Il magazzino delle macro si occupa anche di calcolare i vari riferimenti
 fra le macro.
 
-Ad esempio, se la macro "uno" include la macro "due", all'interno del record
-che corrisponde alla macro "due" viene inserito il progressivo della macro
-"uno".
+Ad esempio, se la macro @I uno include la macro @I {due}, all'interno del record
+che corrisponde alla macro @I due viene inserito il progressivo della macro
+@I {uno}.
 
 Il calcolo dei riferimenti viene effettuato dalla procedura
-"CalcolaRiferimenti".
+@I {CalcolaRiferimenti}.
 
 @d TMacroStore.CalcolaRiferimenti
 @{
@@ -207,9 +218,15 @@ store[k].macroUsers[store[k].macroUsersCount] := i + 1;
 store[k].macroUsersCount := store[k].macroUsersCount + 1;
 @}
 
-=== Definizione della unit macrostore ===
+@End @Section
+# }}}
 
-Riassumendo, la definizione del ""TMacroStore"" e' la seguente:
+# Definizione della unit macrostore {{{
+@Section
+@Title { Definizione della unit macrostore }
+@Begin @PP
+
+Riassumendo, la definizione del ""TMacroStore"" è la seguente:
 
 @d TMacroStore
 @{
@@ -250,3 +267,10 @@ implementation
   @<TMacroStore.CalcolaRiferimenti@>
 end.
 @}
+
+@End @Section
+# }}}
+
+@EndSections
+
+@End @Chapter

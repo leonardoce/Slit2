@@ -1,9 +1,12 @@
-% :folding=explicit:mode=slitpascal:
+# :folding=explicit:mode=slitpascal:
+@Chapter
+@Title { Creazione dei files sorgenti }
+@Begin @PP
 
 La lettura dei files non fa altro che creare i files sorgenti a partire dalle
-macro memorizzate nel magazzino.
+macro memorizzate nel magazzino. @PP
 
-La procedura `ProcessaFiles`, infatti, legge tutto il magazzino delle
+La procedura @F {ProcessaFiles}, infatti, legge tutto il magazzino delle
 macro alla ricerca delle macro che devono generare dei files:
 
 @d procedure ProcessaFiles
@@ -27,11 +30,11 @@ end;
 
 Ogni file viene generato con lo scrap che corrisponde al suo nome. La
 procedura che scrive lo scrap divide in righe il codice dello scrap
-alla ricerca del riferimento ad una macro.
+alla ricerca del riferimento ad una macro. @PP
 
 Sei il riferimento è quello di una macro si richiama ricorsivamente
 per generare il file, altrimenti stampa la riga al livello di indentazione
-desiderato, che inizialmente è 0.
+desiderato, che inizialmente è 0. 
 
 @d procedure ScriviScrapEspanso
 @{
@@ -108,4 +111,4 @@ var
   
   @<slit procedura principale@>
 @}
-
+@End @Chapter
