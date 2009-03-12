@@ -154,7 +154,7 @@ Poi vengono deallocati gli oggetti creati:
 
 == Il magazzino delle macro ==
 
-@i macro.s
+@i magazzino.s
 
 == Driver per il riempimento del magazzino delle macro ==
 
