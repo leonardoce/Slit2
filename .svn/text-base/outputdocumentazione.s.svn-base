@@ -305,7 +305,7 @@ scritti in un formato particolare, che permette a Lout di formattarli
 in modo corretto. @PP
 
 Questo è un estratto di un esempio di codice formattato correttamente
-per usarlo con Lout:
+per usarlo con Lout: @PP
 
 @F @Verbatim {
 @LeftDisplay lines @Break {
