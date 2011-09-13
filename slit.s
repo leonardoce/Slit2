@@ -21,10 +21,55 @@ Inoltre a questo il codice può essere diviso in frammenti che si richiamano per 
 l'intero programma. Per avere maggiori informazioni su questa modalità di lavoro
 si può consultare la pagina: @PP
 
-@F { @Verbatim {http://en.wikipedia.org/wiki/Literate_programming}}
+@F { @Verbatim {http://en.wikipedia.org/wiki/Literate_programming} }
 
 @End @Introduction
 # }}}
+
+@Chapter
+@Title { Sintassi dei files Slit }
+@Begin
+@LP
+
+I files in formato Slit sono composti da linee di testo di documentazione e da
+direttive. Le direttive sono linee che iniziano per un carattere chiocciola
+("@") e sono seguite da una lettera che identifica la direttiva. @PP
+
+In questo documento le direttive supportate sono le seguenti: @PP
+
+@BulletList
+@ListItem { "@d" @Char egrave la direttiva che definisce una macro, }
+@ListItem { "@o" @Char egrave la direttiva che serve per scrivere un file
+sorgente }
+@ListItem { "@i" @Char egrave la direttiva che serve per includere 
+un file slit da un'altro. }
+@EndList
+
+@BeginSections
+@Section @Title { La direttiva "@d" }
+@Begin @PP
+
+La direttiva "@d" @Char egrave la direttiva principale di Slit. @PP
+
+Questa direttiva serve per memorizzare una macro di testo all'interno del
+sistema. La macro pu@Char ograve essere utilizzata all'interno di altre
+macro oppure semplicimente per scrivere un certo file sorgente. @PP
+
+Ecco un esempio di una direttiva "@d":
+
+@IndentedDisplay @F 
+@Verbatim @Begin
+function somma(a,b:Integer) return Integer
+begin
+  return a+b;
+end;
+@End @Verbatim
+
+@End @Section
+@EndSections
+
+@End @Chapter
+
 
 # Il comando Slit {{{
 @Chapter
