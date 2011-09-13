@@ -8,6 +8,36 @@ Slit legge dei file di testo che sono composti da righe di testo normale e da di
 Le direttive sono delle righe che iniziano con il prefisso @Verbatim {@} e che possono essere
 seguite da uno @I {scrap}. @PP
 
+@BeginSections
+
+@Section
+@Title { Il driver del parser }
+@Begin @PP
+
+Il parser dei files di Slit interpreta direttamente i file e chiama un driver
+per processare le direttive. In questo modo {@Char egrave} possibile sfruttare il parser
+per effettuare più operazioni in fasi diverse del processo. @PP
+
+Il driver del parser {@Char egrave} una classe che ha la seguente struttura:
+
+@d slitstream definizione TSlitStreamDriver
+@{
+TSlitStreamDriver = class
+public
+  procedure ProcessaDefinizioneMacro(nomeMacro:String; scrap:String); 
+    virtual; abstract;
+  procedure ProcessaDefinizioneFile(nomeMacro:String; scrap:String);  
+    virtual; abstract;
+  procedure ProcessaRigaDocumentazione(riga:String);
+    virtual; abstract;
+end;
+@}
+
+@End @Section
+
+@Section @Title { Lettura degli scrap }
+@Begin @PP
+
 Uno @I {scrap} {@Char egrave} una parte del corpo della macro (oppure l'intera macro) 
 e che inizia con la riga @F @Verbatim @Begin @{ @End @Verbatim e termina con la riga @F @Verbatim @Begin @} @End @Verbatim .
 @PP
@@ -41,34 +71,8 @@ begin
 end;
 @}
 
-@BeginSections
-
-# Il driver del parser {{{
-@Section
-@Title { Il driver del parser }
-@Begin @PP
-
-Il parser dei files di Slit interpreta direttamente i file e chiama un driver
-per processare le direttive. In questo modo {@Char egrave} possibile sfruttare il parser
-per effettuare più operazioni in fasi diverse del processo. @PP
-
-Il driver del parser {@Char egrave} una classe che ha la seguente struttura:
-
-@d slitstream definizione TSlitStreamDriver
-@{
-TSlitStreamDriver = class
-public
-  procedure ProcessaDefinizioneMacro(nomeMacro:String; scrap:String); 
-    virtual; abstract;
-  procedure ProcessaDefinizioneFile(nomeMacro:String; scrap:String);  
-    virtual; abstract;
-  procedure ProcessaRigaDocumentazione(riga:String);
-    virtual; abstract;
-end;
-@}
-
 @End @Section
-# }}}
+
 
 # Direttive {{{
 @Section 
