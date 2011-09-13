@@ -260,10 +260,7 @@ poi riprese per scrivere i files sorgenti.
 @{
 store := TMacroStore.Create;
 stream := TSlitStream.CreateForFile(ParamStr(1));
-streamOutputDocumentazione := TSlitOutputLout.CreateForFileAndStore(ParamStr(1), store);
 driverMagazzinoMacro := TSlitStreamDriverMagazzino.CreateWithMacroStore( store );
-driverScriviDocumentazione := 
-  TSlitStreamDriverGenerazioneDoc.CreateWithOutputStream( streamOutputDocumentazione );
 @}
 
 La documentazione viene elaborata attraverso un metodo dello stream in ingresso:
@@ -314,6 +311,10 @@ Viene adesso avviata la generazione della documentazione:
 
 @d slit generazione della documentazione
 @{
+streamOutputDocumentazione := TSlitOutputLout.CreateForFileAndStore(ParamStr(1), store);
+driverScriviDocumentazione := 
+  TSlitStreamDriverGenerazioneDoc.CreateWithOutputStream( streamOutputDocumentazione );
+
 stream.Driver := driverScriviDocumentazione;
 stream.Process();
 stream.ResetStream();
