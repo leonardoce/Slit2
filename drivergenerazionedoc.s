@@ -48,6 +48,17 @@ begin
 end;
 @}
 
+Le opzioni, per la generazione della documentazione, vengono semplicemente
+ignorate. @PP
+
+@d TSlitStreamDriverGenerazioneDoc.ProcessaOpzione
+@{
+procedure TSlitStreamDriverGenerazioneDoc.ProcessaOpzione(opzione:String);
+begin
+  {* nop() *}
+end;
+@}
+
 La definizione della classe @F "TSlitStreamDriverGenerazioneDoc" e del file
 dove {@Char egrave} contenuta {@Char egrave} quindi la seguente:
 
@@ -71,6 +82,8 @@ type
       override;
     procedure ProcessaRigaDocumentazione(riga:String);
       override;
+    procedure ProcessaOpzione(opzione:String);
+      override;
   end;
 
 implementation
@@ -78,6 +91,7 @@ implementation
   @<TSlitStreamDriverGenerazioneDoc.ProcessaDefinizioneMacro@>
   @<TSlitStreamDriverGenerazioneDoc.ProcessaDefinizioneFile@>
   @<TSlitStreamDriverGenerazioneDoc.ProcessaRigaDocumentazione@>
+  @<TSlitStreamDriverGenerazioneDoc.ProcessaOpzione@>
   
 end.
 
