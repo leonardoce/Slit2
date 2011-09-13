@@ -143,15 +143,14 @@ Se la riga letta non è una direttiva allora questa viene direttamente scritta su
 @{
 procedure TSlitStream.Process();
 var
-  lineBuffer, lineBufferOrig:String;
+  lineBuffer:String;
   scrapBuffer:String;
   macroName:String;
   temporaryStream:TSlitStream;
 begin
   while (not Eof) do
   begin
-    lineBufferOrig := NextLine();
-    lineBuffer := Trim(lineBufferOrig);
+    lineBuffer := NextLine();
 
     if AnsiStartsStr('@d ',lineBuffer) then
     begin
@@ -173,7 +172,7 @@ begin
     begin
       if FDriver <> Nil then
       begin
-        FDriver.ProcessaRigaDocumentazione(lineBufferOrig);
+        FDriver.ProcessaRigaDocumentazione(lineBuffer);
       end;
     end;
   end;
