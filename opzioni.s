@@ -51,6 +51,33 @@ begin
 end;
 @}
 
+Visto che adesso sappiamo qual @Char egrave il processore delle informazioni
+da utilizzare @Char egrave possibile anche creare una funzione che crea
+il file di output per slit.
+
+@d slitopzioni, crea lo stream di output
+@{
+function CreaStreamOutputDaOpzioni(NomeFile:String; store:TMacroStore):TSlitOutput;
+begin
+  if NomeProcessoreInformazioni='lout' then
+  begin
+    Result := TSlitOutputLout.CreateForFileAndStore (NomeFile, store);
+  end
+  else if NomeProcessoreInformazioni='txt' then
+  begin
+    Result := TSlitOutputTxt.CreateForFile (NomeFile);
+  end
+  else if NomeProcessoreInformazioni='html' then
+  begin
+    Result := TSlitOutputHtml.CreateForFile (NomeFile);
+  end
+  else
+  begin
+    Result := Nil;
+  end;
+end;
+@}
+
 @End @Section
 
 @Section @Title { Definizione della unit slitopzioni }
@@ -64,17 +91,21 @@ unit slitopzioni;
 
 interface
 
+uses slitoutput, macrostore;
+                                         
 function GetNomeProcessoreInformazioni():String;
 procedure SetNomeProcessoreInformazioni(value:String);
+function CreaStreamOutputDaOpzioni(NomeFile:String; store:TMacroStore):TSlitOutput;
 
 implementation
 
-uses sysutils;
+uses sysutils, slithtml, slitlout, slittxt;
 
 var
   NomeProcessoreInformazioni:String;
 
 @<slitopzioni, gestore del processore di documentazione@>
+@<slitopzioni, crea lo stream di output@>
 
 initialization
 

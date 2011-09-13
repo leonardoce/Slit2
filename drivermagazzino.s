@@ -96,6 +96,10 @@ begin
   else if opzione='output_txt' then
   begin
     SetNomeProcessoreInformazioni ('txt');
+  end
+  else
+  begin
+    raise Exception.Create('Opzione non conosciuta: ' + opzione);
   end;
 end;
 @}

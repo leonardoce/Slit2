@@ -1,4 +1,5 @@
 # :folding=explicit:mode=slitpascal:
+@x output_txt
 @SysInclude { tbl }
 @Include { book }
 
@@ -331,7 +332,7 @@ Viene adesso avviata la generazione della documentazione:
 
 @d slit generazione della documentazione
 @{
-streamOutputDocumentazione := TSlitOutputLout.CreateForFileAndStore(ParamStr(1), store);
+streamOutputDocumentazione := CreaStreamOutputDaOpzioni(ParamStr(1), store);
 driverScriviDocumentazione := 
   TSlitStreamDriverGenerazioneDoc.CreateWithOutputStream( streamOutputDocumentazione );
 
