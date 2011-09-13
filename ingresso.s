@@ -8,7 +8,7 @@ Slit legge dei file di testo che sono composti da righe di testo normale e da di
 Le direttive sono delle righe che iniziano con il prefisso @Verbatim {@} e che possono essere
 seguite da uno @I {scrap}. @PP
 
-Uno @I {scrap} è una parte del corpo della macro (oppure l'intera macro) 
+Uno @I {scrap} {@Char egrave} una parte del corpo della macro (oppure l'intera macro) 
 e che inizia con la riga @F @Verbatim @Begin @{ @End @Verbatim e termina con la riga @F @Verbatim @Begin @} @End @Verbatim .
 @PP
 
@@ -49,10 +49,10 @@ end;
 @Begin @PP
 
 Il parser dei files di Slit interpreta direttamente i file e chiama un driver
-per processare le direttive. In questo modo è possibile sfruttare il parser
+per processare le direttive. In questo modo {@Char egrave} possibile sfruttare il parser
 per effettuare più operazioni in fasi diverse del processo. @PP
 
-Il driver del parser è una classe che ha la seguente struttura:
+Il driver del parser {@Char egrave} una classe che ha la seguente struttura:
 
 @d slitstream definizione TSlitStreamDriver
 @{
@@ -95,10 +95,10 @@ All'interno di ogni definizione si può richiamare un'altra macro con la sintassi
 @F @Verbatim { @<nomemacro@> }. Per ulteriori informazioni consultare il capitolo relativo all'output
 dei file sorgenti. @PP
 
-La direttiva @F @Verbatim { @o } è equivalente ma la macro viene utilizzata per scrivere un file
-il cui nome è quello della macro. @PP
+La direttiva @F @Verbatim { @o } {@Char egrave} equivalente ma la macro viene utilizzata per scrivere un file
+il cui nome {@Char egrave} quello della macro. @PP
 
-L'unica cosa da osservare è che il nome del file potrebbe essere racchiuso fra
+L'unica cosa da osservare {@Char egrave} che il nome del file potrebbe essere racchiuso fra
 virtolette @F @Verbatim { "" }. In questo caso le virgolette devono essere rimosse
 dalla stringa del nome della macro. @PP
 
@@ -137,7 +137,7 @@ Il nome del file viene interpretato in modo relativo al file corrente. @PP
 La direttiva @F @Verbatim { @# } ignora tutto quello che segue e può venire utilizzata
 come commento. @PP
 
-Se la riga letta non è una direttiva allora questa viene direttamente scritta sull'output. @PP
+Se la riga letta non {@Char egrave} una direttiva allora questa viene direttamente scritta sull'output. @PP
 
 @d TSlitStream.Process
 @{
