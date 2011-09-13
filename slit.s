@@ -332,11 +332,11 @@ Poi vengono deallocati gli oggetti creati:
 
 @d slit pulizia
 @{
-  FreeAndNil(driverMagazzinoMacro);
-  FreeAndNil(driverScriviDocumentazione);
-  FreeAndNil(streamOutputDocumentazione);
-  FreeAndNil(stream);
-  FreeAndNil(store);
+FreeAndNil(driverMagazzinoMacro);
+FreeAndNil(driverScriviDocumentazione);
+FreeAndNil(streamOutputDocumentazione);
+FreeAndNil(stream);
+FreeAndNil(store);
 @}
 
 @End @Chapter
