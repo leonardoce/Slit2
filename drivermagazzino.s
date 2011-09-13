@@ -87,14 +87,15 @@ begin
   opzione := Trim(Opzione);
   if opzione='output_lout' then
   begin
-    {FTipoOutput := }
-    {TODO QUA}
+    SetNomeProcessoreInformazioni ('lout');
   end
   else if opzione='output_html' then
   begin
+    SetNomeProcessoreInformazioni ('html');
   end
   else if opzione='output_txt' then
   begin
+    SetNomeProcessoreInformazioni ('txt');
   end;
 end;
 @}
@@ -133,7 +134,7 @@ type
   end;
 
 implementation
-  uses strutils, sysutils;
+  uses strutils, sysutils, slitopzioni;
 
   @<TSlitStreamDriverMagazzino.CreateWithMacroStore@>
   @<TSlitStreamDriverMagazzino.ProcessaDefinizioneMacro@>

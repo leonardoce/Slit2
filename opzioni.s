@@ -53,8 +53,6 @@ end;
 
 @End @Section
 
-
-
 @Section @Title { Definizione della unit slitopzioni }
 @Begin @PP
 
