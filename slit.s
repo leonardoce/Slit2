@@ -178,6 +178,26 @@ int main(int argc, char **argv)
 
 @End @Section
 
+@Section @Title { Opzioni }
+@Begin @PP
+
+Slit pu{@Char ograve} essere configurato attraverso delle opzioni. Le opzioni
+si comunicano utilizzando la direttiva @F @Verbatim { @x }. @PP
+Questa direttiva @Char egrave seguita da una stringa che @Char egrave
+il nome dell'opzione stessa. Ad esempio:
+
+@IndentedDisplay @F @Verbatim { @x output_html }
+
+Questa @Char egrave la lista delle opzioni supportate:
+
+@BulletList
+@ListItem { @F output_html : seleziona il formato html per l'output }
+@ListItem { @F output_txt : seleziona il formato testo per l'output }
+@ListItem { @F output_lout : seleziona il formato lout per l'output }
+@EndList
+
+@End @Section
+
 @Section @Title { Documentazione }
 @Begin @PP
 
