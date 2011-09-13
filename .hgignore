@@ -1,0 +1,6 @@
+syntax:glob
+bin
+dist
+*.o
+*.ppu
+*.exe
