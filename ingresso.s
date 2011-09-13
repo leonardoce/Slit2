@@ -1,7 +1,7 @@
 # :folding=explicit:mode=slitpascal:
 
 @Chapter
-@Title { Il formato dei files di ingresso }
+@Title { Il parser }
 @Begin @LP
 
 Slit legge dei file di testo che sono composti da righe di testo normale e da direttive.
@@ -16,7 +16,7 @@ seguite da uno @I {scrap}. @PP
 
 Il parser dei files di Slit interpreta direttamente i file e chiama un driver
 per processare le direttive. In questo modo {@Char egrave} possibile sfruttare il parser
-per effettuare più operazioni in fasi diverse del processo. @PP
+per effettuare pi{@Char ugrave} operazioni in fasi diverse del processo. @PP
 
 Il driver del parser {@Char egrave} una classe che ha la seguente struttura:
 
@@ -29,6 +29,8 @@ public
   procedure ProcessaDefinizioneFile(nomeMacro:String; scrap:String);  
     virtual; abstract;
   procedure ProcessaRigaDocumentazione(riga:String);
+    virtual; abstract;
+  procedure ProcessaOpzione(opzione:String);
     virtual; abstract;
 end;
 @}
