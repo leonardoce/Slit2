@@ -49,7 +49,7 @@ end;
 @}
 
 La definizione della classe @F "TSlitStreamDriverGenerazioneDoc" e del file
-dove è contenuta è quindi la seguente:
+dove {@Char egrave} contenuta {@Char egrave} quindi la seguente:
 
 @o driverdoc.pas
 @{
