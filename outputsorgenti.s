@@ -93,7 +93,8 @@ program slit;
 uses Classes, macrostore, sysutils, 
     strutils, slitstream, slithtml,
     slittxt, slitoutput, slitlout,
-    drivermagazzino, driverdoc;
+    drivermagazzino, driverdoc,
+    slitopzioni;
 
 var
   store:TMacroStore;
