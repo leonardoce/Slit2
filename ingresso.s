@@ -148,7 +148,7 @@ dal driver che @Char egrave agganciato al parser. @PP
 
 @d processa direttiva x
 @{
-FDriver.ProcessaOpzione (MidStr(lineBuffer,2,Length(lineBuffer)-1));
+FDriver.ProcessaOpzione (MidStr(lineBuffer,3,Length(lineBuffer)-2));
 @}
 
 Se la riga letta non {@Char egrave} una direttiva allora questa viene direttamente scritta sull'output. @PP

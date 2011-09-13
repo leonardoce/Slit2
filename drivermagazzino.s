@@ -6,13 +6,15 @@
 Questo driver viene agganciato al parser di Slit per riempire un magazzino
 con le macro. @PP
 
-Il driver viene creato collegandolo ad un magazzino di macro:
+Il driver viene creato collegandolo ad un magazzino di macro e le
+opzioni vengono inizializzate alla stringa vuota.
 
 @d TSlitStreamDriverMagazzino.CreateWithMacroStore
 @{
 constructor TSlitStreamDriverMagazzino.CreateWithMacroStore(ms:TMacroStore);
 begin
   FMacroStore := ms;
+  FTipoOutput := '';
 end;
 @}
 
@@ -82,7 +84,18 @@ end;
 @{
 procedure TSlitStreamDriverMagazzino.ProcessaOpzione(opzione:String);
 begin
-  { no op }
+  opzione := Trim(Opzione);
+  if opzione='output_lout' then
+  begin
+    {FTipoOutput := }
+    {TODO QUA}
+  end
+  else if opzione='output_html' then
+  begin
+  end
+  else if opzione='output_txt' then
+  begin
+  end;
 end;
 @}
 
@@ -106,6 +119,7 @@ interface
 type
   TSlitStreamDriverMagazzino = class(TSlitStreamDriver)
     FMacroStore: TMacroStore;
+    FTipoOutput: String;
   public
     constructor CreateWithMacroStore(ms:TMacroStore);
     procedure ProcessaDefinizioneMacro(nomeMacro:String; scrap:String); 
@@ -119,6 +133,8 @@ type
   end;
 
 implementation
+  uses strutils, sysutils;
+
   @<TSlitStreamDriverMagazzino.CreateWithMacroStore@>
   @<TSlitStreamDriverMagazzino.ProcessaDefinizioneMacro@>
   @<TSlitStreamDriverMagazzino.ProcessaDefinizioneFile@>
