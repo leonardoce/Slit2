@@ -1,6 +1,6 @@
 # :mode=slitpascal:folding=explicit:
 @Chapter 
-@Title { Driver per il riempimento del magazzino delle macro }
+@Title { Driver per il magazzino delle macro e le opzioni }
 @Begin @LP
 
 Questo driver viene agganciato al parser di Slit per riempire un magazzino
@@ -15,6 +15,10 @@ begin
   FMacroStore := ms;
 end;
 @}
+
+@BeginSections
+@Section @Title { Immagazzinamento delle macro }
+@Begin @PP
 
 Alla ricezione di una definizione di macro viene controllato se esiste
 già una macro con questo nome, e nel caso viene dato uno warning, altrimenti
@@ -69,8 +73,26 @@ begin
 end;
 @}
 
+@End @Section
+
+@Section @Title { Trattamento delle opzioni }
+@Begin @PP
+
+@d TSlitStreamDriverMagazzino.ProcessaOpzione
+@{
+procedure TSlitStreamDriverMagazzino.ProcessaOpzione(opzione:String);
+begin
+  { no op }
+end;
+@}
+
+@End @Section
+
+@Section @Title { Definizione del driver }
+@Begin @PP
+
 La definizione della classe ""TSlitStreamDriverMagazzino"" e del file
-dove è contenuta è quindi la seguente:
+dove {@Char egrave} contenuta {@Char egrave} quindi la seguente:
 
 @o drivermagazzino.pas
 @{
@@ -92,6 +114,8 @@ type
       override;
     procedure ProcessaRigaDocumentazione(riga:String);
       override;
+    procedure ProcessaOpzione(opzione:String);
+      override;
   end;
 
 implementation
@@ -99,8 +123,12 @@ implementation
   @<TSlitStreamDriverMagazzino.ProcessaDefinizioneMacro@>
   @<TSlitStreamDriverMagazzino.ProcessaDefinizioneFile@>
   @<TSlitStreamDriverMagazzino.ProcessaRigaDocumentazione@>
-  
+  @<TSlitStreamDriverMagazzino.ProcessaOpzione@>
 end.
 @}
+
+@End @Section
+
+@EndSections
 
 @End @Chapter
