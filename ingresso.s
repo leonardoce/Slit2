@@ -134,7 +134,7 @@ di macro e lo stesso output: @PP
 
 Il nome del file viene interpretato in modo relativo al file corrente. @PP
 
-La direttiva ""@#"" ignora tutto quello che segue e può venire utilizzata
+La direttiva @F @Verbatim { @# } ignora tutto quello che segue e può venire utilizzata
 come commento. @PP
 
 Se la riga letta non è una direttiva allora questa viene direttamente scritta sull'output. @PP
