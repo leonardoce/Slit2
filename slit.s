@@ -185,8 +185,21 @@ Tutto quello che non @Char egrave una direttiva viene direttamente passato
 nel file di documentazione generato senza alcuna trasformazione
 intermedia. @PP
 
-TODO sono rimasto qui.
-Descrivere i vari formati output di slit.
+Slit deve essere utilizzato insieme a un formato di interscambio di testi.
+In questo momento si pu{@Char ograve} utilizzare:
+
+@BulletList
+@ListItem { il formato HTML, }
+@ListItem { il formato testo, }
+@ListItem { il sistema di elaborazione testi Lout. }
+@EndList
+
+La documentazione deve essere inserita in modo coerente con il formato
+scelto. @PP
+Il formato Lout permette anche la generazione di una cross-reference
+fra le macro inserite: ogni macro viene numerata e al termine della 
+macro viene inserita la lista di tutte le macro che la utilizzano. @PP
+
 @End @Section
 
 @EndSections
