@@ -1,0 +1,1712 @@
+# :folding=explicit:mode=slitpascal:
+@SysInclude { tbl }
+@Include { book }
+
+@Book 
+  @Title { Slit - Simple Literate Tool }
+  @Author { Leonardo Cecchi }
+//
+
+# Introduzione {{{
+@Introduction
+@Title { Introduzione }
+@Begin @PP
+
+Slit è un programma che permette di scrivere codice e documentazione all'interno dello stesso
+file. Il rapporto fra il codice e la documentazione è però ribaltato: se normalmente si
+scrive il codice e all'interno di questo si inserisce la documentazione usando Slit si
+scrive la documentazione e all'interno di questa il codice. @PP
+
+Inoltre a questo il codice può essere diviso in frammenti che si richiamano per comporre
+l'intero programma. Per avere maggiori informazioni su questa modalità di lavoro
+si può consultare la pagina: @PP
+
+@F { @Verbatim {http://en.wikipedia.org/wiki/Literate_programming}}
+
+@End @Introduction
+# }}}
+
+# Il comando Slit {{{
+@Chapter
+@Title { Il comando Slit }
+@Begin @LP
+
+I programmi vengono normalmente scritti in file di testo che possono avere qualunque esensione.
+Per separare il codice dalla documentazione di utilizza il comando @F {slit}: @PP
+
+@Display @F @Verbatim {
+slit <nomefile>
+}
+
+Questo comando processa il file con il nome passato e ne interpreta le direttive. Dal file
+passato vengono quindi generati: @PP
+
+@BulletList
+@ListItem { i file della documentazione; }
+@ListItem { i vari file che sono il codice sorgente. }
+@EndList
+
+La procedura principale infatti recita:
+
+@PageMark { 1 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin slit procedura principale @End @Verbatim @I {1 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin if ParamCount = 1 then@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @I { 2 } @CrossLink @Verbatim @Begin <slit preparazione dell'ambiente 2>@End @Verbatim
+       @I { 3 } @CrossLink @Verbatim @Begin <slit riempimento del magazzino delle macro 3>@End @Verbatim
+       @I { 4 } @CrossLink @Verbatim @Begin <slit calcola riferimenti 4>@End @Verbatim
+       @I { 5 } @CrossLink @Verbatim @Begin <slit controlla macro non utilizzate 5>@End @Verbatim
+       @I { 7 } @CrossLink @Verbatim @Begin <slit generazione della documentazione 7>@End @Verbatim
+       @I { 8 } @CrossLink @Verbatim @Begin <slit generazione del codice sorgente 8>@End @Verbatim
+       @I { 9 } @CrossLink @Verbatim @Begin <slit pulizia 9>@End @Verbatim
+     @Verbatim @Begin end@End @Verbatim
+     @Verbatim @Begin else@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin writeln('Uso: ', ParamStr(0), ' <nomefile>');@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin end.@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 69 } @CrossLink { 69 }  } }
+
+Il file di ingresso è rappresentato da un oggetto della classe @F TSlitStream
+mentre il file di uscita della documentazione è rappresentato da una classe
+della famiglia @F { TSlitOutputTxt }.
+
+Le macro vengono memorizzate all'interno di un "magazzino" dal quale vengono
+poi riprese per scrivere i files sorgenti.
+
+@PageMark { 2 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin slit preparazione dell'ambiente @End @Verbatim @I {2 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin store := TMacroStore.Create;@End @Verbatim
+   @Verbatim @Begin stream := TSlitStream.CreateForFile(ParamStr(1));@End @Verbatim
+   @Verbatim @Begin streamHtml := TSlitOutputLout.CreateForFileAndStore(ParamStr(1), store);@End @Verbatim
+   @Verbatim @Begin driverMagazzinoMacro := TSlitStreamDriverMagazzino.CreateWithMacroStore( store );@End @Verbatim
+   @Verbatim @Begin driverScriviDocumentazione :=@End @Verbatim
+     @Verbatim @Begin TSlitStreamDriverGenerazioneDoc.CreateWithOutputStream( streamHtml );@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 1 } @CrossLink { 1 }  } }
+
+La documentazione viene elaborata attraverso un metodo dello stream in ingresso:
+
+@PageMark { 3 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin slit riempimento del magazzino delle macro @End @Verbatim @I {3 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin stream.Driver := driverMagazzinoMacro;@End @Verbatim
+   @Verbatim @Begin stream.Process();@End @Verbatim
+   @Verbatim @Begin stream.ResetStream();@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 1 } @CrossLink { 1 }  } }
+
+Dopo aver popolato il magazino delle macro vengono calcolati i riferimenti:
+
+@PageMark { 4 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin slit calcola riferimenti @End @Verbatim @I {4 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin store.CalcolaRiferimenti();@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 1 } @CrossLink { 1 }  } }
+
+Una volta calcolati i riferimenti è possibile controllare la presenza di macro
+mai utilizzate:
+
+@PageMark { 5 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin slit controlla macro non utilizzate @End @Verbatim @I {5 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin ControllaMacroNonUtilizzate();@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 1 } @CrossLink { 1 }  } }
+
+Il controllo viene fatto scorrendo tutto il magazzino della macro.
+
+@PageMark { 6 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin slit ControllaMacroNonUtilizzate @End @Verbatim @I {6 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin procedure ControllaMacroNonUtilizzate;@End @Verbatim
+   @Verbatim @Begin var@End @Verbatim
+     @Verbatim @Begin tempMacro : TMacroRecord;@End @Verbatim
+     @Verbatim @Begin i : integer;@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin for i := 0 to store.MacroCount-1 do@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin tempMacro := store.GetRecord( i );@End @Verbatim
+       @Verbatim @Begin if (tempMacro.macroUsersCount = 0) and (tempMacro.macroType <> FileMacro) then@End @Verbatim
+       @Verbatim @Begin begin@End @Verbatim
+         @Verbatim @Begin writeln(StdErr, 'La macro ', tempMacro.macroName, ' non è mai stata utilizzata.');@End @Verbatim
+       @Verbatim @Begin end;@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 69 } @CrossLink { 69 }  } }
+
+Viene adesso avviata la generazione della documentazione:
+
+@PageMark { 7 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin slit generazione della documentazione @End @Verbatim @I {7 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin stream.Driver := driverScriviDocumentazione;@End @Verbatim
+   @Verbatim @Begin stream.Process();@End @Verbatim
+   @Verbatim @Begin stream.ResetStream();@End @Verbatim
+   @Verbatim @Begin writeln(store.MacroCount, ' macro processate');@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 1 } @CrossLink { 1 }  } }
+
+Viene poi avviata l'elaborazione dei file sorgenti:
+
+@PageMark { 8 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin slit generazione del codice sorgente @End @Verbatim @I {8 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin ProcessaFiles();@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 1 } @CrossLink { 1 }  } }
+
+Poi vengono deallocati gli oggetti creati:
+
+@PageMark { 9 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin slit pulizia @End @Verbatim @I {9 }  @Sym angleright @Sym equivalence
+     @Verbatim @Begin FreeAndNil(driverMagazzinoMacro);@End @Verbatim
+     @Verbatim @Begin FreeAndNil(driverScriviDocumentazione);@End @Verbatim
+     @Verbatim @Begin FreeAndNil(streamHtml);@End @Verbatim
+     @Verbatim @Begin FreeAndNil(stream);@End @Verbatim
+     @Verbatim @Begin FreeAndNil(store);@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 1 } @CrossLink { 1 }  } }
+
+@End @Chapter
+# }}}
+
+# :folding=explicit:mode=slitpascal:
+
+@Chapter
+@Title { Il formato dei files di ingresso }
+@Begin @LP
+
+Slit legge dei file di testo che sono composti da righe di testo normale e da direttive.
+Le direttive sono delle righe che iniziano con il prefisso @Verbatim {@} e che possono essere
+seguite da uno @I {scrap}. @PP
+
+Uno @I {scrap} è una parte del corpo della macro (oppure l'intera macro) 
+e che inizia con la riga @F @Verbatim @Begin @{ @End @Verbatim e termina con la riga @F @Verbatim @Begin @} @End @Verbatim .
+@PP
+
+Uno scrap viene quindi letto con il codice seguente:
+
+@PageMark { 10 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitStream.ReadScrap @End @Verbatim @I {10 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin function TSlitStream.ReadScrap():String;@End @Verbatim
+   @Verbatim @Begin var@End @Verbatim
+     @Verbatim @Begin buffer:String;@End @Verbatim
+     @Verbatim @Begin bufferLine:String;@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin bufferLine := NextLine;@End @Verbatim
+     @Verbatim @Begin if Trim(bufferLine)<>'@{' then@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin LogError('Mi aspettavo l''inizio di una macro');@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+     @Verbatim @Begin buffer := '';@End @Verbatim
+     @Verbatim @Begin while (not EOF) do@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin bufferLine := NextLine();@End @Verbatim
+       @Verbatim @Begin if Trim(bufferLine)='@}' then@End @Verbatim
+       @Verbatim @Begin begin@End @Verbatim
+         @Verbatim @Begin break;@End @Verbatim
+       @Verbatim @Begin end;@End @Verbatim
+       @Verbatim @Begin buffer := buffer + bufferLine + Chr(13) + Chr(10);@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+     @Verbatim @Begin Result := buffer;@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 21 } @CrossLink { 21 }  } }
+
+@BeginSections
+
+# Il driver del parser {{{
+@Section
+@Title { Il driver del parser }
+@Begin @PP
+
+Il parser dei files di Slit interpreta direttamente i file e chiama un driver
+per processare le direttive. In questo modo è possibile sfruttare il parser
+per effettuare più operazioni in fasi diverse del processo. @PP
+
+Il driver del parser è una classe che ha la seguente struttura:
+
+@PageMark { 11 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin slitstream definizione TSlitStreamDriver @End @Verbatim @I {11 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin TSlitStreamDriver = class@End @Verbatim
+   @Verbatim @Begin public@End @Verbatim
+     @Verbatim @Begin procedure ProcessaDefinizioneMacro(nomeMacro:String; scrap:String);@End @Verbatim
+       @Verbatim @Begin virtual; abstract;@End @Verbatim
+     @Verbatim @Begin procedure ProcessaDefinizioneFile(nomeMacro:String; scrap:String);@End @Verbatim
+       @Verbatim @Begin virtual; abstract;@End @Verbatim
+     @Verbatim @Begin procedure ProcessaRigaDocumentazione(riga:String);@End @Verbatim
+       @Verbatim @Begin virtual; abstract;@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 21 } @CrossLink { 21 }  } }
+
+@End @Section
+# }}}
+
+# Direttive {{{
+@Section 
+@Title { Direttive }
+@Begin @PP
+
+La direttiva di definizione @F @Verbatim {@d} permette di definire una nuova macro, il cui
+nome segue la direttiva, con il contenuto dello scrap che segue. @PP
+
+Per questo viene processata così:
+
+@PageMark { 12 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin processa direttiva d @End @Verbatim @I {12 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin scrapBuffer := ReadScrap();@End @Verbatim
+   @Verbatim @Begin macroName := Trim(MidStr(lineBuffer, 3, Length(lineBuffer)-2));@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin if FDriver <> Nil then@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin FDriver.ProcessaDefinizioneMacro(macroName, scrapBuffer);@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 15 } @CrossLink { 15 }  } }
+
+All'interno di ogni definizione si può richiamare un'altra macro con la sintassi
+@F @Verbatim { @<nomemacro@> }. Per ulteriori informazioni consultare il capitolo relativo all'output
+dei file sorgenti. @PP
+
+La direttiva @F @Verbatim { @o } è equivalente ma la macro viene utilizzata per scrivere un file
+il cui nome è quello della macro. @PP
+
+L'unica cosa da osservare è che il nome del file potrebbe essere racchiuso fra
+virtolette @F @Verbatim { "" }. In questo caso le virgolette devono essere rimosse
+dalla stringa del nome della macro. @PP
+
+@PageMark { 13 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin processa direttiva o @End @Verbatim @I {13 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin scrapBuffer := ReadScrap();@End @Verbatim
+   @Verbatim @Begin macroName := Trim(MidStr(lineBuffer, 3, Length(lineBuffer)-2));@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin if AnsiStartsStr('"', macroName) and AnsiEndsStr('"', macroName) then@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin macroName := MidStr(macroName, 2, Length(macroName)-2);@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin if FDriver <> Nil then@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin FDriver.ProcessaDefinizioneFile(macroName, scrapBuffer);@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 15 } @CrossLink { 15 }  } }
+
+La direttiva @F @Verbatim { @i } permette invece di includere un file in un'altro e quindi
+richiama la lettura di un altro file sorgente utilizzando lo stesso magazzino
+di macro e lo stesso output: @PP
+
+@PageMark { 14 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin processa direttiva i @End @Verbatim @I {14 }  @Sym angleright @Sym equivalence
+     @Verbatim @Begin macroName := Trim(MidStr(lineBuffer, 3, Length(lineBuffer)-2));@End @Verbatim
+     @Verbatim @Begin temporaryStream := TSlitStream.CreateForFile(@End @Verbatim
+       @Verbatim @Begin ExtractFilePath(FNomeFile) + macroName);@End @Verbatim
+     @Verbatim @Begin temporaryStream.Driver := FDriver;@End @Verbatim
+     @Verbatim @Begin temporaryStream.Process();@End @Verbatim
+     @Verbatim @Begin FreeAndNil(temporaryStream);@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 15 } @CrossLink { 15 }  } }
+
+Il nome del file viene interpretato in modo relativo al file corrente. @PP
+
+La direttiva ""@#"" ignora tutto quello che segue e può venire utilizzata
+come commento. @PP
+
+Se la riga letta non è una direttiva allora questa viene direttamente scritta sull'output. @PP
+
+@PageMark { 15 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitStream.Process @End @Verbatim @I {15 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin procedure TSlitStream.Process();@End @Verbatim
+   @Verbatim @Begin var@End @Verbatim
+     @Verbatim @Begin lineBuffer, lineBufferOrig:String;@End @Verbatim
+     @Verbatim @Begin scrapBuffer:String;@End @Verbatim
+     @Verbatim @Begin macroName:String;@End @Verbatim
+     @Verbatim @Begin temporaryStream:TSlitStream;@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin while (not Eof) do@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin lineBufferOrig := NextLine();@End @Verbatim
+       @Verbatim @Begin lineBuffer := Trim(lineBufferOrig);@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+       @Verbatim @Begin if AnsiStartsStr('@d ',lineBuffer) then@End @Verbatim
+       @Verbatim @Begin begin@End @Verbatim
+         @I { 12 } @CrossLink @Verbatim @Begin <processa direttiva d 12>@End @Verbatim
+       @Verbatim @Begin end@End @Verbatim
+       @Verbatim @Begin else if AnsiStartsStr('@o ', lineBuffer) then@End @Verbatim
+       @Verbatim @Begin begin@End @Verbatim
+         @I { 13 } @CrossLink @Verbatim @Begin <processa direttiva o 13>@End @Verbatim
+       @Verbatim @Begin end@End @Verbatim
+       @Verbatim @Begin else if AnsiStartsStr('@i ', lineBuffer) then@End @Verbatim
+       @Verbatim @Begin begin@End @Verbatim
+         @I { 14 } @CrossLink @Verbatim @Begin <processa direttiva i 14>@End @Verbatim
+       @Verbatim @Begin end@End @Verbatim
+       @Verbatim @Begin else if AnsiStartsStr('@# ', lineBuffer) then@End @Verbatim
+       @Verbatim @Begin begin@End @Verbatim
+         @Verbatim @Begin { no-op }@End @Verbatim
+       @Verbatim @Begin end@End @Verbatim
+       @Verbatim @Begin else@End @Verbatim
+       @Verbatim @Begin begin@End @Verbatim
+         @Verbatim @Begin if FDriver <> Nil then@End @Verbatim
+         @Verbatim @Begin begin@End @Verbatim
+           @Verbatim @Begin FDriver.ProcessaRigaDocumentazione(lineBufferOrig);@End @Verbatim
+         @Verbatim @Begin end;@End @Verbatim
+       @Verbatim @Begin end;@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 21 } @CrossLink { 21 }  } }
+
+@End @Section
+# }}}
+
+# Gestione del file di input {{{
+@Section
+@Title { Gestione del file di input }
+@Begin @PP
+
+Il file viene aperto quando il flusso viene costruito: 
+
+@PageMark { 16 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitStream.CreateForFile @End @Verbatim @I {16 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin constructor TSlitStream.CreateForFile(fileName:String);@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin if not FileExists(fileName) then@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin writeln('Il file ', fileName, ' non esiste');@End @Verbatim
+       @Verbatim @Begin Abort;@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+     @Verbatim @Begin currentLine := 0;@End @Verbatim
+     @Verbatim @Begin FNomeFile := fileName;@End @Verbatim
+     @Verbatim @Begin FDriver := Nil;@End @Verbatim
+     @Verbatim @Begin Assign(handle, fileName);@End @Verbatim
+     @Verbatim @Begin Reset(handle);@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 21 } @CrossLink { 21 }  } }
+
+e chiuso quando il flusso viene dismesso:
+
+@PageMark { 17 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitStream.Destroy @End @Verbatim @I {17 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin destructor TSlitStream.Destroy;@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin Close(Handle);@End @Verbatim
+     @Verbatim @Begin inherited Destroy;@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 21 } @CrossLink { 21 }  } }
+
+@PageMark { 18 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin slitstream definizione TSlitStream @End @Verbatim @I {18 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin TSlitStream = class@End @Verbatim
+   @Verbatim @Begin private@End @Verbatim
+     @Verbatim @Begin currentLine:integer;@End @Verbatim
+     @Verbatim @Begin FNomeFile:String;@End @Verbatim
+     @Verbatim @Begin FDriver:TSlitStreamDriver;@End @Verbatim
+     @Verbatim @Begin handle:Text;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+     @Verbatim @Begin function IsEof:Boolean;@End @Verbatim
+   @Verbatim @Begin public@End @Verbatim
+     @Verbatim @Begin constructor CreateForFile(fileName:String);@End @Verbatim
+     @Verbatim @Begin destructor Destroy; override;@End @Verbatim
+     @Verbatim @Begin function NextLine:String;@End @Verbatim
+     @Verbatim @Begin procedure LogError(msg:String);@End @Verbatim
+     @Verbatim @Begin function ReadScrap():String;@End @Verbatim
+     @Verbatim @Begin procedure Process();@End @Verbatim
+     @Verbatim @Begin procedure ResetStream();@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+     @Verbatim @Begin property EOF:Boolean read IsEof;@End @Verbatim
+     @Verbatim @Begin property Driver:TSlitStreamDriver read FDriver write FDriver;@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 21 } @CrossLink { 21 }  } }
+
+Ci sono poi altre operazioni che richiamano semplicemente quelle primitive:
+
+@PageMark { 19 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitStream altre @End @Verbatim @I {19 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin function TSlitStream.NextLine:String;@End @Verbatim
+   @Verbatim @Begin var@End @Verbatim
+     @Verbatim @Begin bufLine:String;@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin readln(Handle, bufLine);@End @Verbatim
+     @Verbatim @Begin currentLine := currentLine + 1;@End @Verbatim
+     @Verbatim @Begin Result := bufLine;@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin function TSlitStream.IsEof:Boolean;@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin Result := system.EOF(handle);@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin procedure TSlitStream.ResetStream();@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin Reset(handle);@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 21 } @CrossLink { 21 }  } }
+
+@End @Section
+# }}}
+
+# Segnalazione degli errori {{{
+@Section
+@Title { Segnalazione degli errori }
+@Begin @PP
+
+Gli errori vengono segnalati in riferimento alla riga correntemente
+processata il cui progressivo viene tenuto in @F { currentLine }:
+
+@PageMark { 20 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitStream.LogError @End @Verbatim @I {20 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin procedure TSlitStream.LogError(msg:String);@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin writeln(FNomeFile, ' errore: ', msg, ' alla riga ', currentLine);@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 21 } @CrossLink { 21 }  } }
+@End @Section
+# }}}
+
+# Definizione dei flussi di ingresso {{{
+@Section
+@Title { Definizione dei flussi di ingresso }
+@Begin @PP
+
+@PageMark { 21 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin slitstream.pas @End @Verbatim @I {21 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin {$MODE OBJFPC}@End @Verbatim
+   @Verbatim @Begin {$H+}@End @Verbatim
+   @Verbatim @Begin unit slitstream;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin interface@End @Verbatim
+     @Verbatim @Begin uses macrostore, slitoutput;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin type@End @Verbatim
+     @I { 11 } @CrossLink @Verbatim @Begin <slitstream definizione TSlitStreamDriver 11>@End @Verbatim
+     @I { 18 } @CrossLink @Verbatim @Begin <slitstream definizione TSlitStream 18>@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin implementation@End @Verbatim
+     @Verbatim @Begin uses sysutils, strutils;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+     @I { 16 } @CrossLink @Verbatim @Begin <TSlitStream.CreateForFile 16>@End @Verbatim
+     @I { 17 } @CrossLink @Verbatim @Begin <TSlitStream.Destroy 17>@End @Verbatim
+     @I { 20 } @CrossLink @Verbatim @Begin <TSlitStream.LogError 20>@End @Verbatim
+     @I { 10 } @CrossLink @Verbatim @Begin <TSlitStream.ReadScrap 10>@End @Verbatim
+     @I { 15 } @CrossLink @Verbatim @Begin <TSlitStream.Process 15>@End @Verbatim
+     @I { 19 } @CrossLink @Verbatim @Begin <TSlitStream altre 19>@End @Verbatim
+   @Verbatim @Begin end.@End @Verbatim
+}
+@End @Section
+# }}}
+
+@EndSections
+@End @Chapter
+# :folding=explicit:mode=slitpascal:
+
+@Chapter
+@Title { Il magazzino delle macro }
+@Begin @PP
+
+# Introduzione al capitolo {{{
+Snit conserva le macro all'interno della memoria. 
+
+@PageMark { 22 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TMacroRecord @End @Verbatim @I {22 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin EMacroType = ( FileMacro, ScrapMacro );@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin TMacroRecord = record@End @Verbatim
+     @Verbatim @Begin macroName:String;@End @Verbatim
+     @Verbatim @Begin macroProgr:Integer;@End @Verbatim
+     @Verbatim @Begin macroContent:String;@End @Verbatim
+     @Verbatim @Begin macroType:EMacroType;@End @Verbatim
+     @Verbatim @Begin macroUsers: array of Integer;@End @Verbatim
+     @Verbatim @Begin macroUsersCount: Integer;@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 34 } @CrossLink { 34 }  } }
+
+Per ogni macro viene memorizzato:
+
+@BulletList
+@ListItem { il nome; }
+@ListItem { il numero progressivo; }
+@ListItem { il contenuto; }
+@ListItem { il tipo (permette di distinguere le macro che generano 
+dei file dalle macro pure); }
+@ListItem { le macro dove questa macro viene utilizzata (vettore "macroUsers") }
+@ListItem { il numero delle macro dove questa macro viene utilizzata 
+(vettore "macroUsersCount") }
+@EndList
+
+Le macro vengono conservate in un vettore dinamico la cui dimensione viene
+fissata, inizialmente, a 50.
+
+@PageMark { 23 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TMacroStore.Create @End @Verbatim @I {23 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin constructor TMacroStore.Create;@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin count:=0;@End @Verbatim
+     @Verbatim @Begin SetLength(store, 50);@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 34 } @CrossLink { 34 }  } }
+
+Per memorizzare una macro viene controllato lo spazio disponibile nel vettore
+(che è memorizzato nella variabile "count"). Se c'è spazio a sufficienza
+allora la macro viene memorizzata altrimenti prima di essere memorizzata
+il vettore viene ampliato per far posto ad altre 50 macro. @PP
+
+Una macro non può essere ripetuta all'interno dello stesso file.
+Per questo motivo, prima di memorizzare la macro, viene controllata l'esistenza
+di una macro con lo stesso nome e, caso mai, viene segnalato un errore
+all'utente. 
+
+@PageMark { 24 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TMacroStore.StoreMacro @End @Verbatim @I {24 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin procedure TMacroStore.StoreMacro(macroName:String; macroContent:String; macroType:EMacroType);@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin if GetMacro(macroName).macroName <> '' then@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin writeln('Attenzione: macro ', macroName, ' duplicata.');@End @Verbatim
+     @Verbatim @Begin end@End @Verbatim
+     @Verbatim @Begin else@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin if count>=Length(store) then@End @Verbatim
+       @Verbatim @Begin begin@End @Verbatim
+         @Verbatim @Begin SetLength(store, Length(Store)+50);@End @Verbatim
+       @Verbatim @Begin end;@End @Verbatim
+       @Verbatim @Begin store[count].macroName := macroName;@End @Verbatim
+       @Verbatim @Begin store[count].macroContent := macroContent;@End @Verbatim
+       @Verbatim @Begin store[count].macroType := macroType;@End @Verbatim
+       @Verbatim @Begin store[count].macroProgr := count + 1;@End @Verbatim
+       @Verbatim @Begin count := count + 1;@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 34 } @CrossLink { 34 }  } }
+
+Per localizzare una macro per nome è necessario scorrere tutto il vettore
+delle macro presenti:
+
+@PageMark { 25 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TMacroStore.GetMacro @End @Verbatim @I {25 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin function TMacroStore.GetMacro(macroName:String):TMacroRecord;@End @Verbatim
+   @Verbatim @Begin var@End @Verbatim
+     @Verbatim @Begin i:integer;@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin Result.macroName := '';@End @Verbatim
+     @Verbatim @Begin for i:=0 to length(Store)-1 do@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin if store[i].macroName=macroName then@End @Verbatim
+       @Verbatim @Begin begin@End @Verbatim
+         @Verbatim @Begin Result:=store[i];@End @Verbatim
+         @Verbatim @Begin exit;@End @Verbatim
+       @Verbatim @Begin end;@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 34 } @CrossLink { 34 }  } }
+
+Vengono anche previste delle chiamate per ottenere il numero di
+macro presenti nel magazzino:
+
+@PageMark { 26 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TMacroStore.MacroCount @End @Verbatim @I {26 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin function TMacroStore.MacroCount:Integer;@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin Result := count;@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 34 } @CrossLink { 34 }  } }
+
+C'è anche una chiamata per ottenere una macro dal numero progressivo.
+(TODO: quando viene usata?):
+
+@PageMark { 27 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TMacroStore.GetRecord @End @Verbatim @I {27 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin function TMacroStore.GetRecord(i:integer):TMacroRecord;@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin Result := store[i];@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 34 } @CrossLink { 34 }  } }
+# }}}
+
+@BeginSections
+
+# Calcolo dei riferimenti {{{
+@Section
+@Title { Calcolo dei riferimenti }
+@Begin @PP 
+
+Il magazzino delle macro si occupa anche di calcolare i vari riferimenti
+fra le macro.
+
+Ad esempio, se la macro @I uno include la macro @I {due}, all'interno del record
+che corrisponde alla macro @I due viene inserito il progressivo della macro
+@I {uno}.
+
+Il calcolo dei riferimenti viene effettuato dalla procedura
+@I {CalcolaRiferimenti}.
+
+@PageMark { 28 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TMacroStore.CalcolaRiferimenti @End @Verbatim @I {28 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin procedure TMacroStore.CalcolaRiferimenti;@End @Verbatim
+   @Verbatim @Begin var@End @Verbatim
+     @Verbatim @Begin i, j, k: Integer;@End @Verbatim
+     @Verbatim @Begin listaStringhe: TStringList;@End @Verbatim
+     @Verbatim @Begin stringaPulita: String;@End @Verbatim
+     @Verbatim @Begin tempRecord: TMacroRecord;@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin listaStringhe := TStringList.Create;@End @Verbatim
+     @Verbatim @Begin @End @Verbatim
+     @I { 29 } @CrossLink @Verbatim @Begin <TMacroStore.CalcolaRiferimenti pulizia record 29>@End @Verbatim
+     @I { 30 } @CrossLink @Verbatim @Begin <TMacroStore.CalcolaRiferimenti calcolo 30>@End @Verbatim
+     @Verbatim @Begin @End @Verbatim
+     @Verbatim @Begin FreeAndNil( listaStringhe );@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 34 } @CrossLink { 34 }  } }
+
+Inizialmente vengono cancellati tutti i riferimenti all'interno del
+magazzino e fatto spazio per 10 riferimenti:
+
+@PageMark { 29 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TMacroStore.CalcolaRiferimenti pulizia record @End @Verbatim @I {29 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin for i:=0 to count-1 do@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin store[i].macroUsersCount:=0;@End @Verbatim
+     @Verbatim @Begin SetLength(store[i].macroUsers, 10);@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 28 } @CrossLink { 28 }  } }
+
+Poi vengono lette le righe di ogni macro:
+
+@PageMark { 30 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TMacroStore.CalcolaRiferimenti calcolo @End @Verbatim @I {30 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin for i:=0 to count-1 do@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin listaStringhe.Text := store[i].macroContent;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+     @Verbatim @Begin for j := 0 to listaStringhe.Count-1 do@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @I { 31 } @CrossLink @Verbatim @Begin <TMacroStore.CalcolaRiferimenti processa riga 31>@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 28 } @CrossLink { 28 }  } }
+
+Se la riga corrisponde a un riferimento viene rintracciato il progressivo
+della macro corrispondente e inserito fra i riferimenti:
+
+@PageMark { 31 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TMacroStore.CalcolaRiferimenti processa riga @End @Verbatim @I {31 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin stringaPulita := Trim( listaStringhe.Strings[j] );@End @Verbatim
+   @Verbatim @Begin if AnsiStartsStr('@<', stringaPulita) and@End @Verbatim
+      @Verbatim @Begin AnsiEndsStr('@>', stringaPulita) then@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin stringaPulita := MidStr(stringaPulita, 3, Length(stringaPulita)-4);@End @Verbatim
+     @Verbatim @Begin tempRecord := GetMacro( stringaPulita );@End @Verbatim
+     @Verbatim @Begin if tempRecord.macroProgr<>0 then@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @I { 32 } @CrossLink @Verbatim @Begin <TMacroStore.CalcolaRiferimenti inserisci riferimento 32>@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 30 } @CrossLink { 30 }  } }
+
+Per inserire il riferimento viene controllato se c'è posto per un nuovo
+riferimento e se non c'è viene creato:
+
+@PageMark { 32 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TMacroStore.CalcolaRiferimenti inserisci riferimento @End @Verbatim @I {32 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin k := tempRecord.macroProgr-1;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin if store[k].macroUsersCount = Length(store[k].macroUsers) then@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin SetLength(store[k].macroUsers, Length(store[k].macroUsers)+10);@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin store[k].macroUsers[store[k].macroUsersCount] := i + 1;@End @Verbatim
+   @Verbatim @Begin store[k].macroUsersCount := store[k].macroUsersCount + 1;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 31 } @CrossLink { 31 }  } }
+
+@End @Section
+# }}}
+
+# Definizione della unit macrostore {{{
+@Section
+@Title { Definizione della unit macrostore }
+@Begin @PP
+
+Riassumendo, la definizione del ""TMacroStore"" è la seguente:
+
+@PageMark { 33 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TMacroStore @End @Verbatim @I {33 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin TMacroStore = class@End @Verbatim
+   @Verbatim @Begin private@End @Verbatim
+     @Verbatim @Begin count:integer;@End @Verbatim
+     @Verbatim @Begin store:array of TMacroRecord;@End @Verbatim
+   @Verbatim @Begin public@End @Verbatim
+     @Verbatim @Begin constructor Create;@End @Verbatim
+     @Verbatim @Begin function MacroCount:Integer;@End @Verbatim
+     @Verbatim @Begin procedure StoreMacro(macroName:String; macroContent:String; macroType:EMacroType);@End @Verbatim
+     @Verbatim @Begin function GetMacro(macroName:String):TMacroRecord;@End @Verbatim
+     @Verbatim @Begin function GetRecord(i:integer):TMacroRecord;@End @Verbatim
+     @Verbatim @Begin procedure CalcolaRiferimenti;@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 34 } @CrossLink { 34 }  } }
+
+@PageMark { 34 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin macrostore.pas @End @Verbatim @I {34 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin {$MODE OBJFPC}@End @Verbatim
+   @Verbatim @Begin {$H+}@End @Verbatim
+   @Verbatim @Begin unit macrostore;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin interface@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin type@End @Verbatim
+     @I { 22 } @CrossLink @Verbatim @Begin <TMacroRecord 22>@End @Verbatim
+     @I { 33 } @CrossLink @Verbatim @Begin <TMacroStore 33>@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin implementation@End @Verbatim
+     @Verbatim @Begin uses SysUtils, Classes, StrUtils;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+     @I { 23 } @CrossLink @Verbatim @Begin <TMacroStore.Create 23>@End @Verbatim
+     @I { 24 } @CrossLink @Verbatim @Begin <TMacroStore.StoreMacro 24>@End @Verbatim
+     @I { 25 } @CrossLink @Verbatim @Begin <TMacroStore.GetMacro 25>@End @Verbatim
+     @I { 26 } @CrossLink @Verbatim @Begin <TMacroStore.MacroCount 26>@End @Verbatim
+     @I { 27 } @CrossLink @Verbatim @Begin <TMacroStore.GetRecord 27>@End @Verbatim
+     @I { 28 } @CrossLink @Verbatim @Begin <TMacroStore.CalcolaRiferimenti 28>@End @Verbatim
+   @Verbatim @Begin end.@End @Verbatim
+}
+
+@End @Section
+# }}}
+
+@EndSections
+
+@End @Chapter
+# :mode=slitpascal:folding=explicit:
+@Chapter 
+@Title { Driver per il riempimento del magazzino delle macro }
+@Begin @LP
+
+Questo driver viene agganciato al parser di Slit per riempire un magazzino
+con le macro. @PP
+
+Il driver viene creato collegandolo ad un magazzino di macro:
+
+@PageMark { 35 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitStreamDriverMagazzino.CreateWithMacroStore @End @Verbatim @I {35 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin constructor TSlitStreamDriverMagazzino.CreateWithMacroStore(ms:TMacroStore);@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin FMacroStore := ms;@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 39 } @CrossLink { 39 }  } }
+
+Alla ricezione di una definizione di macro viene controllato se esiste
+già una macro con questo nome, e nel caso viene dato uno warning, altrimenti
+questa viene direttamente inserita nel magazzino:
+
+@PageMark { 36 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitStreamDriverMagazzino.ProcessaDefinizioneMacro @End @Verbatim @I {36 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin procedure TSlitStreamDriverMagazzino.ProcessaDefinizioneMacro(nomeMacro:String; scrap:String);@End @Verbatim
+   @Verbatim @Begin var@End @Verbatim
+     @Verbatim @Begin tempMacro : TMacroRecord;@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin tempMacro := FMacroStore.GetMacro(nomeMacro);@End @Verbatim
+     @Verbatim @Begin if tempMacro.macroName <> '' then@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin writeln(StdErr, 'Macro ', nomeMacro, ' definita più volte');@End @Verbatim
+     @Verbatim @Begin end@End @Verbatim
+     @Verbatim @Begin else@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin FMacroStore.StoreMacro(nomeMacro, scrap, ScrapMacro);@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 39 } @CrossLink { 39 }  } }
+
+Anche quando viene ricevuta una definizione di file questa viene 
+inserita nel magazzino:
+
+@PageMark { 37 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitStreamDriverMagazzino.ProcessaDefinizioneFile @End @Verbatim @I {37 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin procedure TSlitStreamDriverMagazzino.ProcessaDefinizioneFile(nomeMacro:String; scrap:String);@End @Verbatim
+   @Verbatim @Begin var@End @Verbatim
+     @Verbatim @Begin tempMacro : TMacroRecord;@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin tempMacro := FMacroStore.GetMacro(nomeMacro);@End @Verbatim
+     @Verbatim @Begin if tempMacro.macroName <> '' then@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin writeln(StdErr, 'Macro ', nomeMacro, ' definita più volte');@End @Verbatim
+     @Verbatim @Begin end@End @Verbatim
+     @Verbatim @Begin else@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin FMacroStore.StoreMacro(nomeMacro , scrap, FileMacro);@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 39 } @CrossLink { 39 }  } }
+
+Invece le righe di documentazione vengono scartate:
+
+@PageMark { 38 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitStreamDriverMagazzino.ProcessaRigaDocumentazione @End @Verbatim @I {38 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin procedure TSlitStreamDriverMagazzino.ProcessaRigaDocumentazione(riga:String);@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin { no op }@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 39 } @CrossLink { 39 }  } }
+
+La definizione della classe ""TSlitStreamDriverMagazzino"" e del file
+dove è contenuta è quindi la seguente:
+
+@PageMark { 39 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin drivermagazzino.pas @End @Verbatim @I {39 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin {$MODE OBJFPC}@End @Verbatim
+   @Verbatim @Begin {$H+}@End @Verbatim
+   @Verbatim @Begin unit drivermagazzino;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin interface@End @Verbatim
+     @Verbatim @Begin uses macrostore, slitstream;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin type@End @Verbatim
+     @Verbatim @Begin TSlitStreamDriverMagazzino = class(TSlitStreamDriver)@End @Verbatim
+       @Verbatim @Begin FMacroStore: TMacroStore;@End @Verbatim
+     @Verbatim @Begin public@End @Verbatim
+       @Verbatim @Begin constructor CreateWithMacroStore(ms:TMacroStore);@End @Verbatim
+       @Verbatim @Begin procedure ProcessaDefinizioneMacro(nomeMacro:String; scrap:String);@End @Verbatim
+         @Verbatim @Begin override;@End @Verbatim
+       @Verbatim @Begin procedure ProcessaDefinizioneFile(nomeMacro:String; scrap:String);@End @Verbatim
+         @Verbatim @Begin override;@End @Verbatim
+       @Verbatim @Begin procedure ProcessaRigaDocumentazione(riga:String);@End @Verbatim
+         @Verbatim @Begin override;@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin implementation@End @Verbatim
+     @I { 35 } @CrossLink @Verbatim @Begin <TSlitStreamDriverMagazzino.CreateWithMacroStore 35>@End @Verbatim
+     @I { 36 } @CrossLink @Verbatim @Begin <TSlitStreamDriverMagazzino.ProcessaDefinizioneMacro 36>@End @Verbatim
+     @I { 37 } @CrossLink @Verbatim @Begin <TSlitStreamDriverMagazzino.ProcessaDefinizioneFile 37>@End @Verbatim
+     @I { 38 } @CrossLink @Verbatim @Begin <TSlitStreamDriverMagazzino.ProcessaRigaDocumentazione 38>@End @Verbatim
+     @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin end.@End @Verbatim
+}
+
+@End @Chapter
+# :mode=slitpascal:folding=explicit:
+@Chapter
+@Title { Driver per la generazione della documentazione }
+@Begin @LP
+
+Questo driver viene agganciato al parser di Slit per generare la documentazione
+utilizzando uno fra i vari back-end disponibili. @PP
+
+Il driver viene creato collegandolo ad un magazzino di macro:
+
+@PageMark { 40 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitStreamDriverGenerazioneDoc.CreateWithOutputStream @End @Verbatim @I {40 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin constructor TSlitStreamDriverGenerazioneDoc.CreateWithOutputStream(output:TSlitOutput);@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin FOutputStream := output;@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 44 } @CrossLink { 44 }  } }
+
+Alla ricezione di una definizione di macro questa viene scritta attraverso
+il backend:
+
+@PageMark { 41 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitStreamDriverGenerazioneDoc.ProcessaDefinizioneMacro @End @Verbatim @I {41 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin procedure TSlitStreamDriverGenerazioneDoc.ProcessaDefinizioneMacro(nomeMacro:String; scrap:String);@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin FOutputStream.ScriviScrap(ScrapMacro, nomeMacro, scrap);@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 44 } @CrossLink { 44 }  } }
+
+Anche quando viene ricevuta una definizione di file questa viene 
+scritta attraverso il backend:
+
+@PageMark { 42 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitStreamDriverGenerazioneDoc.ProcessaDefinizioneFile @End @Verbatim @I {42 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin procedure TSlitStreamDriverGenerazioneDoc.ProcessaDefinizioneFile(nomeMacro:String; scrap:String);@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin FOutputStream.ScriviScrap(FileMacro, nomeMacro, scrap);@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 44 } @CrossLink { 44 }  } }
+
+Le righe di documentazione vengono passate direttamente:
+
+@PageMark { 43 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitStreamDriverGenerazioneDoc.ProcessaRigaDocumentazione @End @Verbatim @I {43 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin procedure TSlitStreamDriverGenerazioneDoc.ProcessaRigaDocumentazione(riga:String);@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin FOutputStream.PutLine(riga);@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 44 } @CrossLink { 44 }  } }
+
+La definizione della classe @F "TSlitStreamDriverGenerazioneDoc" e del file
+dove è contenuta è quindi la seguente:
+
+@PageMark { 44 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin driverdoc.pas @End @Verbatim @I {44 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin {$MODE OBJFPC}@End @Verbatim
+   @Verbatim @Begin {$H+}@End @Verbatim
+   @Verbatim @Begin unit driverdoc;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin interface@End @Verbatim
+     @Verbatim @Begin uses slitoutput, slitstream, macrostore;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin type@End @Verbatim
+     @Verbatim @Begin TSlitStreamDriverGenerazioneDoc = class(TSlitStreamDriver)@End @Verbatim
+       @Verbatim @Begin FOutputStream: TSlitOutput;@End @Verbatim
+     @Verbatim @Begin public@End @Verbatim
+       @Verbatim @Begin constructor CreateWithOutputStream(output:TSlitOutput);@End @Verbatim
+       @Verbatim @Begin procedure ProcessaDefinizioneMacro(nomeMacro:String; scrap:String);@End @Verbatim
+         @Verbatim @Begin override;@End @Verbatim
+       @Verbatim @Begin procedure ProcessaDefinizioneFile(nomeMacro:String; scrap:String);@End @Verbatim
+         @Verbatim @Begin override;@End @Verbatim
+       @Verbatim @Begin procedure ProcessaRigaDocumentazione(riga:String);@End @Verbatim
+         @Verbatim @Begin override;@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin implementation@End @Verbatim
+     @I { 40 } @CrossLink @Verbatim @Begin <TSlitStreamDriverGenerazioneDoc.CreateWithOutputStream 40>@End @Verbatim
+     @I { 41 } @CrossLink @Verbatim @Begin <TSlitStreamDriverGenerazioneDoc.ProcessaDefinizioneMacro 41>@End @Verbatim
+     @I { 42 } @CrossLink @Verbatim @Begin <TSlitStreamDriverGenerazioneDoc.ProcessaDefinizioneFile 42>@End @Verbatim
+     @I { 43 } @CrossLink @Verbatim @Begin <TSlitStreamDriverGenerazioneDoc.ProcessaRigaDocumentazione 43>@End @Verbatim
+     @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin end.@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+}
+
+@End @Chapter
+# :folding=explicit:mode=slitpascal: 
+@Chapter
+@Title { Backend di generazione della documentazione }
+@Begin @LP
+
+# {{{
+Slit è pensato per avere più formati per la documentazione. Per questo
+l'oggetto che gestisce l'output della documentazione viene modellato
+nel seguente modo:
+
+@PageMark { 45 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitOutput @End @Verbatim @I {45 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin TSlitOutput = class@End @Verbatim
+   @Verbatim @Begin public@End @Verbatim
+     @Verbatim @Begin procedure ScriviScrap(tipo:EMacroType; nome, contenuto:String); virtual; abstract;@End @Verbatim
+     @Verbatim @Begin procedure PutLine(str:String); virtual; abstract;@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 46 } @CrossLink { 46 }  } }
+
+Con il metodo "ScriviScrap" è possibile scrivere sulla documentazione uno
+"scrap" di codice.
+
+@PageMark { 46 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin slitoutput.pas @End @Verbatim @I {46 }  @Sym angleright @Sym equivalence
+                                                         @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin {$MODE OBJFPC}@End @Verbatim
+   @Verbatim @Begin {$H+}@End @Verbatim
+   @Verbatim @Begin unit slitoutput;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin interface@End @Verbatim
+     @Verbatim @Begin uses macrostore;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin type@End @Verbatim
+     @I { 45 } @CrossLink @Verbatim @Begin <TSlitOutput 45>@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin implementation@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin end.@End @Verbatim
+}
+# }}}
+
+@BeginSections
+
+# Output in formato HTML {{{
+@Section
+@Title { Output in formato HTML }
+@Begin @PP
+
+L'output in formato HTML permette di creare un file HTML per la documentazione.
+I tag devono essere immessi manualmente (eccetto quegli che gestiscono gli scrap).
+
+Il file creato ha l'estensione @F {.html} aggiunta al nome del file di documentazione:
+
+@PageMark { 47 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitOutputHtml.CreateForFile @End @Verbatim @I {47 }  @Sym angleright @Sym equivalence
+     @Verbatim @Begin constructor TSlitOutputHtml.CreateForFile(fileName:String);@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin Assign(handle, ExtractFileName(fileName)+'.html');@End @Verbatim
+       @Verbatim @Begin Rewrite(handle);@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 51 } @CrossLink { 51 }  } }
+
+Il file viene chiuso quando l'output viene liberato:
+
+@PageMark { 48 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitOutputHtml.Destroy @End @Verbatim @I {48 }  @Sym angleright @Sym equivalence
+     @Verbatim @Begin destructor TSlitOutputHtml.Destroy;@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin Close(handle);@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 51 } @CrossLink { 51 }  } }
+
+Le righe di documentazione vengono inserite esattamente come
+sono all'interno del file HTML. Questo permette di
+aggiungere dei tag alla documentazione:
+
+@PageMark { 49 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitOutputHtml.PutLine @End @Verbatim @I {49 }  @Sym angleright @Sym equivalence
+     @Verbatim @Begin procedure TSlitOutputHtml.PutLine(str:String);@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin writeln(handle, str);@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 51 } @CrossLink { 51 }  } }
+
+La testata viene scritta in un ""div"" e gli scrap vengono inseriti in 
+blocchi preformattati:
+
+@PageMark { 50 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitOutputHtml.ScriviScrap @End @Verbatim @I {50 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin procedure TSlitOutputHtml.ScriviScrap(tipo:EMacroType; nome, contenuto:String);@End @Verbatim
+   @Verbatim @Begin var@End @Verbatim
+     @Verbatim @Begin titolo: String;@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin if tipo = FileMacro then@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin titolo := 'File';@End @Verbatim
+     @Verbatim @Begin end@End @Verbatim
+     @Verbatim @Begin else@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin titolo := 'Definizione';@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+     @Verbatim @Begin writeln(handle,@End @Verbatim
+       @Verbatim @Begin '<div class=''testata''>', text2html(titolo), ' ', text2html(nome), '</div>');@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+     @Verbatim @Begin writeln(handle, '<pre>');@End @Verbatim
+     @Verbatim @Begin writeln(handle, text2html(contenuto));@End @Verbatim
+     @Verbatim @Begin writeln(handle, '</pre>');@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 51 } @CrossLink { 51 }  } }
+
+Riassumendo, il codice di gestione del formato HTML e' il seguente:
+
+@PageMark { 51 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin slithtml.pas @End @Verbatim @I {51 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin {$MODE OBJFPC}@End @Verbatim
+   @Verbatim @Begin {$H+}@End @Verbatim
+   @Verbatim @Begin unit slithtml;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin interface@End @Verbatim
+     @Verbatim @Begin uses slitoutput, macrostore;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin type@End @Verbatim
+     @Verbatim @Begin TSlitOutputHtml = class(TSlitOutput)@End @Verbatim
+     @Verbatim @Begin private@End @Verbatim
+       @Verbatim @Begin handle:Text;@End @Verbatim
+     @Verbatim @Begin public@End @Verbatim
+       @Verbatim @Begin constructor CreateForFile(fileName:String);@End @Verbatim
+       @Verbatim @Begin destructor Destroy; override;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+       @Verbatim @Begin procedure ScriviScrap(tipo:EMacroType; nome, contenuto:String); override;@End @Verbatim
+       @Verbatim @Begin procedure PutLine(str:String); override;@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin implementation@End @Verbatim
+     @Verbatim @Begin uses sysutils, strutils, classes, htmlutils;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+     @I { 47 } @CrossLink @Verbatim @Begin <TSlitOutputHtml.CreateForFile 47>@End @Verbatim
+     @I { 48 } @CrossLink @Verbatim @Begin <TSlitOutputHtml.Destroy 48>@End @Verbatim
+     @I { 49 } @CrossLink @Verbatim @Begin <TSlitOutputHtml.PutLine 49>@End @Verbatim
+     @I { 50 } @CrossLink @Verbatim @Begin <TSlitOutputHtml.ScriviScrap 50>@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin end.@End @Verbatim
+}
+@End @Section
+# }}}
+
+# Output in formato testo {{{
+@Section
+@Title { Output in formato testo }
+@Begin @PP
+
+Slit può anche lavorare con file in formato testo. In questo caso i file sono
+pensati per essere utilizzati con txt2tags. @PP
+
+Al file di documentazione viene aggiunta l'estensione ".txt": 
+
+@PageMark { 52 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitOutputTxt.CreateForFile @End @Verbatim @I {52 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin constructor TSlitOutputTxt.CreateForFile(fileName:String);@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin Assign(handle, ExtractFileName(fileName)+'.txt');@End @Verbatim
+     @Verbatim @Begin Rewrite(handle);@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 56 } @CrossLink { 56 }  } }
+
+E al rilascio del flusso il file viene chiuso:
+
+@PageMark { 53 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitOutputTxt.Destroy @End @Verbatim @I {53 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin destructor TSlitOutputTxt.Destroy;@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin Close(handle);@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 56 } @CrossLink { 56 }  } }
+
+Le linee di documentazione vengono inserite nel file direttamente come sono:
+
+@PageMark { 54 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitOutputTxt.PutLine @End @Verbatim @I {54 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin procedure TSlitOutputTxt.PutLine(str:String);@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin writeln(handle, str);@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 56 } @CrossLink { 56 }  } }
+
+La testata viene scritta in modo che prima e dopo di essa ci sia una
+linea orizzontale. Il titolo della testata viene scritto in grassetto. @PP
+
+Gli scrap vengono scritti fra blocchi di testo in modo che non vengono
+interpretati da txt2tags:
+
+@PageMark { 55 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitOutputTxt.ScriviScrap @End @Verbatim @I {55 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin procedure TSlitOutputTxt.ScriviScrap(tipo:EMacroType; nome, contenuto:String);@End @Verbatim
+   @Verbatim @Begin var@End @Verbatim
+     @Verbatim @Begin titolo: String;@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin if tipo = FileMacro then@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin titolo := 'File';@End @Verbatim
+     @Verbatim @Begin end@End @Verbatim
+     @Verbatim @Begin else@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin titolo := 'Definizione';@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+     @Verbatim @Begin writeln(handle, '------------------------------');@End @Verbatim
+     @Verbatim @Begin writeln(handle, '| **', titolo, ' ', nome, '**');@End @Verbatim
+     @Verbatim @Begin writeln(handle, '------------------------------');@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+     @Verbatim @Begin writeln(handle, '```');@End @Verbatim
+     @Verbatim @Begin writeln(handle, contenuto);@End @Verbatim
+     @Verbatim @Begin writeln(handle, '```');@End @Verbatim
+     @Verbatim @Begin writeln(handle, '------------------------------');@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 56 } @CrossLink { 56 }  } }
+
+Riassumendo:
+
+@PageMark { 56 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin slittxt.pas @End @Verbatim @I {56 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin {$MODE OBJFPC}@End @Verbatim
+   @Verbatim @Begin {$H+}@End @Verbatim
+   @Verbatim @Begin unit slittxt;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin interface@End @Verbatim
+     @Verbatim @Begin uses slitstream, slitoutput, macrostore;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin type@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+     @Verbatim @Begin TSlitOutputTxt = class(TSlitOutput)@End @Verbatim
+     @Verbatim @Begin private@End @Verbatim
+       @Verbatim @Begin handle:Text;@End @Verbatim
+     @Verbatim @Begin public@End @Verbatim
+       @Verbatim @Begin constructor CreateForFile(fileName:String);@End @Verbatim
+       @Verbatim @Begin destructor Destroy; override;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+       @Verbatim @Begin procedure ScriviScrap(tipo:EMacroType; nome, contenuto:String); override;@End @Verbatim
+       @Verbatim @Begin procedure PutLine(str:String); override;@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin implementation@End @Verbatim
+     @Verbatim @Begin uses sysutils, strutils, classes;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+     @I { 52 } @CrossLink @Verbatim @Begin <TSlitOutputTxt.CreateForFile 52>@End @Verbatim
+     @I { 53 } @CrossLink @Verbatim @Begin <TSlitOutputTxt.Destroy 53>@End @Verbatim
+     @I { 54 } @CrossLink @Verbatim @Begin <TSlitOutputTxt.PutLine 54>@End @Verbatim
+     @I { 55 } @CrossLink @Verbatim @Begin <TSlitOutputTxt.ScriviScrap 55>@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin end.@End @Verbatim
+}
+@End @Section
+# }}}
+
+# Output in formato Lout {{{
+@Section
+@Title { Output in formato Lout }
+@Begin @PP
+
+LOut è un sistema di typesetting di spirito simile a TeX ma di sintassi più semplice e più
+facilmente programmabile. @PP
+
+Uno dei vantaggi di LOut è la programmabilità e la leggerezza.
+
+Slit può creare documentazione in formato LOut. @PP
+
+I file di lout non hanno una estensione determinata. Per quanto riguarda slit l'estensione
+che viene aggiunta alla documentazione e' "".lout"".
+
+@PageMark { 57 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitOutputLout.CreateForFileAndStore @End @Verbatim @I {57 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin constructor TSlitOutputLout.CreateForFileAndStore(fileName:String; store:TMacroStore);@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin Assign(handle, ExtractFileName(fileName)+'.lout');@End @Verbatim
+     @Verbatim @Begin Rewrite(handle);@End @Verbatim
+     @Verbatim @Begin FStore := store;@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 66 } @CrossLink { 66 }  } }
+
+La chiusura avviene alla dismissione del flusso:
+
+@PageMark { 58 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitOutputLout.Destroy @End @Verbatim @I {58 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin destructor TSlitOutputLout.Destroy;@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin Close(handle);@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 66 } @CrossLink { 66 }  } }
+
+Le righe di documentazione vengono inserite esattamente come
+sono all'interno del file Lout. Questo permette di
+aggiungere istruzioni lout alla documentazione:
+
+@PageMark { 59 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitOutputLout.PutLine @End @Verbatim @I {59 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin procedure TSlitOutputLout.PutLine(str:String);@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin writeln(handle, str);@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 66 } @CrossLink { 66 }  } }
+
+Per quanto riguarda i settori di codice, questi devono essere
+scritti in un formato particolare, che permette a Lout di formattarli
+in modo corretto. @PP
+
+Questo è un estratto di un esempio di codice formattato correttamente
+per usarlo con Lout: @PP
+
+@F @Verbatim {
+@LeftDisplay lines @Break {
+@Sym angleleft @I @Verbatim @Begin definizione di ciao @End @Verbatim @Sym angleright @Sym equivalence
+    @Verbatim @Begin while(true) { @End @Verbatim 
+      @Verbatim @Begin putstrln("ciao!"); @End @Verbatim
+    @Verbatim @Begin } @End @Verbatim
+}
+}
+
+Il nome della definizione viene scritto fra parentesi angolate in italico
+@Verbatim {(@I)}. @PP 
+
+La testata viene scritta così:
+
+@PageMark { 60 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitOutputLout scrivi testata @End @Verbatim @I {60 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin write(handle, '@Sym angleleft { BoldSlope } @Font @','Verbatim @Begin ');@End @Verbatim
+   @Verbatim @Begin write(handle, nome, ' @','End @','Verbatim ');@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin write(handle, '@I {', currentMacro.macroProgr, ' } ');@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin writeln(handle, ' @Sym angleright @Sym equivalence');@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 65 } @CrossLink { 65 }  } }
+
+Per ogni testata viene scritto un tag che serve per generare i link che portano
+alla definizione della macro. @PP
+
+Ad ogni tag corrisponde un nome che non deve avere caratteri che non siano
+alfanumerici oppure underscore. @PP
+
+Per questo motivo viene usato, come tag, il progressivo della macro. @PP
+
+@PageMark { 61 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitOutputLout scrivi tag @End @Verbatim @I {61 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin writeln(handle, '@PageMark { ', currentMacro.macroProgr, ' } ');@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 65 } @CrossLink { 65 }  } }
+
+Il codice scritto dall'utente viene inserito fra blocchi
+verbatim ovvero fra @Verbatim { "@Verbatim @Begin" } e @Verbatim { "@End @Verbatim" }. @PP 
+
+Tutto il codice è racchiuso fra @Verbatim { "@LeftDisplay lines @Break" }, che permette
+di rendere l'indentazione significativa. @PP
+
+Il codice viene prima diviso in linee e gli spazi che vengono prima del
+primo scritto vengono isolati dal codice perche' sono significativi per
+la versione: @PP
+
+@PageMark { 62 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitOutputLout scrivi codice @End @Verbatim @I {62 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin stringhe := TStringList.Create;@End @Verbatim
+   @Verbatim @Begin stringhe.Text := contenuto;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin for i := 0 to stringhe.Count-1 do@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @I { 63 } @CrossLink @Verbatim @Begin <TSlitOutputLout.ScriviScrap processa linea 63>@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin FreeAndNil(stringhe);@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 65 } @CrossLink { 65 }  } }
+
+Per ogni linea vengono separati gli spazi iniziali dal resto della stringa
+e gli spazi iniziali vengono inseriti prima del blocchi verbatim. @PP
+
+Se la riga che si va a scrivere è un riferimento ad una macro
+allora viene evidenziata in grassetto e viene inserito un link alla
+definizione della macro. 
+
+@PageMark { 63 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitOutputLout.ScriviScrap processa linea @End @Verbatim @I {63 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin spazi := Length( stringhe.Strings[i] );@End @Verbatim
+   @Verbatim @Begin spazi := spazi - Length(TrimLeft(stringhe.Strings[i]));@End @Verbatim
+   @Verbatim @Begin for j := 1 to spazi do@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin write(handle, ' ');@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin write(handle, '   ');@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin stringaPulita := Trim(stringhe.Strings[i]);@End @Verbatim
+   @Verbatim @Begin if AnsiStartsStr('@<', stringaPulita) and@End @Verbatim
+      @Verbatim @Begin AnsiEndsStr('@>', stringaPulita) then@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin nomeDefinizione := MidStr(stringaPulita, 3, Length(stringaPulita)-4);@End @Verbatim
+     @Verbatim @Begin macroTemp := FStore.GetMacro( nomeDefinizione );@End @Verbatim
+     @Verbatim @Begin write(handle, '@I { ', macroTemp.macroProgr, ' } @CrossLink ');@End @Verbatim
+     @Verbatim @Begin stringaPulita := '<' + nomeDefinizione + ' ' + IntToStr(macroTemp.macroProgr) + '>';@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin write(handle, '@','Verbatim @','Begin ');@End @Verbatim
+   @Verbatim @Begin write(handle, stringaPulita);@End @Verbatim
+   @Verbatim @Begin writeln(handle, '@','End @','Verbatim');@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 62 } @CrossLink { 62 }  } }
+
+Dopo aver scritto il codice viene scritto anche i riferimenti alle macro
+che usano questa. 
+
+@PageMark { 64 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitOutputLout scrivi riferimenti @End @Verbatim @I {64 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin if currentMacro.macroUsersCount <> 0 then@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin write(handle, '{ -1p setsmallcaps 0.9 } @Font { ');@End @Verbatim
+     @Verbatim @Begin write(handle, 'Usata da: ');@End @Verbatim
+     @Verbatim @Begin for i:=0 to currentMacro.macroUsersCount-1 do@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin write(handle, ' { ', currentMacro.macroUsers[i], ' } @CrossLink { ');@End @Verbatim
+       @Verbatim @Begin write(handle, currentMacro.macroUsers[i], ' } ');@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+     @Verbatim @Begin write(handle, ' } ');@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 65 } @CrossLink { 65 }  } }
+
+La scrittura di una macro è quindi riassunta in questo codice:
+
+@PageMark { 65 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin TSlitOutputLout.ScriviScrap @End @Verbatim @I {65 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin procedure TSlitOutputLout.ScriviScrap(tipo:EMacroType; nome, contenuto:String);@End @Verbatim
+   @Verbatim @Begin var@End @Verbatim
+     @Verbatim @Begin stringhe:TStringList;@End @Verbatim
+     @Verbatim @Begin spazi:integer;@End @Verbatim
+     @Verbatim @Begin stringaPulita, nomeDefinizione: String;@End @Verbatim
+     @Verbatim @Begin i, j:integer;@End @Verbatim
+     @Verbatim @Begin currentMacro, macroTemp: TMacroRecord;@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin currentMacro := FStore.GetMacro(nome);@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+     @I { 61 } @CrossLink @Verbatim @Begin <TSlitOutputLout scrivi tag 61>@End @Verbatim
+     @Verbatim @Begin @End @Verbatim
+     @Verbatim @Begin writeln(handle, '@LeftDisplay lines @Break {');@End @Verbatim
+     @I { 60 } @CrossLink @Verbatim @Begin <TSlitOutputLout scrivi testata 60>@End @Verbatim
+     @I { 62 } @CrossLink @Verbatim @Begin <TSlitOutputLout scrivi codice 62>@End @Verbatim
+     @I { 64 } @CrossLink @Verbatim @Begin <TSlitOutputLout scrivi riferimenti 64>@End @Verbatim
+     @Verbatim @Begin writeln(handle, '}');@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 66 } @CrossLink { 66 }  } }
+
+Riassumendo, il codice di gestione del formato Lout è il seguente:
+
+@PageMark { 66 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin slitlout.pas @End @Verbatim @I {66 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin {$MODE OBJFPC}@End @Verbatim
+   @Verbatim @Begin {$H+}@End @Verbatim
+   @Verbatim @Begin unit slitlout;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin interface@End @Verbatim
+     @Verbatim @Begin uses slitoutput, macrostore;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin type@End @Verbatim
+     @Verbatim @Begin TSlitOutputLout = class(TSlitOutput)@End @Verbatim
+     @Verbatim @Begin private@End @Verbatim
+       @Verbatim @Begin handle:Text;@End @Verbatim
+       @Verbatim @Begin FStore: TMacroStore;@End @Verbatim
+     @Verbatim @Begin public@End @Verbatim
+       @Verbatim @Begin constructor CreateForFileAndStore(fileName:String; store:TMacroStore);@End @Verbatim
+       @Verbatim @Begin destructor Destroy; override;@End @Verbatim
+       @Verbatim @Begin procedure PutLine(str:String); override;@End @Verbatim
+       @Verbatim @Begin procedure ScriviScrap(tipo:EMacroType; nome, contenuto:String); override;@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin implementation@End @Verbatim
+     @Verbatim @Begin uses sysutils, strutils, classes;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+     @I { 57 } @CrossLink @Verbatim @Begin <TSlitOutputLout.CreateForFileAndStore 57>@End @Verbatim
+     @I { 58 } @CrossLink @Verbatim @Begin <TSlitOutputLout.Destroy 58>@End @Verbatim
+     @I { 59 } @CrossLink @Verbatim @Begin <TSlitOutputLout.PutLine 59>@End @Verbatim
+     @I { 65 } @CrossLink @Verbatim @Begin <TSlitOutputLout.ScriviScrap 65>@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin end.@End @Verbatim
+}
+@End @Section
+# }}}
+
+@EndSections
+@End @Chapter
+# :folding=explicit:mode=slitpascal:
+@Chapter
+@Title { Creazione dei files sorgenti }
+@Begin @PP
+
+La lettura dei files non fa altro che creare i files sorgenti a partire dalle
+macro memorizzate nel magazzino. @PP
+
+La procedura @F {ProcessaFiles}, infatti, legge tutto il magazzino delle
+macro alla ricerca delle macro che devono generare dei files:
+
+@PageMark { 67 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin procedure ProcessaFiles @End @Verbatim @I {67 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin procedure ProcessaFiles();@End @Verbatim
+   @Verbatim @Begin var@End @Verbatim
+     @Verbatim @Begin i:Integer;@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin for i:=0 to store.MacroCount-1 do@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin if store.GetRecord(i).macroType = FileMacro then@End @Verbatim
+       @Verbatim @Begin begin@End @Verbatim
+         @Verbatim @Begin Assign(streamOutput, Trim(store.GetRecord(i).macroName));@End @Verbatim
+         @Verbatim @Begin Rewrite(streamOutput);@End @Verbatim
+         @Verbatim @Begin ScriviScrapEspanso(store.GetRecord(i).macroName, 0);@End @Verbatim
+         @Verbatim @Begin Close(streamOutput);@End @Verbatim
+       @Verbatim @Begin end;@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 69 } @CrossLink { 69 }  } }
+
+Ogni file viene generato con lo scrap che corrisponde al suo nome. La
+procedura che scrive lo scrap divide in righe il codice dello scrap
+alla ricerca del riferimento ad una macro. @PP
+
+Sei il riferimento è quello di una macro si richiama ricorsivamente
+per generare il file, altrimenti stampa la riga al livello di indentazione
+desiderato, che inizialmente è 0. 
+
+@PageMark { 68 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin procedure ScriviScrapEspanso @End @Verbatim @I {68 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin procedure ScriviScrapEspanso(nome:String; indent:Integer);@End @Verbatim
+   @Verbatim @Begin var@End @Verbatim
+     @Verbatim @Begin stringhe:TStringList;@End @Verbatim
+     @Verbatim @Begin rec:TMacroRecord;@End @Verbatim
+     @Verbatim @Begin i:integer;@End @Verbatim
+     @Verbatim @Begin tempStringa:String;@End @Verbatim
+     @Verbatim @Begin tempIndentazione:String;@End @Verbatim
+   @Verbatim @Begin begin@End @Verbatim
+     @Verbatim @Begin tempIndentazione := '';@End @Verbatim
+     @Verbatim @Begin for i := 1 to indent do@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin tempIndentazione := tempIndentazione + ' ';@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+     @Verbatim @Begin rec := store.GetMacro(nome);@End @Verbatim
+     @Verbatim @Begin if rec.macroName = '' then@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin writeln(streamOutput, '<', nome, '>');@End @Verbatim
+       @Verbatim @Begin writeln(StdErr, 'Attenzione: macro ', nome, ' sconosciuta');@End @Verbatim
+     @Verbatim @Begin end@End @Verbatim
+     @Verbatim @Begin else@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin stringhe := TStringList.Create;@End @Verbatim
+       @Verbatim @Begin stringhe.Text := rec.macroContent;@End @Verbatim
+       @Verbatim @Begin for i := 0 to stringhe.Count-1 do@End @Verbatim
+       @Verbatim @Begin begin@End @Verbatim
+         @Verbatim @Begin tempStringa := Trim(stringhe.Strings[i]);@End @Verbatim
+         @Verbatim @Begin if AnsiStartsStr('@<', tempStringa) and AnsiEndsStr('@>', tempStringa) then@End @Verbatim
+         @Verbatim @Begin begin@End @Verbatim
+           @Verbatim @Begin ScriviScrapEspanso(MidStr(tempStringa, 3, Length(tempStringa)-4),@End @Verbatim
+             @Verbatim @Begin indent +@End @Verbatim
+             @Verbatim @Begin Length(stringhe.Strings[i]) - Length(TrimLeft(stringhe.Strings[i])));@End @Verbatim
+         @Verbatim @Begin end@End @Verbatim
+         @Verbatim @Begin else@End @Verbatim
+         @Verbatim @Begin begin@End @Verbatim
+           @Verbatim @Begin writeln(streamOutput, tempIndentazione, stringhe.Strings[i]);@End @Verbatim
+         @Verbatim @Begin end;@End @Verbatim
+       @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+       @Verbatim @Begin FreeAndNil(stringhe);@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 69 } @CrossLink { 69 }  } }
+
+Riassumendo:
+
+@PageMark { 69 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin slit.pas @End @Verbatim @I {69 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin {$MODE objfpc}@End @Verbatim
+   @Verbatim @Begin {$H+}@End @Verbatim
+   @Verbatim @Begin program slit;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin uses Classes, macrostore, sysutils,@End @Verbatim
+       @Verbatim @Begin strutils, slitstream, slithtml,@End @Verbatim
+       @Verbatim @Begin slittxt, slitoutput, slitlout,@End @Verbatim
+       @Verbatim @Begin drivermagazzino, driverdoc;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin var@End @Verbatim
+     @Verbatim @Begin store:TMacroStore;@End @Verbatim
+     @Verbatim @Begin stream:TSlitStream;@End @Verbatim
+     @Verbatim @Begin streamHtml: TSlitOutput;@End @Verbatim
+     @Verbatim @Begin streamOutput:Text;@End @Verbatim
+     @Verbatim @Begin driverMagazzinoMacro: TSlitStreamDriver;@End @Verbatim
+     @Verbatim @Begin driverScriviDocumentazione: TSlitStreamDriver;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+     @I { 68 } @CrossLink @Verbatim @Begin <procedure ScriviScrapEspanso 68>@End @Verbatim
+     @Verbatim @Begin @End @Verbatim
+     @I { 67 } @CrossLink @Verbatim @Begin <procedure ProcessaFiles 67>@End @Verbatim
+     @Verbatim @Begin @End @Verbatim
+     @I { 6 } @CrossLink @Verbatim @Begin <slit ControllaMacroNonUtilizzate 6>@End @Verbatim
+     @Verbatim @Begin @End @Verbatim
+     @I { 1 } @CrossLink @Verbatim @Begin <slit procedura principale 1>@End @Verbatim
+}
+@End @Chapter
+# :folding=explicit:mode=slitpascal:
+@Chapter
+@Title { Utilità per la gestione dei files html }
+@Begin @LP
+
+Slit produce output anche in formato HTML e il formato HTML prevede, per il testo
+in esso contenuto, una sintassi particolare. @PP
+
+Il testo, in HTML, è composto da una serie di carattere oppure di entità. I
+caratteri che devono essere trattati in modo articolare sono il maggiore, il minore,
+e la "e commerciale". @PP
+
+Per questo motivo esiste una funzione il cui scopo è di implementare
+questa politica: 
+
+@PageMark { 70 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin text2html dichiarazione @End @Verbatim @I {70 }  @Sym angleright @Sym equivalence
+     @Verbatim @Begin function text2html(str:String):String;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 73 } @CrossLink { 73 }  } }
+
+La funzione scorre tutta la stringa passata codificando ogni carattere in formato
+HTML:
+
+@PageMark { 71 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin text2html @End @Verbatim @I {71 }  @Sym angleright @Sym equivalence
+     @Verbatim @Begin function text2html(str:String):String;@End @Verbatim
+     @Verbatim @Begin var@End @Verbatim
+       @Verbatim @Begin buffer:String;@End @Verbatim
+       @Verbatim @Begin i:Integer;@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin buffer := '';@End @Verbatim
+       @Verbatim @Begin for i:=1 to Length(str) do@End @Verbatim
+       @Verbatim @Begin begin@End @Verbatim
+         @I { 72 } @CrossLink @Verbatim @Begin <text2html controllo carattere 72>@End @Verbatim
+       @Verbatim @Begin end;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+       @Verbatim @Begin Result := buffer;@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 73 } @CrossLink { 73 }  } }
+
+Ogni carattere viene controllato:
+
+@PageMark { 72 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin text2html controllo carattere @End @Verbatim @I {72 }  @Sym angleright @Sym equivalence
+     @Verbatim @Begin if str[i]='<' then@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin buffer := buffer + '&lt;';@End @Verbatim
+     @Verbatim @Begin end@End @Verbatim
+     @Verbatim @Begin else if str[i]='>' then@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin buffer := buffer + '&gt;';@End @Verbatim
+     @Verbatim @Begin end@End @Verbatim
+     @Verbatim @Begin else if str[i]='&' then@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin buffer := buffer + '&amp;';@End @Verbatim
+     @Verbatim @Begin end@End @Verbatim
+     @Verbatim @Begin else@End @Verbatim
+     @Verbatim @Begin begin@End @Verbatim
+       @Verbatim @Begin buffer := buffer + str[i];@End @Verbatim
+     @Verbatim @Begin end;@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 71 } @CrossLink { 71 }  } }
+
+Riassumendo esiste una unit definita in modo seguente:
+
+
+@PageMark { 73 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin unit htmlutils @End @Verbatim @I {73 }  @Sym angleright @Sym equivalence
+   @Verbatim @Begin {$MODE OBJFPC}@End @Verbatim
+   @Verbatim @Begin {$M+}@End @Verbatim
+   @Verbatim @Begin unit htmlutils;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin interface@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+     @Verbatim @Begin uses sysutils, strutils;@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+     @I { 70 } @CrossLink @Verbatim @Begin <text2html dichiarazione 70>@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+   @Verbatim @Begin implementation@End @Verbatim
+   @Verbatim @Begin @End @Verbatim
+     @I { 71 } @CrossLink @Verbatim @Begin <text2html 71>@End @Verbatim
+   @Verbatim @Begin end.@End @Verbatim
+{ -1p setsmallcaps 0.9 } @Font { Usata da:  { 74 } @CrossLink { 74 }  } }
+
+@PageMark { 74 } 
+@LeftDisplay lines @Break {
+@Sym angleleft { BoldSlope } @Font @Verbatim @Begin htmlutils.pas @End @Verbatim @I {74 }  @Sym angleright @Sym equivalence
+     @I { 73 } @CrossLink @Verbatim @Begin <unit htmlutils 73>@End @Verbatim
+}
+
+@End @Chapter
