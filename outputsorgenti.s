@@ -19,10 +19,10 @@ begin
   begin
     if store.GetRecord(i).macroType = FileMacro then
     begin
-      Assign(streamOutput, Trim(store.GetRecord(i).macroName));
-      Rewrite(streamOutput);
+      Assign(streamOutputSorgenti, Trim(store.GetRecord(i).macroName));
+      Rewrite(streamOutputSorgenti);
       ScriviScrapEspanso(store.GetRecord(i).macroName, 0);
-      Close(streamOutput);
+      Close(streamOutputSorgenti);
     end;
   end;
 end;
@@ -55,7 +55,7 @@ begin
   rec := store.GetMacro(nome);
   if rec.macroName = '' then
   begin
-    writeln(streamOutput, '<', nome, '>');
+    writeln(streamOutputSorgenti, '<', nome, '>');
     writeln(StdErr, 'Attenzione: macro ', nome, ' sconosciuta');
   end
   else
@@ -73,7 +73,7 @@ begin
       end
       else
       begin
-        writeln(streamOutput, tempIndentazione, stringhe.Strings[i]);
+        writeln(streamOutputSorgenti, tempIndentazione, stringhe.Strings[i]);
       end;
     end;
 
@@ -82,7 +82,7 @@ begin
 end;
 @}
 
-Riassumendo:
+Riassumendo questo e' il programma principale:
 
 @o slit.pas
 @{
@@ -98,8 +98,8 @@ uses Classes, macrostore, sysutils,
 var
   store:TMacroStore;
   stream:TSlitStream;
-  streamHtml: TSlitOutput;
-  streamOutput:Text;
+  streamOutputDocumentazione: TSlitOutput;
+  streamOutputSorgenti:Text;
   driverMagazzinoMacro: TSlitStreamDriver;
   driverScriviDocumentazione: TSlitStreamDriver;
 

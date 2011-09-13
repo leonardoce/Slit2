@@ -260,10 +260,10 @@ poi riprese per scrivere i files sorgenti.
 @{
 store := TMacroStore.Create;
 stream := TSlitStream.CreateForFile(ParamStr(1));
-streamHtml := TSlitOutputLout.CreateForFileAndStore(ParamStr(1), store);
+streamOutputDocumentazione := TSlitOutputLout.CreateForFileAndStore(ParamStr(1), store);
 driverMagazzinoMacro := TSlitStreamDriverMagazzino.CreateWithMacroStore( store );
 driverScriviDocumentazione := 
-  TSlitStreamDriverGenerazioneDoc.CreateWithOutputStream( streamHtml );
+  TSlitStreamDriverGenerazioneDoc.CreateWithOutputStream( streamOutputDocumentazione );
 @}
 
 La documentazione viene elaborata attraverso un metodo dello stream in ingresso:
@@ -333,7 +333,7 @@ Poi vengono deallocati gli oggetti creati:
 @{
   FreeAndNil(driverMagazzinoMacro);
   FreeAndNil(driverScriviDocumentazione);
-  FreeAndNil(streamHtml);
+  FreeAndNil(streamOutputDocumentazione);
   FreeAndNil(stream);
   FreeAndNil(store);
 @}
