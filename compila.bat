@@ -17,4 +17,13 @@ pushd bin
 fpc slit.pas
 popd
 
+echo.
+echo.
+echo Recompiling documentation
+echo -------------------------
+echo.
+pushd bin
+copy ..\book .
+lout slit.s.lout -o slit.ps -r4
+popd
 @echo on
