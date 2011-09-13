@@ -130,18 +130,26 @@ di macro e lo stesso output: @PP
 
 @d processa direttiva i
 @{
-  macroName := Trim(MidStr(lineBuffer, 3, Length(lineBuffer)-2));
-  temporaryStream := TSlitStream.CreateForFile(
-    ExtractFilePath(FNomeFile) + macroName);
-  temporaryStream.Driver := FDriver;
-  temporaryStream.Process();
-  FreeAndNil(temporaryStream);
+macroName := Trim(MidStr(lineBuffer, 3, Length(lineBuffer)-2));
+temporaryStream := TSlitStream.CreateForFile(
+  ExtractFilePath(FNomeFile) + macroName);
+temporaryStream.Driver := FDriver;
+temporaryStream.Process();
+FreeAndNil(temporaryStream);
 @}
 
 Il nome del file viene interpretato in modo relativo al file corrente. @PP
 
 La direttiva @F @Verbatim { @# } ignora tutto quello che segue e può venire utilizzata
 come commento. @PP
+
+La direttiva @F @Verbatim { @x } invece passa a Slit una opzione, che viene gestita
+dal driver che @Char egrave agganciato al parser. @PP
+
+@d processa direttiva x
+@{
+FDriver.ProcessaOpzione (MidStr(lineBuffer,2,Length(lineBuffer)-1));
+@}
 
 Se la riga letta non {@Char egrave} una direttiva allora questa viene direttamente scritta sull'output. @PP
 
@@ -172,7 +180,11 @@ begin
     end
     else if AnsiStartsStr('@# ', lineBuffer) then
     begin
-      { no-op }
+      { no-op, si tratta di un commento }
+    end
+    else if AnsiStartsStr('@x ', lineBuffer) then
+    begin
+      @<processa direttiva x@>
     end
     else
     begin
