@@ -45,6 +45,10 @@ sorgente }
 un file slit da un'altro. }
 @EndList
 
+C'@Char egrave una cosa molto importante da ricordare: le direttive sono
+valide solamente se sono scritte al primo carattere della linea. Questo
+per fare in modo che slit non interpreti una stringa come una direttiva. @PP
+
 @BeginSections
 @Section @Title { La direttiva "@d" }
 @Begin @PP
@@ -52,20 +56,139 @@ un file slit da un'altro. }
 La direttiva "@d" @Char egrave la direttiva principale di Slit. @PP
 
 Questa direttiva serve per memorizzare una macro di testo all'interno del
-sistema. La macro pu@Char ograve essere utilizzata all'interno di altre
+sistema. La macro pu{@Char ograve} essere utilizzata all'interno di altre
 macro oppure semplicimente per scrivere un certo file sorgente. @PP
 
 Ecco un esempio di una direttiva "@d":
 
 @IndentedDisplay @F 
 @Verbatim @Begin
+ @d funzione somma
+@{
 function somma(a,b:Integer) return Integer
 begin
   return a+b;
 end;
+@}
+@End @Verbatim
+
+Come si vede la direttiva "@d" @Char egrave seguita da uno @I scrap. Uno
+@I scrap, secondo la terminologia Slit, @Char egrave il contenuto della
+macro definita. @PP
+
+Uno scrap inizia per "@{" e finisce con "@}". Tutto quello che 
+@Char egrave fra queste due righe @Char egrave considerato come
+contenuto della macro in corso di definizione. @PP
+
+In base al tipo di processore scelto per l'output Slit enuncia il
+nome della macro e il suo contenuto all'interno della documentazione.
+Ad ogni macro viene associato un numero che la identifica e alla fine
+della macro vengono enunciati i numeri di macro che utilizzano la macro
+appena definita. @PP
+
+Una macro pu{@Char ograve} anche essere non utilizzata, in questo 
+caso Slit avverte
+l'utente alla fine del processo di produzione dei files sorgenti. @PP
+
+@End @Section
+
+@Section @Title { La direttiva "@o" e sintassi degli scrap }
+@Begin @PP
+
+La direttiva "@o" @Char egrave molto simile, dal punto di vista sintattico,
+a quella "@d". Infatti viene utilizzata per definire un tipo particolare di
+macro, il cui nome viene utilizzato per scrivere un file. @PP
+
+Ad esempio: 
+
+@IndentedDisplay @F 
+@Verbatim @Begin
+ @o prova.c
+@{
+#include <stdio.h>
+
+int main(int argc, char **argv)
+{
+    printf("Hello world!\n");
+    return 0;
+}
+@}
+@End @Verbatim
+
+All'interno di uno scrap si pu{@Char ograve} includere un riferimento ad
+un'altro:
+
+@IndentedDisplay @F 
+@Verbatim @Begin
+ @d saluta
+@{
+printf("Hello world!\n");
+@}
+@End @Verbatim
+
+@IndentedDisplay @F 
+@Verbatim @Begin
+ @o provadue.c
+@{
+#include <stdio.h>
+
+int main(int argc, char **argv)
+{
+    @<saluta@>
+    return 0;
+}
+@}
+@End @Verbatim
+
+Nello scrivere il codice sorgente slit ricorda il livello di indentazione dei
+riferimenti alle macro e li utilizza per scrivere il codice.
+
+@End @Section
+
+@Section @Title { La direttiva "@i" }
+@Begin @PP
+
+La direttiva "@i" invece serve per includere un file slit da un'altro. @PP
+
+Molto spesso i programmi scritti con Slit sono composti da pi{@Char ugrave}
+files Slit. La direttiva "@i" dice a Slit di andare a leggere un'altro file
+e ritornare al file chiamante quando la lettura viene completata. @PP
+
+Ad esempio:
+
+@IndentedDisplay @F @Verbatim { @i provatre_funzioni.s }
+@IndentedDisplay @F @Verbatim { @i provatre_dichiarazioni.s }
+
+@IndentedDisplay @F
+@Verbatim @Begin
+ @o provatre.c
+@{
+@include <stdio.h>
+
+@<dichiarazioni@>
+@<funzioni@>
+
+int main(int argc, char **argv)
+{
+    funzionePrincipale();
+    return 0;
+}
+@}
 @End @Verbatim
 
 @End @Section
+
+@Section @Title { Documentazione }
+@Begin @PP
+
+Tutto quello che non @Char egrave una direttiva viene direttamente passato 
+nel file di documentazione generato senza alcuna trasformazione
+intermedia. @PP
+
+TODO sono rimasto qui.
+Descrivere i vari formati output di slit.
+@End @Section
+
 @EndSections
 
 @End @Chapter
