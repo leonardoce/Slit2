@@ -390,8 +390,11 @@ if AnsiStartsStr('@<', stringaPulita) and
 begin
   nomeDefinizione := MidStr(stringaPulita, 3, Length(stringaPulita)-4);
   macroTemp := FStore.GetMacro( nomeDefinizione );
-  write(handle, '@I { ', macroTemp.macroProgr, ' } @CrossLink ');
-  stringaPulita := '<' + nomeDefinizione + ' ' + IntToStr(macroTemp.macroProgr) + '>';
+  if macroTemp<>Nil then
+  begin
+    write(handle, '@I { ', macroTemp.macroProgr, ' } @CrossLink ');
+    stringaPulita := '<' + nomeDefinizione + ' ' + IntToStr(macroTemp.macroProgr) + '>';
+  end;
 end;
 
 write(handle, '@','Verbatim @','Begin ');
@@ -431,13 +434,16 @@ var
 begin
   currentMacro := FStore.GetMacro(nome);
 
-  @<TSlitOutputLout scrivi tag@>
-  
-  writeln(handle, '@LeftDisplay lines @Break {');  
-  @<TSlitOutputLout scrivi testata@>
-  @<TSlitOutputLout scrivi codice@>
-  @<TSlitOutputLout scrivi riferimenti@>
-  writeln(handle, '}');
+  if currentMacro<>Nil then
+  begin
+    @<TSlitOutputLout scrivi tag@>
+    
+    writeln(handle, '@LeftDisplay lines @Break {');  
+    @<TSlitOutputLout scrivi testata@>
+    @<TSlitOutputLout scrivi codice@>
+    @<TSlitOutputLout scrivi riferimenti@>
+    writeln(handle, '}');
+  end;
 end;
 @}
 

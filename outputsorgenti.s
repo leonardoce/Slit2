@@ -53,7 +53,7 @@ begin
   end;
 
   rec := store.GetMacro(nome);
-  if rec.macroName = '' then
+  if rec=Nil then
   begin
     writeln(streamOutputSorgenti, '<', nome, '>');
     writeln(StdErr, 'Attenzione: macro ', nome, ' sconosciuta');

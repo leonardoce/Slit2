@@ -13,16 +13,19 @@ EMacroType = ( FileMacro, ScrapMacro );
 TMacroRecord = class
 private
   FMacroName:String;
+  FMacroContent:String;
 
 public
   macroProgr:Integer;
-  macroContent:String;
   macroType:EMacroType;
   macroUsers: array of Integer;
   macroUsersCount: Integer;
 
   constructor CreateWithName(Name:String);
+
   property MacroName:String read FMacroName;
+  property MacroContent:String read FMacroContent;
+  procedure AddContent (Content:String);
 end;
 @}
 
@@ -46,6 +49,17 @@ Le macro vengono sempre create con un nome:
 constructor TMacroRecord.CreateWithName(Name:String);
 begin
   FMacroName := Name;
+  FMacroContent := '';
+end;
+@}
+
+@Char Egrave possibile aggiungere contenuto ad una macro:
+
+@d TMacroRecord.AddContent
+@{
+procedure TMacroRecord.AddContent (Content:String);
+begin
+  FMacroContent += Content;
 end;
 @}
 
@@ -84,7 +98,7 @@ procedure TMacroStore.StoreMacro(macroName:String; macroContent:String; macroTyp
 var
   i:Integer;
 begin
-  if GetMacro(macroName).MacroName <> '' then
+  if GetMacro(macroName) <> Nil then
   begin
     writeln('Attenzione: macro ', macroName, ' duplicata.');
   end
@@ -99,7 +113,7 @@ begin
       end;
     end;
     store[count] := TMacroRecord.CreateWithName (macroName);
-    store[count].macroContent := macroContent;
+    store[count].AddContent (macroContent);
     store[count].macroType := macroType;
     store[count].macroProgr := count + 1;
     count := count + 1;
@@ -116,12 +130,11 @@ function TMacroStore.GetMacro(macroName:String):TMacroRecord;
 var
   i:integer;
 begin
-  Result := TMacroRecord.CreateWithName('');
+  Result := Nil;
   for i:=0 to length(Store)-1 do
   begin
     if (store[i]<>Nil) and (store[i].MacroName=macroName) then
     begin
-      FreeAndNil (Result);
       Result:=store[i];
       exit;
     end;
@@ -292,6 +305,7 @@ implementation
   @<TMacroStore.CalcolaRiferimenti@>
 
   @<TMacroRecord.CreateWithName@>
+  @<TMacroRecord.AddContent@>
 end.
 @}
 
