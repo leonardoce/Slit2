@@ -56,7 +56,7 @@ Uno dei vantaggi di LOut {@Char egrave} la programmabilit{@Char agrave} e la leg
 Slit pu{@Char ograve} creare documentazione in formato LOut. @PP
 
 I file di lout non hanno una estensione determinata. Per quanto riguarda slit l'estensione
-che viene aggiunta alla documentazione e' "".lout"".
+che viene aggiunta alla documentazione @Char egrave "".lout"".
 
 @d TSlitOutputLout.CreateForFileAndStore
 @{
@@ -141,7 +141,7 @@ Tutto il codice {@Char egrave} racchiuso fra @Verbatim { "@LeftDisplay lines @Br
 di rendere l'indentazione significativa. @PP
 
 Il codice viene prima diviso in linee e gli spazi che vengono prima del
-primo scritto vengono isolati dal codice perche' sono significativi per
+primo scritto vengono isolati dal codice perch{@Char eacute} sono significativi per
 la versione: @PP
 
 @d TSlitOutputLout scrivi codice
