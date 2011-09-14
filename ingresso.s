@@ -75,8 +75,6 @@ end;
 
 @End @Section
 
-
-# Direttive {{{
 @Section 
 @Title { Direttive }
 @Begin @PP
@@ -198,9 +196,7 @@ end;
 @}
 
 @End @Section
-# }}}
 
-# Gestione del file di input {{{
 @Section
 @Title { Gestione del file di input }
 @Begin @PP
@@ -285,9 +281,7 @@ end;
 @}
 
 @End @Section
-# }}}
 
-# Segnalazione degli errori {{{
 @Section
 @Title { Segnalazione degli errori }
 @Begin @PP
@@ -303,9 +297,7 @@ begin
 end;
 @}
 @End @Section
-# }}}
 
-# Definizione dei flussi di ingresso {{{
 @Section
 @Title { Definizione dei flussi di ingresso }
 @Begin @PP
@@ -335,7 +327,6 @@ implementation
 end.
 @}
 @End @Section
-# }}}
 
 @EndSections
 @End @Chapter
