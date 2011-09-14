@@ -50,7 +50,7 @@ Per memorizzare una macro viene controllato lo spazio disponibile nel vettore
 allora la macro viene memorizzata altrimenti prima di essere memorizzata
 il vettore viene ampliato per far posto ad altre 50 macro. @PP
 
-Una macro non può essere ripetuta all'interno dello stesso file.
+Una macro non pu{@Char ograve} essere ripetuta all'interno dello stesso file.
 Per questo motivo, prima di memorizzare la macro, viene controllata l'esistenza
 di una macro con lo stesso nome e, caso mai, viene segnalato un errore
 all'utente. 
