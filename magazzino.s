@@ -10,13 +10,19 @@ Slit conserva le macro all'interno della memoria.
 @{
 EMacroType = ( FileMacro, ScrapMacro );
 
-TMacroRecord = record
-  macroName:String;
+TMacroRecord = class
+private
+  FMacroName:String;
+
+public
   macroProgr:Integer;
   macroContent:String;
   macroType:EMacroType;
   macroUsers: array of Integer;
   macroUsersCount: Integer;
+
+  constructor CreateWithName(Name:String);
+  property MacroName:String read FMacroName;
 end;
 @}
 
@@ -33,15 +39,32 @@ dei file dalle macro pure); }
 (vettore "macroUsersCount") }
 @EndList
 
+Le macro vengono sempre create con un nome:
+
+@d TMacroRecord.CreateWithName
+@{
+constructor TMacroRecord.CreateWithName(Name:String);
+begin
+  FMacroName := Name;
+end;
+@}
+
 Le macro vengono conservate in un vettore dinamico la cui dimensione viene
 fissata, inizialmente, a 50.
 
 @d TMacroStore.Create
 @{
 constructor TMacroStore.Create;
+var
+  i:Integer;
 begin
   count:=0;
   SetLength(store, 50);
+
+  for i:=0 to Length(Store)-1 do
+  begin
+    Store[i] := Nil;
+  end;
 end;
 @}
 
@@ -58,8 +81,10 @@ all'utente.
 @d TMacroStore.StoreMacro
 @{
 procedure TMacroStore.StoreMacro(macroName:String; macroContent:String; macroType:EMacroType);
+var
+  i:Integer;
 begin
-  if GetMacro(macroName).macroName <> '' then
+  if GetMacro(macroName).MacroName <> '' then
   begin
     writeln('Attenzione: macro ', macroName, ' duplicata.');
   end
@@ -68,8 +93,12 @@ begin
     if count>=Length(store) then
     begin
       SetLength(store, Length(Store)+50);
+      for i:=count to Length(Store)-1 do
+      begin
+        Store[i] := Nil;
+      end;
     end;
-    store[count].macroName := macroName;
+    store[count] := TMacroRecord.CreateWithName (macroName);
     store[count].macroContent := macroContent;
     store[count].macroType := macroType;
     store[count].macroProgr := count + 1;
@@ -87,11 +116,12 @@ function TMacroStore.GetMacro(macroName:String):TMacroRecord;
 var
   i:integer;
 begin
-  Result.macroName := '';
+  Result := TMacroRecord.CreateWithName('');
   for i:=0 to length(Store)-1 do
   begin
-    if store[i].macroName=macroName then
+    if (store[i]<>Nil) and (store[i].MacroName=macroName) then
     begin
+      FreeAndNil (Result);
       Result:=store[i];
       exit;
     end;
@@ -260,6 +290,8 @@ implementation
   @<TMacroStore.MacroCount@>
   @<TMacroStore.GetRecord@>
   @<TMacroStore.CalcolaRiferimenti@>
+
+  @<TMacroRecord.CreateWithName@>
 end.
 @}
 
