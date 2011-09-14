@@ -68,11 +68,21 @@ La testata viene scritta cos{@Char igrave}:
 @d TSlitOutputLout scrivi testata
 @{
 write(handle, '@Sym angleleft { BoldSlope } @Font @','Verbatim @Begin ');
+if tipo=FileScrap then
+begin
+  write(handle, 'FILE ');
+end;
 write(handle, nome, ' @','End @','Verbatim ');
 
 write(handle, '@I {', currentMacro.macroProgr, ' } ');
 
-writeln(handle, ' @Sym angleright @Sym equivalence');
+write(handle, ' @Sym angleright'); 
+if tipo=AppendScrap then
+begin
+  write(handle, ' @Sym plus');
+end;
+writeln(handle, ' @Sym equivalence');
+
 @}
 
 Per ogni testata viene scritto un tag che serve per generare i link che portano
