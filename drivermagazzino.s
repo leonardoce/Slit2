@@ -56,7 +56,7 @@ begin
   tempMacro := FMacroStore.GetMacro(nomeMacro);
   if tempMacro.macroName <> '' then
   begin
-    writeln(StdErr, 'Macro ', nomeMacro, ' definita piu' volte');
+    writeln(StdErr, 'Macro ', nomeMacro, ' definita piu'' volte');
   end
   else
   begin
@@ -64,6 +64,30 @@ begin
   end;
 end;
 @}
+
+Il caso nel quale alla macro ne viene aggiunta un'altra @Char egrave un
+po' diverso: bisogna prima controllare l'esistenza della macro prima
+di aggiungerci altre cose. @PP
+
+@d TSlitStreamDriverMagazzino.ProcessaAggiungiNellaMacro
+@{
+procedure TSlitStreamDriverMagazzino.ProcessaAggiungiNellaMacro(nomeMacro:String; scrap:String); 
+var
+  tempMacro : TMacroRecord;
+begin
+  tempMacro := FMacroStore.GetMacro(nomeMacro);
+  if tempMacro.macroName <> '' then
+  begin
+    writeln(StdErr, 'Richiesta aggiunta di uno scrap alla macro ', nomeMacro, 
+      ' che non e'' stata ancora definita');
+  end
+  else
+  begin
+    FMacroStore.StoreMacro(nomeMacro, scrap, ScrapMacro);
+  end;
+end;
+@}
+
 
 Invece le righe di documentazione vengono scartate:
 
@@ -129,6 +153,8 @@ type
     constructor CreateWithMacroStore(ms:TMacroStore);
     procedure ProcessaDefinizioneMacro(nomeMacro:String; scrap:String); 
       override;
+    procedure ProcessaAggiungiNellaMacro(nomeMacro:String; scrap:String);
+      override;
     procedure ProcessaDefinizioneFile(nomeMacro:String; scrap:String);  
       override;
     procedure ProcessaRigaDocumentazione(riga:String);
@@ -145,6 +171,7 @@ implementation
   @<TSlitStreamDriverMagazzino.ProcessaDefinizioneFile@>
   @<TSlitStreamDriverMagazzino.ProcessaRigaDocumentazione@>
   @<TSlitStreamDriverMagazzino.ProcessaOpzione@>
+  @<TSlitStreamDriverMagazzino.ProcessaAggiungiNellaMacro@>
 end.
 @}
 
