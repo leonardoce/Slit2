@@ -4,7 +4,6 @@
 @Title { Il magazzino delle macro }
 @Begin @PP
 
-# Introduzione al capitolo {{{
 Slit conserva le macro all'interno della memoria. 
 
 @d TMacroRecord
@@ -121,11 +120,9 @@ begin
   Result := store[i];
 end;
 @}
-# }}}
 
 @BeginSections
 
-# Calcolo dei riferimenti {{{
 @Section
 @Title { Calcolo dei riferimenti }
 @Begin @PP 
@@ -219,9 +216,7 @@ store[k].macroUsersCount := store[k].macroUsersCount + 1;
 @}
 
 @End @Section
-# }}}
 
-# Definizione della unit macrostore {{{
 @Section
 @Title { Definizione della unit macrostore }
 @Begin @PP
@@ -269,7 +264,6 @@ end.
 @}
 
 @End @Section
-# }}}
 
 @EndSections
 
