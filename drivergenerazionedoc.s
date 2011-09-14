@@ -23,7 +23,7 @@ il backend:
 @{
 procedure TSlitStreamDriverGenerazioneDoc.ProcessaDefinizioneMacro(nomeMacro:String; scrap:String); 
 begin
-  FOutputStream.ScriviScrap(ScrapMacro, nomeMacro, scrap);
+  FOutputStream.ScriviScrap(DefinitionScrap, nomeMacro, scrap);
 end;
 @}
 
@@ -34,7 +34,18 @@ scritta attraverso il backend:
 @{
 procedure TSlitStreamDriverGenerazioneDoc.ProcessaDefinizioneFile(nomeMacro:String; scrap:String); 
 begin
-  FOutputStream.ScriviScrap(FileMacro, nomeMacro, scrap);
+  FOutputStream.ScriviScrap(FileScrap, nomeMacro, scrap);
+end;
+@}
+
+
+Quando invece si tratta di una aggiunta in coda ad un'altra macro:
+
+@d TSlitStreamDriverGenerazioneDoc.ProcessaAggiungiNellaMacro
+@{
+procedure TSlitStreamDriverGenerazioneDoc.ProcessaAggiungiNellaMacro(nomeMacro:String; scrap:String); 
+begin
+  FOutputStream.ScriviScrap(AppendScrap, nomeMacro, scrap);
 end;
 @}
 
@@ -84,6 +95,8 @@ type
       override;
     procedure ProcessaOpzione(opzione:String);
       override;
+    procedure ProcessaAggiungiNellaMacro(nomeMacro:String; scrap:String);
+      override;
   end;
 
 implementation
@@ -92,6 +105,7 @@ implementation
   @<TSlitStreamDriverGenerazioneDoc.ProcessaDefinizioneFile@>
   @<TSlitStreamDriverGenerazioneDoc.ProcessaRigaDocumentazione@>
   @<TSlitStreamDriverGenerazioneDoc.ProcessaOpzione@>
+  @<TSlitStreamDriverGenerazioneDoc.ProcessaAggiungiNellaMacro@>
   
 end.
 

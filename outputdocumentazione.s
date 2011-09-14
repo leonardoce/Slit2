@@ -3,16 +3,17 @@
 @Title { Backend di generazione della documentazione }
 @Begin @LP
 
-# {{{
 Slit {@Char egrave} pensato per avere pi{@Char ugrave} formati per la documentazione. Per questo
 l'oggetto che gestisce l'output della documentazione viene modellato
 nel seguente modo:
 
 @d TSlitOutput
 @{                                                  
+EScrapType = (DefinitionScrap, AppendScrap, FileScrap);
+
 TSlitOutput = class
 public                      
-  procedure ScriviScrap(tipo:EMacroType; nome, contenuto:String); virtual; abstract;
+  procedure ScriviScrap(tipo:EScrapType; nome, contenuto:String); virtual; abstract;
   procedure PutLine(str:String); virtual; abstract;
 end;
 @}
@@ -37,11 +38,9 @@ implementation
 
 end.
 @}
-# }}}
 
 @BeginSections
 
-# Output in formato HTML {{{
 @Section
 @Title { Output in formato HTML }
 @Begin @PP
@@ -87,13 +86,17 @@ blocchi preformattati:
 
 @d TSlitOutputHtml.ScriviScrap
 @{
-procedure TSlitOutputHtml.ScriviScrap(tipo:EMacroType; nome, contenuto:String);
+procedure TSlitOutputHtml.ScriviScrap(tipo:EScrapType; nome, contenuto:String);
 var
   titolo: String;
 begin
-  if tipo = FileMacro then
+  if tipo = FileScrap then
   begin
     titolo := 'File';
+  end
+  else if tipo = AppendScrap then
+  begin
+    titolo := 'Aggiunta alla definizione';
   end
   else
   begin
@@ -128,7 +131,7 @@ type
     constructor CreateForFile(fileName:String);
     destructor Destroy; override;
 
-    procedure ScriviScrap(tipo:EMacroType; nome, contenuto:String); override;
+    procedure ScriviScrap(tipo:EScrapType; nome, contenuto:String); override;
     procedure PutLine(str:String); override;
   end;
 
@@ -143,9 +146,7 @@ implementation
 end.
 @}
 @End @Section
-# }}}
 
-# Output in formato testo {{{
 @Section
 @Title { Output in formato testo }
 @Begin @PP
@@ -192,13 +193,17 @@ interpretati da txt2tags:
 
 @d TSlitOutputTxt.ScriviScrap
 @{
-procedure TSlitOutputTxt.ScriviScrap(tipo:EMacroType; nome, contenuto:String);
+procedure TSlitOutputTxt.ScriviScrap(tipo:EScrapType; nome, contenuto:String);
 var
   titolo: String;
 begin
-  if tipo = FileMacro then
+  if tipo = FileScrap then
   begin
     titolo := 'File';
+  end
+  else if tipo = AppendScrap then
+  begin
+    titolo := 'Aggiunta alla definizione';
   end
   else
   begin
@@ -236,7 +241,7 @@ type
     constructor CreateForFile(fileName:String);
     destructor Destroy; override;
 
-    procedure ScriviScrap(tipo:EMacroType; nome, contenuto:String); override;
+    procedure ScriviScrap(tipo:EScrapType; nome, contenuto:String); override;
     procedure PutLine(str:String); override;
   end;
 
@@ -251,9 +256,7 @@ implementation
 end.
 @}
 @End @Section
-# }}}
 
-# Output in formato Lout {{{
 @Section
 @Title { Output in formato Lout }
 @Begin @PP
@@ -319,7 +322,7 @@ per usarlo con Lout: @PP
 Il nome della definizione viene scritto fra parentesi angolate in italico
 @Verbatim {(@I)}. @PP 
 
-La testata viene scritta così:
+La testata viene scritta cos{@Char igrave}:
 
 @d TSlitOutputLout scrivi testata
 @{
@@ -424,7 +427,7 @@ La scrittura di una macro {@Char egrave} quindi riassunta in questo codice:
 
 @d TSlitOutputLout.ScriviScrap
 @{
-procedure TSlitOutputLout.ScriviScrap(tipo:EMacroType; nome, contenuto:String);
+procedure TSlitOutputLout.ScriviScrap(tipo:EScrapType; nome, contenuto:String);
 var
   stringhe:TStringList;
   spazi:integer;
@@ -467,7 +470,7 @@ type
     constructor CreateForFileAndStore(fileName:String; store:TMacroStore);
     destructor Destroy; override;
     procedure PutLine(str:String); override;
-    procedure ScriviScrap(tipo:EMacroType; nome, contenuto:String); override;
+    procedure ScriviScrap(tipo:EScrapType; nome, contenuto:String); override;
   end;
 
 implementation
@@ -481,7 +484,6 @@ implementation
 end.
 @}
 @End @Section
-# }}}
 
 @EndSections
 @End @Chapter
