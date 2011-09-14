@@ -3,7 +3,7 @@ echo Generating boostrap
 echo -------------------
 echo.
 pushd bootstrap
-fpc slit
+fpc -gl slit
 popd
 
 echo.
@@ -14,9 +14,9 @@ echo.
 if not exist bin mkdir bin
 pushd bin
 ..\bootstrap\slit ..\slit.s
-fpc slit.pas
+fpc -gl slit.pas
 .\slit ..\slit.s
-fpc slit.pas
+fpc -gl slit.pas
 popd
 
 echo.

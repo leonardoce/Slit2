@@ -236,7 +236,7 @@ if AnsiStartsStr('@<', stringaPulita) and
 begin
   stringaPulita := MidStr(stringaPulita, 3, Length(stringaPulita)-4);
   tempRecord := GetMacro( stringaPulita );
-  if tempRecord.macroProgr<>0 then
+  if (tempRecord<>Nil) and (tempRecord.macroProgr<>0) then
   begin
     @<TMacroStore.CalcolaRiferimenti inserisci riferimento@> 
   end;
@@ -295,7 +295,7 @@ type
   @<TMacroStore@>
 
 implementation
-  uses SysUtils, Classes, StrUtils;
+  uses SysUtils, Classes, StrUtils, slitstatus;
 
   @<TMacroStore.Create@>
   @<TMacroStore.StoreMacro@>

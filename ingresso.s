@@ -179,6 +179,8 @@ var
   macroName:String;
   temporaryStream:TSlitStream;
 begin
+  SegnalaInizioElaborazioneStream(Self);
+
   while (not Eof) do
   begin
     lineBuffer := NextLine();
@@ -215,6 +217,8 @@ begin
       end;
     end;
   end;
+
+  SegnalaFineElaborazioneStream;
 end;
 @}
 

@@ -336,7 +336,7 @@ begin
     tempMacro := store.GetRecord( i );
     if (tempMacro.macroUsersCount = 0) and (tempMacro.macroType <> FileMacro) then
     begin
-      writeln(StdErr, 'La macro ', tempMacro.macroName, ' non e'' mai stata utilizzata.');
+      LogErrorMessage('La macro ' + tempMacro.macroName + ' non e'' mai stata utilizzata.');
     end;
   end;
 end;

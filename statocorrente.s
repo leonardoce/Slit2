@@ -140,13 +140,13 @@ procedure LogErrorMessage(message:String);
 begin
   if StreamStackCount>0 then
   begin
-    write (StreamStack[StreamStackCount-1].CurrentFile);
-    write (':');
-    write (StreamStack[StreamStackCount-1].CurrentLine);
-    write (' ');
+    write (StdErr, StreamStack[StreamStackCount-1].CurrentFile);
+    write (StdErr, ':');
+    write (StdErr, StreamStack[StreamStackCount-1].CurrentLine);
+    write (StdErr, ' ');
   end;
 
-  writeln (message);
+  writeln (StdErr, message);
 end;
 @}
 

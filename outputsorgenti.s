@@ -56,7 +56,7 @@ begin
   if rec=Nil then
   begin
     writeln(streamOutputSorgenti, '<', nome, '>');
-    writeln(StdErr, 'Attenzione: macro ', nome, ' sconosciuta');
+    LogErrorMessage('Attenzione: macro ' + nome + ' sconosciuta');
   end
   else
   begin

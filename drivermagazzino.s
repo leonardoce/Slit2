@@ -35,7 +35,7 @@ begin
   tempMacro := FMacroStore.GetMacro(nomeMacro);
   if tempMacro<>Nil then
   begin
-    writeln(StdErr, 'Macro ', nomeMacro, ' definita piu'' volte');
+    LogErrorMessage('Macro ' + nomeMacro + ' definita piu'' volte');
   end
   else
   begin
@@ -56,7 +56,7 @@ begin
   tempMacro := FMacroStore.GetMacro(nomeMacro);
   if tempMacro<>Nil then
   begin
-    writeln(StdErr, 'Macro ', nomeMacro, ' definita piu'' volte');
+    LogErrorMessage('Macro ' + nomeMacro + ' definita piu'' volte');
   end
   else
   begin
@@ -82,7 +82,7 @@ begin
   end
   else
   begin
-    writeln(StdErr, 'Richiesta aggiunta di uno scrap alla macro ', nomeMacro, 
+    LogErrorMessage('Richiesta aggiunta di uno scrap alla macro ' + nomeMacro +
       ' che non e'' stata ancora definita');
   end;
 end;
