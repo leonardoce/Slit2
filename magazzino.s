@@ -5,7 +5,7 @@
 @Begin @PP
 
 # Introduzione al capitolo {{{
-Snit conserva le macro all'interno della memoria. 
+Slit conserva le macro all'interno della memoria. 
 
 @d TMacroRecord
 @{
