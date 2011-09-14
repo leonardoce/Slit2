@@ -8,7 +8,6 @@
   @Author { Leonardo Cecchi }
 //
 
-# Introduzione {{{
 @Introduction
 @Title { Introduzione }
 @Begin @PP
@@ -25,7 +24,6 @@ si può consultare la pagina: @PP
 @F { @Verbatim {http://en.wikipedia.org/wiki/Literate_programming} }
 
 @End @Introduction
-# }}}
 
 @Chapter
 @Title { Sintassi dei files Slit }
@@ -228,7 +226,6 @@ macro viene inserita la lista di tutte le macro che la utilizzano. @PP
 @End @Chapter
 
 
-# Il comando Slit {{{
 @Chapter
 @Title { Il comando Slit }
 @Begin @LP
@@ -361,7 +358,6 @@ FreeAndNil(store);
 @}
 
 @End @Chapter
-# }}}
 
 @i magazzino.s
 @i statocorrente.s
