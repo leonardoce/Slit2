@@ -53,7 +53,7 @@ facilmente programmabile. @PP
 
 Uno dei vantaggi di LOut {@Char egrave} la programmabilit{@Char agrave} e la leggerezza.
 
-Slit può creare documentazione in formato LOut. @PP
+Slit pu{@Char ograve} creare documentazione in formato LOut. @PP
 
 I file di lout non hanno una estensione determinata. Per quanto riguarda slit l'estensione
 che viene aggiunta alla documentazione e' "".lout"".
