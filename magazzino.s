@@ -21,7 +21,7 @@ public
   macroUsers: array of Integer;
   macroUsersCount: Integer;
 
-  constructor CreateWithName(Name:String; Progressivo:Integer);
+  constructor CreateWithData(Name:String; Progressivo:Integer);
 
   property MacroName:String read FMacroName;
   property MacroContent:String read FMacroContent;
@@ -45,12 +45,12 @@ dei file dalle macro pure); }
 
 Le macro vengono sempre create con un nome:
 
-@d TMacroRecord.CreateWithName
+@d TMacroRecord.CreateWithData
 @{
-constructor TMacroRecord.CreateWithName(Name:String; Progressivo:Integer);
+constructor TMacroRecord.CreateWithData(Name:String; Progressivo:Integer);
 begin
   FMacroName := Name;
-  FMacroProg := Progressivo;
+  FMacroProgr := Progressivo;
   FMacroContent := '';
 end;
 @}
@@ -114,7 +114,7 @@ begin
         Store[i] := Nil;
       end;
     end;
-    store[count] := TMacroRecord.CreateWithName (macroName, count+1);
+    store[count] := TMacroRecord.CreateWithData (macroName, count+1);
     store[count].AddContent (macroContent);
     store[count].macroType := macroType;
     count := count + 1;
@@ -305,7 +305,7 @@ implementation
   @<TMacroStore.GetRecord@>
   @<TMacroStore.CalcolaRiferimenti@>
 
-  @<TMacroRecord.CreateWithName@>
+  @<TMacroRecord.CreateWithData@>
   @<TMacroRecord.AddContent@>
 end.
 @}
