@@ -14,17 +14,18 @@ TMacroRecord = class
 private
   FMacroName:String;
   FMacroContent:String;
+  FMacroProgr:Integer;
 
 public
-  macroProgr:Integer;
   macroType:EMacroType;
   macroUsers: array of Integer;
   macroUsersCount: Integer;
 
-  constructor CreateWithName(Name:String);
+  constructor CreateWithName(Name:String; Progressivo:Integer);
 
   property MacroName:String read FMacroName;
   property MacroContent:String read FMacroContent;
+  property MacroProgr:Integer read FMacroProgr;
   procedure AddContent (Content:String);
 end;
 @}
@@ -46,9 +47,10 @@ Le macro vengono sempre create con un nome:
 
 @d TMacroRecord.CreateWithName
 @{
-constructor TMacroRecord.CreateWithName(Name:String);
+constructor TMacroRecord.CreateWithName(Name:String; Progressivo:Integer);
 begin
   FMacroName := Name;
+  FMacroProg := Progressivo;
   FMacroContent := '';
 end;
 @}
@@ -112,10 +114,9 @@ begin
         Store[i] := Nil;
       end;
     end;
-    store[count] := TMacroRecord.CreateWithName (macroName);
+    store[count] := TMacroRecord.CreateWithName (macroName, count+1);
     store[count].AddContent (macroContent);
     store[count].macroType := macroType;
-    store[count].macroProgr := count + 1;
     count := count + 1;
   end;
 end;
