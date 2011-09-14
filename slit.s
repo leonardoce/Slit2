@@ -177,7 +177,51 @@ int main(int argc, char **argv)
 
 @End @Section
 
-@Section @Title { Opzioni }
+@Section @Title { La direttiva "@+" }
+@Begin @PP
+
+La direttiva @F "@+" aggiunge uno scrap in coda a una macro gi{@Char agrave}
+esistente. Questo serve per ridurre la quantit{@Char agrave} dei nomi di
+macro utilizzati e per non essere costretti ad inventarsi nomi non utili.
+@PP
+
+Ad esempio:
+
+@IndentedDisplay @F
+@Verbatim @Begin
+ @o provatre.c
+@{
+@include <stdio.h>
+
+@<dichiarazioni@>
+
+int main(int argc, char **argv)
+{
+    funzionePrincipale();
+    return 0;
+}
+@}
+@End @Verbatim
+
+@IndentedDisplay @F
+@Verbatim @Begin
+ @d dichiarazioni
+@{
+void funzioneUno();
+@}
+@End @Verbatim
+
+@IndentedDisplay @F
+@Verbatim @Begin
+ @+ dichiarazioni
+@{
+void funzionePrincipale();
+@}
+@End @Verbatim
+
+@End @Section
+
+@Section @Title { Opzioni (la direttiva "@x") }
 @Begin @PP
 
 Slit pu{@Char ograve} essere configurato attraverso delle opzioni. Le opzioni
