@@ -26,6 +26,8 @@ TSlitStreamDriver = class
 public
   procedure ProcessaDefinizioneMacro(nomeMacro:String; scrap:String); 
     virtual; abstract;
+  procedure ProcessaAggiungiNellaMacro(nomeMacro:String; scrap:String);
+    virtual; abstract;
   procedure ProcessaDefinizioneFile(nomeMacro:String; scrap:String);  
     virtual; abstract;
   procedure ProcessaRigaDocumentazione(riga:String);
@@ -82,7 +84,7 @@ end;
 La direttiva di definizione @F @Verbatim {@d} permette di definire una nuova macro, il cui
 nome segue la direttiva, con il contenuto dello scrap che segue. @PP
 
-Per questo viene processata così:
+Per questo viene processata cos{@Char igrave}:
 
 @d processa direttiva d
 @{
@@ -95,7 +97,7 @@ begin
 end;
 @}
 
-All'interno di ogni definizione si può richiamare un'altra macro con la sintassi
+All'interno di ogni definizione si pu{@Char ograve} richiamare un'altra macro con la sintassi
 @F @Verbatim { @<nomemacro@> }. Per ulteriori informazioni consultare il capitolo relativo all'output
 dei file sorgenti. @PP
 
@@ -122,6 +124,23 @@ begin
 end;  
 @}
 
+Anche la direttiva @F @Verbatim { @+ } @Char egrave piuttosto simile: infatti serve per
+aggiungere contenuto ad una macro gi{@Char agrave} definita. 
+Processare una direttiva @F @Verbatim {@+} @Char egrave molto simile a 
+processare una direttiva @F @Verbatim { @d }: dal punto di vista del parser
+basta solamente invocare una diversa funzione del driver:
+
+@d processa direttiva +
+@{
+scrapBuffer := ReadScrap();
+macroName := Trim(MidStr(lineBuffer, 3, Length(lineBuffer)-2));
+
+if FDriver <> Nil then
+begin
+  FDriver.ProcessaAggiungiNellaMacro(macroName, scrapBuffer);
+end;
+@}
+
 La direttiva @F @Verbatim { @i } permette invece di includere un file in un'altro e quindi
 richiama la lettura di un altro file sorgente utilizzando lo stesso magazzino
 di macro e lo stesso output: @PP
@@ -138,7 +157,7 @@ FreeAndNil(temporaryStream);
 
 Il nome del file viene interpretato in modo relativo al file corrente. @PP
 
-La direttiva @F @Verbatim { @# } ignora tutto quello che segue e può venire utilizzata
+La direttiva @F @Verbatim { @# } ignora tutto quello che segue e pu{@Char ograve} venire utilizzata
 come commento. @PP
 
 La direttiva @F @Verbatim { @x } invece passa a Slit una opzione, che viene gestita
@@ -183,6 +202,10 @@ begin
     else if AnsiStartsStr('@x ', lineBuffer) then
     begin
       @<processa direttiva x@>
+    end
+    else if AnsiStartsStr('@+ ', lineBuffer) then
+    begin
+      @<processa direttiva +@>
     end
     else
     begin
