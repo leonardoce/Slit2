@@ -23,7 +23,7 @@ end;
 @Begin @PP
 
 Alla ricezione di una definizione di macro viene controllato se esiste
-già una macro con questo nome, e nel caso viene dato uno warning, altrimenti
+gi{@Char agrave} una macro con questo nome, e nel caso viene dato uno warning, altrimenti
 questa viene direttamente inserita nel magazzino:
 
 @d TSlitStreamDriverMagazzino.ProcessaDefinizioneMacro
@@ -56,7 +56,7 @@ begin
   tempMacro := FMacroStore.GetMacro(nomeMacro);
   if tempMacro.macroName <> '' then
   begin
-    writeln(StdErr, 'Macro ', nomeMacro, ' definita più volte');
+    writeln(StdErr, 'Macro ', nomeMacro, ' definita piu' volte');
   end
   else
   begin
