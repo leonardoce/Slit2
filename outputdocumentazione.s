@@ -264,7 +264,7 @@ end.
 LOut {@Char egrave} un sistema di typesetting di spirito simile a TeX ma di sintassi pi{@Char ugrave} semplice e pi{@Char ugrave}
 facilmente programmabile. @PP
 
-Uno dei vantaggi di LOut {@Char egrave} la programmabilità e la leggerezza.
+Uno dei vantaggi di LOut {@Char egrave} la programmabilit{@Char agrave} e la leggerezza.
 
 Slit può creare documentazione in formato LOut. @PP
 
