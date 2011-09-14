@@ -94,7 +94,7 @@ uses Classes, macrostore, sysutils,
     strutils, slitstream, slithtml,
     slittxt, slitoutput, slitlout,
     drivermagazzino, driverdoc,
-    slitopzioni;
+    slitstatus;
 
 var
   store:TMacroStore;

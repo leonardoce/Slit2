@@ -138,7 +138,7 @@ type
   end;
 
 implementation
-  uses strutils, sysutils, slitopzioni;
+  uses strutils, sysutils, slitstatus;
 
   @<TSlitStreamDriverMagazzino.CreateWithMacroStore@>
   @<TSlitStreamDriverMagazzino.ProcessaDefinizioneMacro@>

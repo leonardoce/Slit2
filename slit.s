@@ -1,5 +1,5 @@
 # :folding=explicit:mode=slitpascal:
-@x output_txt
+@x output_lout
 @SysInclude { tbl }
 @Include { book }
 
