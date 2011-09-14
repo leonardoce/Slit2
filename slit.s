@@ -365,7 +365,7 @@ FreeAndNil(store);
 
 @i ingresso.s
 @i magazzino.s
-@i opzioni.s
+@i statocorrente.s
 @i drivermagazzino.s
 @i drivergenerazionedoc.s
 @i outputdocumentazione.s
