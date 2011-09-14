@@ -58,7 +58,7 @@ begin
   bufferLine := NextLine;
   if Trim(bufferLine)<>'@{' then
   begin
-    LogError('Mi aspettavo l''inizio di una macro');
+    LogErrorMessage('Mi aspettavo l''inizio di una macro');
   end;
 
   buffer := '';
@@ -236,7 +236,7 @@ begin
     Abort;
   end;
 
-  currentLine := 0;
+  FCurrentLine := 0;
   FNomeFile := fileName;
   FDriver := Nil;
   Assign(handle, fileName);
@@ -259,7 +259,7 @@ end;
 @{
 TSlitStream = class
 private
-  currentLine:integer;
+  FCurrentLine:integer;
   FNomeFile:String;
   FDriver:TSlitStreamDriver;
   handle:Text;
@@ -269,13 +269,14 @@ public
   constructor CreateForFile(fileName:String);
   destructor Destroy; override;
   function NextLine:String;
-  procedure LogError(msg:String);
   function ReadScrap():String;
   procedure Process();
   procedure ResetStream();
 
   property EOF:Boolean read IsEof;
   property Driver:TSlitStreamDriver read FDriver write FDriver;
+  property CurrentFile:String read FNomeFile;
+  property CurrentLine:Integer read FCurrentLine;
 end;
 @}
 
@@ -288,7 +289,7 @@ var
   bufLine:String;
 begin
   readln(Handle, bufLine);
-  currentLine := currentLine + 1;
+  FCurrentLine := currentLine + 1;
   Result := bufLine;
 end;
 
@@ -303,22 +304,6 @@ begin
 end;
 @}
 
-@End @Section
-
-@Section
-@Title { Segnalazione degli errori }
-@Begin @PP
-
-Gli errori vengono segnalati in riferimento alla riga correntemente
-processata il cui progressivo viene tenuto in @F { currentLine }:
-
-@d TSlitStream.LogError
-@{
-procedure TSlitStream.LogError(msg:String);
-begin
-  writeln(FNomeFile, ' errore: ', msg, ' alla riga ', currentLine);
-end;
-@}
 @End @Section
 
 @Section
@@ -339,11 +324,10 @@ type
   @<slitstream definizione TSlitStream@>
 
 implementation
-  uses sysutils, strutils;
+  uses sysutils, strutils, slitstatus;
 
   @<TSlitStream.CreateForFile@>
   @<TSlitStream.Destroy@>
-  @<TSlitStream.LogError@>
   @<TSlitStream.ReadScrap@>
   @<TSlitStream.Process@>
   @<TSlitStream altre@>

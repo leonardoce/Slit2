@@ -92,6 +92,66 @@ end;
 @EndSubSections
 
 @End @Section
+
+@Section @Title { Tracciatura del file correntemente elaborato }
+@Begin @PP
+
+Slit tiene traccia del file correntemente elaborato per emettere
+dei messaggi di errore il pi{@Char ugrave} accurati possibile. Il
+parser, subito dopo l'apertura di un file e subito prima della sua
+chiusura, segnala a questo modulo l'evento. Cos{@Char igrave} viene
+tenuto traccia del file correntemente elaborato. @PP
+
+Gli streams vengono tenuti in uno stack dinamico:
+
+@d slitstatus, SegnalaInizioElaborazioneStream
+@{
+procedure SegnalaInizioElaborazioneStream (stream:TSlitStream);
+begin
+  if Length(StreamStack)>=StreamStackCount then
+  begin
+    SetLength(StreamStack, Length(StreamStack)+10);
+  end;
+
+  StreamStack[StreamStackCount] := stream;
+  StreamStackCount := StreamStackCount+1;
+end;
+@}
+
+@d slitstatus, SegnalaFineElaborazioneStream
+@{
+procedure SegnalaFineElaborazioneStream;
+begin
+  if StreamStackCount>0 then
+  begin
+    StreamStack[StreamStackCount] := Nil;
+    StreamStackCount := StreamStackCount-1;
+  end;
+end;
+@}
+
+Grazie a queste chiamate possiamo creare una procedura per l'emissione
+di messaggi di errori che hanno un riferimento al file correntemente
+processato:
+
+@d slitstatus, LogErrorMessage
+@{
+procedure LogErrorMessage(message:String);
+begin
+  if StreamStackCount>0 then
+  begin
+    write (StreamStack[StreamStackCount-1].CurrentFile);
+    write (':');
+    write (StreamStack[StreamStackCount-1].CurrentLine);
+    write (' ');
+  end;
+
+  writeln (message);
+end;
+@}
+
+@End @Section
+
 @Section @Title { Definizione della unit slitstatus }
 @Begin @PP
 
@@ -103,11 +163,14 @@ unit slitstatus;
 
 interface
 
-uses slitoutput, macrostore;
+uses slitoutput, macrostore, slitstream;
                                          
 function GetNomeProcessoreInformazioni():String;
 procedure SetNomeProcessoreInformazioni(value:String);
 function CreaStreamOutputDaOpzioni(NomeFile:String; store:TMacroStore):TSlitOutput;
+procedure SegnalaInizioElaborazioneStream (stream:TSlitStream);
+procedure SegnalaFineElaborazioneStream;
+procedure LogErrorMessage(message:String);
 
 implementation
 
@@ -115,13 +178,19 @@ uses sysutils, slithtml, slitlout, slittxt;
 
 var
   NomeProcessoreInformazioni:String;
+  StreamStack: array of TSlitStream;
+  StreamStackCount: Integer;
 
 @<slitstatus, gestore del processore di documentazione@>
 @<slitstatus, crea lo stream di output@>
+@<slitstatus, SegnalaInizioElaborazioneStream@>
+@<slitstatus, SegnalaFineElaborazioneStream@>
+@<slitstatus, LogErrorMessage@>
 
 initialization
 
 NomeProcessoreInformazioni := 'lout';
+StreamStackCount := 0;
 end.
 @}
 
