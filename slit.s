@@ -363,9 +363,9 @@ FreeAndNil(store);
 @End @Chapter
 # }}}
 
-@i ingresso.s
 @i magazzino.s
 @i statocorrente.s
+@i ingresso.s
 @i drivermagazzino.s
 @i drivergenerazionedoc.s
 @i outputdocumentazione.s

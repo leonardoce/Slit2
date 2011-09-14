@@ -19,7 +19,7 @@ unit apposita, che gestisce tutti i dati e fornisce delle operazioni
 di alto livello che operano su questi. @PP
 
 @BeginSubSections
-@SubSection @Title { Motore di output della documentazione }
+@SubSection @Title { Formato di output della documentazione }
 @Begin @PP
 
 Slit deve scrivere, all'interno della documentazione del codice, il
@@ -89,7 +89,10 @@ end;
 
 @End @SubSection
 
-@SubSection @Title { Definizione della unit slitstatus }
+@EndSubSections
+
+@End @Section
+@Section @Title { Definizione della unit slitstatus }
 @Begin @PP
 
 @o slitstatus.pas
@@ -121,8 +124,6 @@ initialization
 NomeProcessoreInformazioni := 'lout';
 end.
 @}
-@End @SubSection
-@EndSubSections
 
 @End @Section
 
