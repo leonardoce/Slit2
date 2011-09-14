@@ -47,7 +47,7 @@ end;
 @}
 
 Per memorizzare una macro viene controllato lo spazio disponibile nel vettore
-(che è memorizzato nella variabile "count"). Se c'è spazio a sufficienza
+(che {@Char egrave} memorizzato nella variabile "count"). Se c'{@Char egrave} spazio a sufficienza
 allora la macro viene memorizzata altrimenti prima di essere memorizzata
 il vettore viene ampliato per far posto ad altre 50 macro. @PP
 
@@ -79,7 +79,7 @@ begin
 end;
 @}
 
-Per localizzare una macro per nome è necessario scorrere tutto il vettore
+Per localizzare una macro per nome {@Char egrave} necessario scorrere tutto il vettore
 delle macro presenti:
 
 @d TMacroStore.GetMacro
@@ -111,7 +111,7 @@ begin
 end;
 @}
 
-C'è anche una chiamata per ottenere una macro dal numero progressivo.
+C'{@Char egrave} anche una chiamata per ottenere una macro dal numero progressivo.
 (TODO: quando viene usata?):
 
 @d TMacroStore.GetRecord
@@ -203,8 +203,8 @@ begin
 end;
 @}
 
-Per inserire il riferimento viene controllato se c'è posto per un nuovo
-riferimento e se non c'è viene creato:
+Per inserire il riferimento viene controllato se c'{@Char egrave} posto per un nuovo
+riferimento e se non c'{@Char egrave} viene creato:
 
 @d TMacroStore.CalcolaRiferimenti inserisci riferimento
 @{
@@ -226,7 +226,7 @@ store[k].macroUsersCount := store[k].macroUsersCount + 1;
 @Title { Definizione della unit macrostore }
 @Begin @PP
 
-Riassumendo, la definizione del ""TMacroStore"" è la seguente:
+Riassumendo, la definizione del ""TMacroStore"" {@Char egrave} la seguente:
 
 @d TMacroStore
 @{
