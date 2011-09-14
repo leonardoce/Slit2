@@ -12,8 +12,8 @@
 @Title { Introduzione }
 @Begin @PP
 
-Slit è un programma che permette di scrivere codice e documentazione all'interno dello stesso
-file. Il rapporto fra il codice e la documentazione è però ribaltato: se normalmente si
+Slit {@Char egrave} un programma che permette di scrivere codice e documentazione all'interno dello stesso
+file. Il rapporto fra il codice e la documentazione {@Char egrave} per{@Char ograve} ribaltato: se normalmente si
 scrive il codice e all'interno di questo si inserisce la documentazione usando Slit si
 scrive la documentazione e all'interno di questa il codice. @PP
 
@@ -311,8 +311,8 @@ begin
 end.
 @}
 
-Il file di ingresso è rappresentato da un oggetto della classe @F TSlitStream
-mentre il file di uscita della documentazione è rappresentato da una classe
+Il file di ingresso {@Char egrave} rappresentato da un oggetto della classe @F TSlitStream
+mentre il file di uscita della documentazione {@Char egrave} rappresentato da una classe
 della famiglia @F { TSlitOutputTxt }.
 
 Le macro vengono memorizzate all'interno di un "magazzino" dal quale vengono
@@ -341,7 +341,7 @@ Dopo aver popolato il magazino delle macro vengono calcolati i riferimenti:
 store.CalcolaRiferimenti();
 @}
 
-Una volta calcolati i riferimenti è possibile controllare la presenza di macro
+Una volta calcolati i riferimenti {@Char egrave} possibile controllare la presenza di macro
 mai utilizzate:
 
 @d slit controlla macro non utilizzate
@@ -363,7 +363,7 @@ begin
     tempMacro := store.GetRecord( i );
     if (tempMacro.macroUsersCount = 0) and (tempMacro.macroType <> FileMacro) then
     begin
-      writeln(StdErr, 'La macro ', tempMacro.macroName, ' non è mai stata utilizzata.');
+      writeln(StdErr, 'La macro ', tempMacro.macroName, ' non {@Char egrave} mai stata utilizzata.');
     end;
   end;
 end;
