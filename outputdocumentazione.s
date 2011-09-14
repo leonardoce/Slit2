@@ -4,7 +4,7 @@
 @Begin @LP
 
 # {{{
-Slit è pensato per avere più formati per la documentazione. Per questo
+Slit {@Char egrave} pensato per avere pi{@Char ugrave} formati per la documentazione. Per questo
 l'oggetto che gestisce l'output della documentazione viene modellato
 nel seguente modo:
 
@@ -17,7 +17,7 @@ public
 end;
 @}
 
-Con il metodo "ScriviScrap" è possibile scrivere sulla documentazione uno
+Con il metodo "ScriviScrap" {@Char egrave} possibile scrivere sulla documentazione uno
 "scrap" di codice.
 
 @o slitoutput.pas
@@ -109,7 +109,7 @@ begin
 end;
 @}
 
-Riassumendo, il codice di gestione del formato HTML e' il seguente:
+Riassumendo, il codice di gestione del formato HTML @Char egrave il seguente:
 
 @o slithtml.pas
 @{
@@ -258,10 +258,10 @@ end.
 @Title { Output in formato Lout }
 @Begin @PP
 
-LOut è un sistema di typesetting di spirito simile a TeX ma di sintassi più semplice e più
+LOut {@Char egrave} un sistema di typesetting di spirito simile a TeX ma di sintassi pi{@Char ugrave} semplice e pi{@Char ugrave}
 facilmente programmabile. @PP
 
-Uno dei vantaggi di LOut è la programmabilità e la leggerezza.
+Uno dei vantaggi di LOut {@Char egrave} la programmabilità e la leggerezza.
 
 Slit può creare documentazione in formato LOut. @PP
 
@@ -304,7 +304,7 @@ Per quanto riguarda i settori di codice, questi devono essere
 scritti in un formato particolare, che permette a Lout di formattarli
 in modo corretto. @PP
 
-Questo è un estratto di un esempio di codice formattato correttamente
+Questo {@Char egrave} un estratto di un esempio di codice formattato correttamente
 per usarlo con Lout: @PP
 
 @F @Verbatim {
@@ -347,7 +347,7 @@ writeln(handle, '@PageMark { ', currentMacro.macroProgr, ' } ');
 Il codice scritto dall'utente viene inserito fra blocchi
 verbatim ovvero fra @Verbatim { "@Verbatim @Begin" } e @Verbatim { "@End @Verbatim" }. @PP 
 
-Tutto il codice è racchiuso fra @Verbatim { "@LeftDisplay lines @Break" }, che permette
+Tutto il codice {@Char egrave} racchiuso fra @Verbatim { "@LeftDisplay lines @Break" }, che permette
 di rendere l'indentazione significativa. @PP
 
 Il codice viene prima diviso in linee e gli spazi che vengono prima del
@@ -370,7 +370,7 @@ FreeAndNil(stringhe);
 Per ogni linea vengono separati gli spazi iniziali dal resto della stringa
 e gli spazi iniziali vengono inseriti prima del blocchi verbatim. @PP
 
-Se la riga che si va a scrivere è un riferimento ad una macro
+Se la riga che si va a scrivere {@Char egrave} un riferimento ad una macro
 allora viene evidenziata in grassetto e viene inserito un link alla
 definizione della macro. 
 
@@ -420,7 +420,7 @@ begin
 end;
 @}
 
-La scrittura di una macro è quindi riassunta in questo codice:
+La scrittura di una macro {@Char egrave} quindi riassunta in questo codice:
 
 @d TSlitOutputLout.ScriviScrap
 @{
@@ -447,7 +447,7 @@ begin
 end;
 @}
 
-Riassumendo, il codice di gestione del formato Lout è il seguente:
+Riassumendo, il codice di gestione del formato Lout {@Char egrave} il seguente:
 
 @o slitlout.pas
 @{
