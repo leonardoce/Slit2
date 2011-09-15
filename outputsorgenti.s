@@ -21,7 +21,8 @@ begin
     begin
       Assign(streamOutputSorgenti, Trim(store.GetRecord(i).macroName));
       Rewrite(streamOutputSorgenti);
-      ScriviScrapEspanso(store.GetRecord(i).macroName, 0);
+      {TODO gestire marcatori in base all'estensione}
+      ScriviScrapEspanso(True, store.GetRecord(i).macroName, 0, '{', '}');
       Close(streamOutputSorgenti);
     end;
   end;
@@ -38,7 +39,7 @@ desiderato, che inizialmente è 0.
 
 @d procedure ScriviScrapEspanso
 @{
-procedure ScriviScrapEspanso(nome:String; indent:Integer);
+procedure ScriviScrapEspanso(isMain:Boolean; nome:String; indent:Integer; inizioCommento:String; fineCommento:String);
 var
   rec:TMacroRecord;
   i:integer;
@@ -51,6 +52,11 @@ begin
   for i := 1 to indent do
   begin
     tempIndentazione := tempIndentazione + ' ';
+  end;
+
+  if (not isMain) and GetGenerazioneMarcatoriAbilitata() then
+  begin
+    writeln (streamOutputSorgenti, tempIndentazione, inizioCommento, '[open] ', nome, fineCommento);
   end;
 
   rec := store.GetMacro(nome);
@@ -68,15 +74,23 @@ begin
 
       if AnsiStartsStr('@<', tempStringa) and AnsiEndsStr('@>', tempStringa) then
       begin
-        ScriviScrapEspanso(MidStr(tempStringa, 3, Length(tempStringa)-4),
+        ScriviScrapEspanso(False, 
+          MidStr(tempStringa, 3, Length(tempStringa)-4),
           indent + 
-          Length(linea) - Length(TrimLeft(linea)));
+          Length(linea) - Length(TrimLeft(linea)),
+          inizioCommento,
+          fineCommento);
       end
       else
       begin
         writeln(streamOutputSorgenti, tempIndentazione, linea);
       end;
     end;
+  end;
+
+  if (not isMain) and GetGenerazioneMarcatoriAbilitata() then
+  begin
+    writeln (streamOutputSorgenti, tempIndentazione, inizioCommento, '[close] ', nome, fineCommento);
   end;
 end;
 @}

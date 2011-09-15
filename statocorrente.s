@@ -107,6 +107,24 @@ Slit fa questa distinzione utilizzando l'estensione del file. @PP
 
 @End @SubSection
 
+@SubSection @Title { Generazione dei marcatori di inizio di sezione }
+
+Nei file sorgenti generati @Char egrave possibile conservare il nome
+della macro Slit che @Char egrave stata letta per generarli. @PP
+
+@d Get/Set GenerazioneMarcatoriAbilitata
+@{
+function GetGenerazioneMarcatoriAbilitata:Boolean;
+begin
+  Result := GenerazioneMarcatoriAbilitata;
+end;
+
+procedure SetGenerazioneMarcatoriAbilitata(value:Boolean);
+begin
+  GenerazioneMarcatoriAbilitata := value;
+end;
+@}
+
 @EndSubSections
 
 @End @Section
@@ -227,6 +245,8 @@ procedure SegnalaFineElaborazioneStream;
 procedure LogErrorMessage(message:String);
 function GetCurrentParsingFile:String;
 function GetCurrentParsingLine:Integer;
+function GetGenerazioneMarcatoriAbilitata:Boolean;
+procedure SetGenerazioneMarcatoriAbilitata(value:Boolean);
 
 implementation
 
@@ -234,6 +254,7 @@ uses sysutils, slithtml, slitlout, slittxt;
 
 var
   NomeProcessoreInformazioni:String;
+  GenerazioneMarcatoriAbilitata:Boolean;
   StreamStack: array of TSlitStream;
   StreamStackCount: Integer;
 
@@ -244,11 +265,13 @@ var
 @<slitstatus, LogErrorMessage@>
 @<slitstatus, GetCurrentParsingFile@>
 @<slitstatus, GetCurrentParsingLine@>
+@<Get/Set GenerazioneMarcatoriAbilitata@>
 
 initialization
 
 NomeProcessoreInformazioni := 'lout';
 StreamStackCount := 0;
+GenerazioneMarcatoriAbilitata := True;
 end.
 @}
 
