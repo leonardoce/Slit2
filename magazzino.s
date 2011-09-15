@@ -26,6 +26,7 @@ private
 
   procedure AddLine (Content:String; FileCorrente:String; LineaCorrente:Integer);
   function ReadMacroContent:String;
+  function GetMacroLine(Idx:Integer):RScrapLine;
 public
   macroUsers: array of Integer;
   macroUsersCount: Integer;
@@ -38,6 +39,8 @@ public
   property MacroProgr:Integer read FMacroProgr;
   property MacroType:EMacroType read FMacroType;
   procedure AddContent (Content:String; FileCorrente:String; LineaCorrente:Integer);
+  property MacroLinesCount:integer read FMacroLinesCount;
+  property MacroLine[idx:Integer]:RScrapLine read GetMacroLine;
 end;
 @}
 
@@ -136,6 +139,14 @@ begin
   begin
     Result:=Result+FMacroContent[i].Content+LineEnding;
   end;
+end;
+@}
+
+@d TMacroRecord.GetMacroLine
+@{
+function TMacroRecord.GetMacroLine(idx:Integer):RScrapLine;
+begin
+  Result := FMacroContent[idx];
 end;
 @}
 
@@ -382,6 +393,7 @@ implementation
   @<TMacroRecord.CreateWithData@>
   @<TMacroRecord.AddContent@>
   @<TMacroRecord.AddLine@>
+  @<TMacroRecord.GetMacroLine@>
 end.
 @}
 
