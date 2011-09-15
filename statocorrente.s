@@ -89,6 +89,24 @@ end;
 
 @End @SubSection
 
+@SubSection @Title { Marcatore di inizio e fine dei commenti }
+@Begin
+
+Nei file sorgenti generati da Slit @Char egrave possibile inserire
+o meno un riferimento al file originale, che contiene la documentazione
+e il codice. @PP
+
+In questo caso il commento deve essere racchiuso fra delimitatori che
+lo caratterizzino come commento valido per il linguaggio generato. @PP
+
+@Char Egrave possibile che un singolo documento Slit generi 
+pi{@char ugrave} sorgenti in linguaggi diversi. In questo caso occorre
+distinguere fra linguaggio e linguaggio. @PP
+
+Slit fa questa distinzione utilizzando l'estensione del file. @PP
+
+@End @SubSection
+
 @EndSubSections
 
 @End @Section
