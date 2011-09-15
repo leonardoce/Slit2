@@ -28,7 +28,7 @@ questa viene direttamente inserita nel magazzino:
 
 @d TSlitStreamDriverMagazzino.ProcessaDefinizioneMacro
 @{
-procedure TSlitStreamDriverMagazzino.ProcessaDefinizioneMacro(nomeMacro:String; scrap:String); 
+procedure TSlitStreamDriverMagazzino.ProcessaDefinizioneMacro(nomeMacro:String; scrap:String; scrapStartLine:Integer); 
 var
   tempMacro : TMacroRecord;
 begin
@@ -39,7 +39,7 @@ begin
   end
   else
   begin
-    FMacroStore.StoreMacro(nomeMacro, scrap, ScrapMacro);
+    FMacroStore.StoreMacro(nomeMacro, scrap, ScrapMacro, Parser.CurrentFile, scrapStartLine);
   end;
 end;
 @}
@@ -49,7 +49,7 @@ inserita nel magazzino:
 
 @d TSlitStreamDriverMagazzino.ProcessaDefinizioneFile
 @{
-procedure TSlitStreamDriverMagazzino.ProcessaDefinizioneFile(nomeMacro:String; scrap:String); 
+procedure TSlitStreamDriverMagazzino.ProcessaDefinizioneFile(nomeMacro:String; scrap:String; scrapStartLine:Integer); 
 var
   tempMacro : TMacroRecord;
 begin
@@ -60,7 +60,7 @@ begin
   end
   else
   begin
-    FMacroStore.StoreMacro(nomeMacro , scrap, FileMacro);
+    FMacroStore.StoreMacro(nomeMacro , scrap, FileMacro, Parser.CurrentFile, scrapStartLine);
   end;
 end;
 @}
@@ -71,14 +71,14 @@ di aggiungerci altre cose. @PP
 
 @d TSlitStreamDriverMagazzino.ProcessaAggiungiNellaMacro
 @{
-procedure TSlitStreamDriverMagazzino.ProcessaAggiungiNellaMacro(nomeMacro:String; scrap:String); 
+procedure TSlitStreamDriverMagazzino.ProcessaAggiungiNellaMacro(nomeMacro:String; scrap:String; scrapStartLine:Integer); 
 var
   tempMacro : TMacroRecord;
 begin
   tempMacro := FMacroStore.GetMacro(nomeMacro);
   if tempMacro<>Nil then
   begin
-    tempMacro.AddContent (scrap);
+    tempMacro.AddContent (scrap, Parser.CurrentFile, scrapStartLine);
   end
   else
   begin
@@ -151,11 +151,11 @@ type
     FTipoOutput: String;
   public
     constructor CreateWithMacroStore(ms:TMacroStore);
-    procedure ProcessaDefinizioneMacro(nomeMacro:String; scrap:String); 
+    procedure ProcessaDefinizioneMacro(nomeMacro:String; scrap:String; scrapStartLine:Integer); 
       override;
-    procedure ProcessaAggiungiNellaMacro(nomeMacro:String; scrap:String);
+    procedure ProcessaAggiungiNellaMacro(nomeMacro:String; scrap:String; scrapStartLine:Integer);
       override;
-    procedure ProcessaDefinizioneFile(nomeMacro:String; scrap:String);  
+    procedure ProcessaDefinizioneFile(nomeMacro:String; scrap:String; scrapStartLine:Integer);  
       override;
     procedure ProcessaRigaDocumentazione(riga:String);
       override;

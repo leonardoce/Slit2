@@ -21,7 +21,7 @@ il backend:
 
 @d TSlitStreamDriverGenerazioneDoc.ProcessaDefinizioneMacro
 @{
-procedure TSlitStreamDriverGenerazioneDoc.ProcessaDefinizioneMacro(nomeMacro:String; scrap:String); 
+procedure TSlitStreamDriverGenerazioneDoc.ProcessaDefinizioneMacro(nomeMacro:String; scrap:String; scrapStartLine:Integer); 
 begin
   FOutputStream.ScriviScrap(DefinitionScrap, nomeMacro, scrap);
 end;
@@ -32,7 +32,7 @@ scritta attraverso il backend:
 
 @d TSlitStreamDriverGenerazioneDoc.ProcessaDefinizioneFile
 @{
-procedure TSlitStreamDriverGenerazioneDoc.ProcessaDefinizioneFile(nomeMacro:String; scrap:String); 
+procedure TSlitStreamDriverGenerazioneDoc.ProcessaDefinizioneFile(nomeMacro:String; scrap:String; scrapStartLine:Integer); 
 begin
   FOutputStream.ScriviScrap(FileScrap, nomeMacro, scrap);
 end;
@@ -43,7 +43,7 @@ Quando invece si tratta di una aggiunta in coda ad un'altra macro:
 
 @d TSlitStreamDriverGenerazioneDoc.ProcessaAggiungiNellaMacro
 @{
-procedure TSlitStreamDriverGenerazioneDoc.ProcessaAggiungiNellaMacro(nomeMacro:String; scrap:String); 
+procedure TSlitStreamDriverGenerazioneDoc.ProcessaAggiungiNellaMacro(nomeMacro:String; scrap:String; scrapStartLine:Integer); 
 begin
   FOutputStream.ScriviScrap(AppendScrap, nomeMacro, scrap);
 end;
@@ -87,15 +87,15 @@ type
     FOutputStream: TSlitOutput;
   public
     constructor CreateWithOutputStream(output:TSlitOutput);
-    procedure ProcessaDefinizioneMacro(nomeMacro:String; scrap:String); 
+    procedure ProcessaDefinizioneMacro(nomeMacro:String; scrap:String; scrapStartLine:Integer); 
       override;
-    procedure ProcessaDefinizioneFile(nomeMacro:String; scrap:String);  
+    procedure ProcessaDefinizioneFile(nomeMacro:String; scrap:String; scrapStartLine:Integer);  
+      override;
+    procedure ProcessaAggiungiNellaMacro(nomeMacro:String; scrap:String; scrapStartLine:Integer);
       override;
     procedure ProcessaRigaDocumentazione(riga:String);
       override;
     procedure ProcessaOpzione(opzione:String);
-      override;
-    procedure ProcessaAggiungiNellaMacro(nomeMacro:String; scrap:String);
       override;
   end;
 

@@ -20,9 +20,12 @@ TMacroRecord = class
 private
   FMacroName:String;
   FMacroContent:array of RScrapLine;
+  FMacroLinesCount:Integer;
   FMacroProgr:Integer;
   FMacroType:EMacroType;
 
+  procedure AddLine (Content:String; FileCorrente:String; LineaCorrente:Integer);
+  function ReadMacroContent:String;
 public
   macroUsers: array of Integer;
   macroUsersCount: Integer;
@@ -31,10 +34,10 @@ public
     Tipo:EMacroType);
 
   property MacroName:String read FMacroName;
-  property MacroContent:String read FMacroContent;
+  property MacroContent:String read ReadMacroContent;
   property MacroProgr:Integer read FMacroProgr;
   property MacroType:EMacroType read FMacroType;
-  procedure AddContent (Content:String);
+  procedure AddContent (Content:String; FileCorrente:String; LineaCorrente:Integer);
 end;
 @}
 
@@ -68,28 +71,71 @@ constructor TMacroRecord.CreateWithData(Name:String; Progressivo:Integer; Tipo:E
 begin
   FMacroName := Name;
   FMacroProgr := Progressivo;
-  FMacroContent := '';
   FMacroType := Tipo;
+  FMacroLinesCount := 0;
+  SetLength(FMacroContent, 50);
 end;
 @}
 
 @Char Egrave possibile aggiungere contenuto ad una macro, e questo viene
 gestito tenendo traccia del file correntemente letto e del numero di
-riga.
+riga. La riga indicata in questa funzione {@Char egrave} quella relativa
+all'inizio del contenuto passato.
 
 @d TMacroRecord.AddContent
 @{
-procedure TMacroRecord.AddContent (Content:String);
+procedure TMacroRecord.AddContent (Content:String; FileCorrente:String; LineaCorrente:Integer);
 var
   divisioneRighe:TStringList;
-  fileCorrente:String;
+  i:Integer;
 begin
-  fileCorrente := 
-
   divisioneRighe := TStringList.Create;
   divisioneRighe.Text := Content;
   
-  FMacroContent += Content;
+  for i:=0 to divisioneRighe.Count-1 do
+  begin
+    AddLine (divisioneRighe.Strings[i], FileCorrente, LineaCorrente-1+i);
+  end;
+
+  FreeAndNil (divisioneRighe);
+end;
+@}
+
+La funzione che segue invece tratta l'aggiunta del contenuto riga per riga
+e {@Char egrave} quella che viene utilizzata per implementare l'aggiunta
+di contenuto ad una macro.
+
+@d TMacroRecord.AddLine
+@{
+procedure TMacroRecord.AddLine (Content:String; FileCorrente:String; LineaCorrente:Integer);
+begin
+  if Length(FMacroContent)>=FMacroLinesCount then
+  begin
+    SetLength(FMacroContent, Length(FMacroContent)+50);
+  end;
+
+  FMacroContent[FMacroLinesCount].Content := Content;
+  FMacroContent[FMacroLinesCount].FileName := FileCorrente;
+  FMacroContent[FMacroLinesCount].LineNumber := LineaCorrente;
+  FMacroLinesCount := FMacroLinesCount+1;
+end;
+@}
+
+Dopo questo trattamento il contenuto della macro {@Char egrave} ugualmente
+prelevabile sommando una ad una le varie stringhe:
+
+@d TMacroRecord.ReadMacroContent
+@{
+function TMacroRecord.ReadMacroContent:String;
+var
+  i:Integer;
+
+begin
+  Result:='';
+  for i:=0 to FMacroLinesCount-1 do
+  begin
+    Result:=Result+FMacroContent[i].Content+LineEnding;
+  end;
 end;
 @}
 
@@ -124,7 +170,7 @@ all'utente.
 
 @d TMacroStore.StoreMacro
 @{
-procedure TMacroStore.StoreMacro(macroName:String; macroContent:String; macroType:EMacroType);
+procedure TMacroStore.StoreMacro(macroName:String; macroContent:String; macroType:EMacroType; FileName:String; CurrentLine:Integer);
 var
   i:Integer;
 begin
@@ -143,7 +189,7 @@ begin
       end;
     end;
     store[count] := TMacroRecord.CreateWithData (macroName, count+1, macroType);
-    store[count].AddContent (macroContent);
+    store[count].AddContent (macroContent, FileName, CurrentLine);
     count := count + 1;
   end;
 end;
@@ -303,7 +349,7 @@ private
 public
   constructor Create;
   function MacroCount:Integer;
-  procedure StoreMacro(macroName:String; macroContent:String; macroType:EMacroType);
+  procedure StoreMacro(macroName:String; macroContent:String; macroType:EMacroType; FileName:String; CurrentLine:Integer);
   function GetMacro(macroName:String):TMacroRecord;
   function GetRecord(i:integer):TMacroRecord;
   procedure CalcolaRiferimenti;
@@ -332,8 +378,10 @@ implementation
   @<TMacroStore.GetRecord@>
   @<TMacroStore.CalcolaRiferimenti@>
 
+  @<TMacroRecord.ReadMacroContent@>
   @<TMacroRecord.CreateWithData@>
   @<TMacroRecord.AddContent@>
+  @<TMacroRecord.AddLine@>
 end.
 @}
 

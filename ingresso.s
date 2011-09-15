@@ -29,11 +29,11 @@ private
   FParser:TSlitStream;
 
 public
-  procedure ProcessaDefinizioneMacro(nomeMacro:String; scrap:String); 
+  procedure ProcessaDefinizioneMacro(nomeMacro:String; scrap:String; scrapStartLine:Integer); 
     virtual; abstract;
-  procedure ProcessaAggiungiNellaMacro(nomeMacro:String; scrap:String);
+  procedure ProcessaAggiungiNellaMacro(nomeMacro:String; scrap:String; scrapStartLine:Integer);
     virtual; abstract;
-  procedure ProcessaDefinizioneFile(nomeMacro:String; scrap:String);  
+  procedure ProcessaDefinizioneFile(nomeMacro:String; scrap:String; scrapStartLine:Integer);  
     virtual; abstract;
   procedure ProcessaRigaDocumentazione(riga:String);
     virtual; abstract;
@@ -95,12 +95,13 @@ Per questo viene processata cos{@Char igrave}:
 
 @d processa direttiva d
 @{
+scrapStartLine := CurrentLine+1;
 scrapBuffer := ReadScrap();
 macroName := Trim(MidStr(lineBuffer, 3, Length(lineBuffer)-2));
 
 if FDriver <> Nil then
 begin
-  FDriver.ProcessaDefinizioneMacro(macroName, scrapBuffer);
+  FDriver.ProcessaDefinizioneMacro(macroName, scrapBuffer, scrapStartLine);
 end;
 @}
 
@@ -117,6 +118,7 @@ dalla stringa del nome della macro. @PP
 
 @d processa direttiva o
 @{
+scrapStartLine := CurrentLine+1;
 scrapBuffer := ReadScrap();
 macroName := Trim(MidStr(lineBuffer, 3, Length(lineBuffer)-2));
 
@@ -127,7 +129,7 @@ end;
 
 if FDriver <> Nil then
 begin
-  FDriver.ProcessaDefinizioneFile(macroName, scrapBuffer);
+  FDriver.ProcessaDefinizioneFile(macroName, scrapBuffer, scrapStartLine);
 end;  
 @}
 
@@ -139,12 +141,13 @@ basta solamente invocare una diversa funzione del driver:
 
 @d processa direttiva +
 @{
+scrapStartLine := CurrentLine+1;
 scrapBuffer := ReadScrap();
 macroName := Trim(MidStr(lineBuffer, 3, Length(lineBuffer)-2));
 
 if FDriver <> Nil then
 begin
-  FDriver.ProcessaAggiungiNellaMacro(macroName, scrapBuffer);
+  FDriver.ProcessaAggiungiNellaMacro(macroName, scrapBuffer, scrapStartLine);
 end;
 @}
 
@@ -183,10 +186,12 @@ procedure TSlitStream.Process();
 var
   lineBuffer:String;
   scrapBuffer:String;
+  scrapStartLine:Integer;
   macroName:String;
   temporaryStream:TSlitStream;
 begin
   SegnalaInizioElaborazioneStream(Self);
+  FDriver.Parser := Self;
 
   while (not Eof) do
   begin
