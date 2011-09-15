@@ -22,7 +22,12 @@ Il driver del parser {@Char egrave} una classe che ha la seguente struttura:
 
 @d slitstream definizione TSlitStreamDriver
 @{
+TSlitStream = class;
+
 TSlitStreamDriver = class
+private
+  FParser:TSlitStream;
+
 public
   procedure ProcessaDefinizioneMacro(nomeMacro:String; scrap:String); 
     virtual; abstract;
@@ -34,6 +39,8 @@ public
     virtual; abstract;
   procedure ProcessaOpzione(opzione:String);
     virtual; abstract;
+
+  property Parser:TSlitStream read FParser write FParser;
 end;
 @}
 
