@@ -42,7 +42,7 @@ desiderato, che inizialmente è 0.
 procedure ScriviScrapEspanso(isMain:Boolean; nome:String; indent:Integer; inizioCommento:String; fineCommento:String);
 var
   rec:TMacroRecord;
-  i:integer;
+  i, j:integer;
   tempStringa:String;
   tempIndentazione:String;
   linea:String;
@@ -60,36 +60,7 @@ begin
     writeln (streamOutputSorgenti, tempIndentazione, inizioCommento, '[open] ', nome, fineCommento);
   end;
 
-  rec := store.GetMacro(nome);
-  if rec=Nil then
-  begin
-    writeln(streamOutputSorgenti, '<', nome, '>');
-    LogErrorMessage('Attenzione: macro ' + nome + ' sconosciuta');
-  end
-  else
-  begin
-    for i := 0 to rec.MacroLinesCount-1 do
-    begin
-      linea := rec.MacroLine[i].Content;
-      tempStringa := Trim(linea);
-
-      @<calcolo indicazione del numero di riga@>
-
-      if AnsiStartsStr('@<', tempStringa) and AnsiEndsStr('@>', tempStringa) then
-      begin
-        ScriviScrapEspanso(False, 
-          MidStr(tempStringa, 3, Length(tempStringa)-4),
-          indent + 
-          Length(linea) - Length(TrimLeft(linea)),
-          inizioCommento,
-          fineCommento);
-      end
-      else
-      begin
-        writeln(streamOutputSorgenti, tempIndentazione, linea, indicazioneRiga);
-      end;
-    end;
-  end;
+  @<ScriviScrapEspanso, scrittura righe del file sorgente@>
 
   if (not isMain) and GetGenerazioneMarcatoriAbilitata() then
   begin
@@ -98,13 +69,58 @@ begin
 end;
 @}
 
-L'indicazione del numero di riga viene calcolata se se opzioni la ammettono
+Le righe del file sorgente vengono scritte ad una ad una leggendo
+dal magazzino delle macro:
 
-@d calcolo indicazione del numero di riga
+@d ScriviScrapEspanso, scrittura righe del file sorgente
+@{
+rec := store.GetMacro(nome);
+if rec=Nil then
+begin
+  writeln(streamOutputSorgenti, '<', nome, '>');
+  LogErrorMessage('Attenzione: macro ' + nome + ' sconosciuta');
+end
+else
+begin
+  for i := 0 to rec.MacroLinesCount-1 do
+  begin
+    linea := rec.MacroLine[i].Content;
+    tempStringa := Trim(linea);
+
+    @<ScriviScrapEspanso, calcolo indicazione del numero di riga@>
+
+    if AnsiStartsStr('@<', tempStringa) and AnsiEndsStr('@>', tempStringa) then
+    begin
+      ScriviScrapEspanso(False, 
+        MidStr(tempStringa, 3, Length(tempStringa)-4),
+        indent + 
+        Length(linea) - Length(TrimLeft(linea)),
+        inizioCommento,
+        fineCommento);
+    end
+    else
+    begin
+      writeln(streamOutputSorgenti, tempIndentazione, linea, indicazioneRiga);
+    end;
+  end;
+end;
+@}
+
+L'indicazione del numero di riga viene calcolata se se opzioni la ammettono:
+
+@d ScriviScrapEspanso, calcolo indicazione del numero di riga
 @{
 if GetGenerazioneNumeriRigaAbilitata() then
 begin
-  indicazioneRiga := inizioCommento +
+  indicazioneRiga := '';
+ 
+  for j := 1 to (length(linea)+length(tempIndentazione))-100 do
+  begin
+    indicazioneRiga := indicazioneRiga + ' ';
+  end;
+
+  indicazioneRiga := indicazioneRiga + 
+    inizioCommento+
     rec.MacroLine[i].FileName +
     ':' +
     IntToStr(rec.MacroLine[i].LineNumber) +
@@ -115,6 +131,8 @@ begin
   indicazioneRiga := '';
 end;
 @}
+
+
 Riassumendo questo e' il programma principale:
 
 @o slit.pas
