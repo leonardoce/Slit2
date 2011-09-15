@@ -114,7 +114,7 @@ if GetGenerazioneNumeriRigaAbilitata() then
 begin
   indicazioneRiga := '';
  
-  for j := 1 to 100-(length(linea)+length(tempIndentazione)) do
+  for j := 1 to GetColonnaNumeriRiga()-(length(linea)+length(tempIndentazione)) do
   begin
     indicazioneRiga := indicazioneRiga + ' ';
   end;

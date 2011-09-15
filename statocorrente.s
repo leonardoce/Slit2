@@ -151,6 +151,24 @@ begin
 end;
 @}
 
+I marcatori, per non dare noia, vengono messi ad una precisa
+colonna se disponibile oppure alla fine della riga di codice
+sorgente. Questa colonna @Char egrave configurabile:
+
+@d Get/Set ColonnaNumeriRiga
+@{
+function GetColonnaNumeriRiga:Integer;
+begin
+  Result := ColonnaNumeriRiga;
+end;
+
+procedure SetColonnaNumeriRiga(value:Integer);
+begin
+  ColonnaNumeriRiga := value;
+end;
+@}
+
+
 @End @SubSection
 
 @EndSubSections
@@ -277,6 +295,8 @@ function GetGenerazioneMarcatoriAbilitata:Boolean;
 procedure SetGenerazioneMarcatoriAbilitata(value:Boolean);
 function GetGenerazioneNumeriRigaAbilitata:Boolean;
 procedure SetGenerazioneNumeriRigaAbilitata(value:Boolean);
+function GetColonnaNumeriRiga:Integer;
+procedure SetColonnaNumeriRiga(value:Integer);
 
 implementation
 
@@ -288,6 +308,7 @@ var
   GenerazioneNumeriRigaAbilitata:Boolean;
   StreamStack: array of TSlitStream;
   StreamStackCount: Integer;
+  ColonnaNumeriRiga:Integer;
 
 @<slitstatus, gestore del processore di documentazione@>
 @<slitstatus, crea lo stream di output@>
@@ -298,6 +319,7 @@ var
 @<slitstatus, GetCurrentParsingLine@>
 @<Get/Set GenerazioneMarcatoriAbilitata@>
 @<Get/Set GenerazioneNumeriRigaAbilitata@>
+@<Get/Set ColonnaNumeriRiga@>
 
 initialization
 
@@ -305,6 +327,7 @@ NomeProcessoreInformazioni := 'lout';
 StreamStackCount := 0;
 GenerazioneMarcatoriAbilitata := True;
 GenerazioneNumeriRigaAbilitata := True;
+ColonnaNumeriRiga := 100;
 end.
 @}
 
