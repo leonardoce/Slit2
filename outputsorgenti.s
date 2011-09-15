@@ -40,11 +40,12 @@ desiderato, che inizialmente è 0.
 @{
 procedure ScriviScrapEspanso(nome:String; indent:Integer);
 var
-  stringhe:TStringList;
   rec:TMacroRecord;
   i:integer;
   tempStringa:String;
   tempIndentazione:String;
+  linea:String;
+
 begin
   tempIndentazione := '';
   for i := 1 to indent do
@@ -60,24 +61,22 @@ begin
   end
   else
   begin
-    stringhe := TStringList.Create;
-    stringhe.Text := rec.macroContent;
-    for i := 0 to stringhe.Count-1 do
+    for i := 0 to rec.MacroLinesCount-1 do
     begin
-      tempStringa := Trim(stringhe.Strings[i]);
+      linea := rec.MacroLine[i].Content;
+      tempStringa := Trim(linea);
+
       if AnsiStartsStr('@<', tempStringa) and AnsiEndsStr('@>', tempStringa) then
       begin
         ScriviScrapEspanso(MidStr(tempStringa, 3, Length(tempStringa)-4),
           indent + 
-          Length(stringhe.Strings[i]) - Length(TrimLeft(stringhe.Strings[i])));
+          Length(linea) - Length(TrimLeft(linea)));
       end
       else
       begin
-        writeln(streamOutputSorgenti, tempIndentazione, stringhe.Strings[i]);
+        writeln(streamOutputSorgenti, tempIndentazione, linea);
       end;
     end;
-
-    FreeAndNil(stringhe);
   end;
 end;
 @}
