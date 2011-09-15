@@ -46,6 +46,7 @@ var
   tempStringa:String;
   tempIndentazione:String;
   linea:String;
+  indicazioneRiga:String;
 
 begin
   tempIndentazione := '';
@@ -72,6 +73,19 @@ begin
       linea := rec.MacroLine[i].Content;
       tempStringa := Trim(linea);
 
+      if GetGenerazioneNumeriRigaAbilitata() then
+      begin
+        indicazioneRiga := '        ' + inizioCommento +
+          rec.MacroLine[i].FileName +
+          ':' +
+          IntToStr(rec.MacroLine[i].LineNumber) +
+          fineCommento ;
+      end
+      else
+      begin
+        indicazioneRiga := '';
+      end;
+
       if AnsiStartsStr('@<', tempStringa) and AnsiEndsStr('@>', tempStringa) then
       begin
         ScriviScrapEspanso(False, 
@@ -83,7 +97,7 @@ begin
       end
       else
       begin
-        writeln(streamOutputSorgenti, tempIndentazione, linea);
+        writeln(streamOutputSorgenti, tempIndentazione, linea, indicazioneRiga);
       end;
     end;
   end;

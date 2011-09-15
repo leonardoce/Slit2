@@ -90,7 +90,7 @@ end;
 @End @SubSection
 
 @SubSection @Title { Marcatore di inizio e fine dei commenti }
-@Begin
+@Begin @PP
 
 Nei file sorgenti generati da Slit @Char egrave possibile inserire
 o meno un riferimento al file originale, che contiene la documentazione
@@ -100,14 +100,15 @@ In questo caso il commento deve essere racchiuso fra delimitatori che
 lo caratterizzino come commento valido per il linguaggio generato. @PP
 
 @Char Egrave possibile che un singolo documento Slit generi 
-pi{@char ugrave} sorgenti in linguaggi diversi. In questo caso occorre
+pi{@Char ugrave} sorgenti in linguaggi diversi. In questo caso occorre
 distinguere fra linguaggio e linguaggio. @PP
 
 Slit fa questa distinzione utilizzando l'estensione del file. @PP
 
 @End @SubSection
 
-@SubSection @Title { Generazione dei marcatori di inizio di sezione }
+@SubSection @Title { Generazione dei marcatori di inizio e file sezione }
+@Begin @PP
 
 Nei file sorgenti generati @Char egrave possibile conservare il nome
 della macro Slit che @Char egrave stata letta per generarli. @PP
@@ -124,6 +125,33 @@ begin
   GenerazioneMarcatoriAbilitata := value;
 end;
 @}
+
+@End @SubSection
+
+@SubSection @Title { Generazione dei marcatori di riga }
+@Begin @PP
+
+Spesso @Char egrave importante conservare, all'interno del
+file sorgente generato, il nome del file di documentazione
+e il numero di riga corrispondente. @PP 
+
+Queste informazioni permettono di rintracciare facilmente un errere
+emesso dal compilatore. @PP
+
+@d Get/Set GenerazioneNumeriRigaAbilitata
+@{
+function GetGenerazioneNumeriRigaAbilitata:Boolean;
+begin
+  Result := GenerazioneNumeriRigaAbilitata;
+end;
+
+procedure SetGenerazioneNumeriRigaAbilitata(value:Boolean);
+begin
+  GenerazioneNumeriRigaAbilitata := value;
+end;
+@}
+
+@End @SubSection
 
 @EndSubSections
 
@@ -247,6 +275,8 @@ function GetCurrentParsingFile:String;
 function GetCurrentParsingLine:Integer;
 function GetGenerazioneMarcatoriAbilitata:Boolean;
 procedure SetGenerazioneMarcatoriAbilitata(value:Boolean);
+function GetGenerazioneNumeriRigaAbilitata:Boolean;
+procedure SetGenerazioneNumeriRigaAbilitata(value:Boolean);
 
 implementation
 
@@ -255,6 +285,7 @@ uses sysutils, slithtml, slitlout, slittxt;
 var
   NomeProcessoreInformazioni:String;
   GenerazioneMarcatoriAbilitata:Boolean;
+  GenerazioneNumeriRigaAbilitata:Boolean;
   StreamStack: array of TSlitStream;
   StreamStackCount: Integer;
 
@@ -266,12 +297,14 @@ var
 @<slitstatus, GetCurrentParsingFile@>
 @<slitstatus, GetCurrentParsingLine@>
 @<Get/Set GenerazioneMarcatoriAbilitata@>
+@<Get/Set GenerazioneNumeriRigaAbilitata@>
 
 initialization
 
 NomeProcessoreInformazioni := 'lout';
 StreamStackCount := 0;
 GenerazioneMarcatoriAbilitata := True;
+GenerazioneNumeriRigaAbilitata := True;
 end.
 @}
 

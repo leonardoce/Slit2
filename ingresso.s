@@ -95,7 +95,7 @@ Per questo viene processata cos{@Char igrave}:
 
 @d processa direttiva d
 @{
-scrapStartLine := CurrentLine+1;
+scrapStartLine := CurrentLine+2;
 scrapBuffer := ReadScrap();
 macroName := Trim(MidStr(lineBuffer, 3, Length(lineBuffer)-2));
 
@@ -118,7 +118,7 @@ dalla stringa del nome della macro. @PP
 
 @d processa direttiva o
 @{
-scrapStartLine := CurrentLine+1;
+scrapStartLine := CurrentLine+2;
 scrapBuffer := ReadScrap();
 macroName := Trim(MidStr(lineBuffer, 3, Length(lineBuffer)-2));
 

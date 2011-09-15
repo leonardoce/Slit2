@@ -97,7 +97,7 @@ begin
   
   for i:=0 to divisioneRighe.Count-1 do
   begin
-    AddLine (divisioneRighe.Strings[i], FileCorrente, LineaCorrente-1+i);
+    AddLine (divisioneRighe.Strings[i], FileCorrente, LineaCorrente+i);
   end;
 
   FreeAndNil (divisioneRighe);
