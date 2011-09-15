@@ -10,10 +10,16 @@ Slit conserva le macro all'interno della memoria.
 @{
 EMacroType = ( FileMacro, ScrapMacro );
 
+RScrapLine = record
+  Content:String;
+  FileName:String;
+  LineNumber:Integer;
+end;
+
 TMacroRecord = class
 private
   FMacroName:String;
-  FMacroContent:String;
+  FMacroContent:array of RScrapLine;
   FMacroProgr:Integer;
   FMacroType:EMacroType;
 
@@ -21,7 +27,8 @@ public
   macroUsers: array of Integer;
   macroUsersCount: Integer;
 
-  constructor CreateWithData(Name:String; Progressivo:Integer; Tipo:EMacroType);
+  constructor CreateWithData(Name:String; Progressivo:Integer; 
+    Tipo:EMacroType);
 
   property MacroName:String read FMacroName;
   property MacroContent:String read FMacroContent;
@@ -44,6 +51,15 @@ dei file dalle macro pure); }
 (vettore "macroUsersCount") }
 @EndList
 
+Una macro viene man mano popolata con Scrap e ogni scrap @Char egrave composto da
+un insieme di righe. Slit deve conservare, per ogni riga degli scrap, il file da
+quale proviene e il numero di riga. In questo modo si pu{@Char ograve} costruire,
+successivamente, una mappa fra le righe della documentazione e quelle dei vari
+sorgenti generati. @PP
+
+Questa mappa e' utile per gli sviluppatori per decodificare i messaggi di errore
+emessi dal compilatore. @PP
+
 Le macro vengono sempre create con un nome:
 
 @d TMacroRecord.CreateWithData
@@ -57,12 +73,22 @@ begin
 end;
 @}
 
-@Char Egrave possibile aggiungere contenuto ad una macro:
+@Char Egrave possibile aggiungere contenuto ad una macro, e questo viene
+gestito tenendo traccia del file correntemente letto e del numero di
+riga.
 
 @d TMacroRecord.AddContent
 @{
 procedure TMacroRecord.AddContent (Content:String);
+var
+  divisioneRighe:TStringList;
+  fileCorrente:String;
 begin
+  fileCorrente := 
+
+  divisioneRighe := TStringList.Create;
+  divisioneRighe.Text := Content;
+  
   FMacroContent += Content;
 end;
 @}
