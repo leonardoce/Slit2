@@ -130,6 +130,42 @@ begin
 end;
 @}
 
+In questo modo possiamo creare delle chiamate per ottenere il file e
+la riga corrente:
+
+@d slitstatus, GetCurrentParsingFile
+@{
+function GetCurrentParsingFile:String;
+begin
+  if StreamStackCount>0 then
+  begin
+    Result := StreamStack[StreamStackCount-1].CurrentFile;
+  end
+  else
+  begin
+    Result := '';
+  end;
+end;
+@}
+
+Se non c'{@Char egrave} la linea corrente allora la funzione 
+ritorna -1:
+
+@d slitstatus, GetCurrentParsingLine
+@{
+function GetCurrentParsingLine:Integer;
+begin
+  if StreamStackCount>0 then
+  begin
+    Result := StreamStack[StreamStackCount-1].CurrentLine;
+  end
+  else
+  begin
+    Result := -1;
+  end;
+end;
+@}
+
 Grazie a queste chiamate possiamo creare una procedura per l'emissione
 di messaggi di errori che hanno un riferimento al file correntemente
 processato:
@@ -171,6 +207,8 @@ function CreaStreamOutputDaOpzioni(NomeFile:String; store:TMacroStore):TSlitOutp
 procedure SegnalaInizioElaborazioneStream (stream:TSlitStream);
 procedure SegnalaFineElaborazioneStream;
 procedure LogErrorMessage(message:String);
+function GetCurrentParsingFile:String;
+function GetCurrentParsingLine:Integer;
 
 implementation
 
@@ -186,6 +224,8 @@ var
 @<slitstatus, SegnalaInizioElaborazioneStream@>
 @<slitstatus, SegnalaFineElaborazioneStream@>
 @<slitstatus, LogErrorMessage@>
+@<slitstatus, GetCurrentParsingFile@>
+@<slitstatus, GetCurrentParsingLine@>
 
 initialization
 
