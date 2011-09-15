@@ -121,6 +121,22 @@ begin
   begin
     SetNomeProcessoreInformazioni ('txt');
   end
+  else if opzione='section_markers' then
+  begin
+    SetGenerazioneMarcatoriAbilitata(true);
+  end
+  else if opzione='no_section_markers' then
+  begin
+    SetGenerazioneMarcatoriAbilitata(false);
+  end
+  else if opzione='line_markers' then
+  begin
+    SetGenerazioneNumeriRigaAbilitata(true);
+  end
+  else if opzione='no_line_markers' then
+  begin
+    SetGenerazioneNumeriRigaAbilitata(false);
+  end
   else
   begin
     raise Exception.Create('Opzione non conosciuta: ' + opzione);

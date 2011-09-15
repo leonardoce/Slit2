@@ -210,6 +210,14 @@ Questa @Char egrave la lista delle opzioni supportate:
 @ListItem { @F output_html : seleziona il formato html per l'output }
 @ListItem { @F output_txt : seleziona il formato testo per l'output }
 @ListItem { @F output_lout : seleziona il formato lout per l'output }
+@ListItem { @F section_markers : abilita la produzione dei marcatori di
+inizio e fine sezione }
+@ListItem { @F no_section_markers : disabilita la produzione dei marcatori
+di inizio e fine sezione }
+@ListItem { @F line_markers : abilita la produzione dei marcatori di
+riga nei file sorgenti generati }
+@ListItem { @F no_line_markers : disabilita la produzione dei marcatori
+di riga nei file sorgenti generati }
 @EndList
 
 @End @Section
