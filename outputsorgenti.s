@@ -73,18 +73,7 @@ begin
       linea := rec.MacroLine[i].Content;
       tempStringa := Trim(linea);
 
-      if GetGenerazioneNumeriRigaAbilitata() then
-      begin
-        indicazioneRiga := '        ' + inizioCommento +
-          rec.MacroLine[i].FileName +
-          ':' +
-          IntToStr(rec.MacroLine[i].LineNumber) +
-          fineCommento ;
-      end
-      else
-      begin
-        indicazioneRiga := '';
-      end;
+      @<calcolo indicazione del numero di riga@>
 
       if AnsiStartsStr('@<', tempStringa) and AnsiEndsStr('@>', tempStringa) then
       begin
@@ -109,6 +98,23 @@ begin
 end;
 @}
 
+L'indicazione del numero di riga viene calcolata se se opzioni la ammettono
+
+@d calcolo indicazione del numero di riga
+@{
+if GetGenerazioneNumeriRigaAbilitata() then
+begin
+  indicazioneRiga := inizioCommento +
+    rec.MacroLine[i].FileName +
+    ':' +
+    IntToStr(rec.MacroLine[i].LineNumber) +
+    fineCommento ;
+end
+else
+begin
+  indicazioneRiga := '';
+end;
+@}
 Riassumendo questo e' il programma principale:
 
 @o slit.pas
