@@ -132,7 +132,6 @@ begin
 end;
 @}
 
-
 Riassumendo questo e' il programma principale:
 
 @o slit.pas
