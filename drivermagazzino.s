@@ -104,6 +104,9 @@ end;
 @Section @Title { Trattamento delle opzioni }
 @Begin @PP
 
+Le opzioni vengono trattate qui e trasformate in chiamate alle
+opportune funzioni dello stato globale del programma. @PP
+
 @d TSlitStreamDriverMagazzino.ProcessaOpzione
 @{
 procedure TSlitStreamDriverMagazzino.ProcessaOpzione(opzione:String);
@@ -133,13 +136,50 @@ begin
   begin
     SetGenerazioneNumeriRigaAbilitata(true);
   end
-  else if opzione='no_line_markers' then
+  else if AnsiStartsStr('comment_markers', opzione) then
   begin
-    SetGenerazioneNumeriRigaAbilitata(false);
+    GestioneOpzioneCommenti (opzione);
   end
   else
   begin
-    raise Exception.Create('Opzione non conosciuta: ' + opzione);
+    LogErrorMessage('Opzione non conosciuta: ' + opzione);
+  end;
+end;
+@}
+
+L'opzione dei commenti merita un discorso in pi{@Char ugrave} rispetto
+alle altre perch{@Char egrave} il codice per la gestione del parametro
+{@Char egrave} quantomeno particolare. @PP
+
+@d TSlitStreamDriverMagazzino.GestioneOpzioneCommenti
+@{
+procedure TSlitStreamDriverMagazzino.GestioneOpzioneCommenti (opzione:String);
+var
+  estensione, inizio, fine:String;
+  delimitatori: TSysCharSet;
+
+begin
+  opzione := MidStr (opzione, Length('comment_markers')+1, 
+    Length(opzione)-Length('comment_markers')-1);
+  opzione := Trim (opzione);
+
+  if Length(opzione)<5 then
+  begin
+    LogErrorMessage ('opzione comment_markers con valore non valido');
+  end
+  else
+  begin
+    delimitatori := [opzione[1]];
+
+    estensione := ExtractDelimited (2, opzione, delimitatori);
+    inizio := ExtractDelimited (3, opzione, delimitatori);
+    fine := ExtractDelimited (4, opzione, delimitatori);
+
+    writeln (estensione);
+    writeln (inizio);
+    writeln (fine);
+
+    AggiungiLinguaggio (estensione, inizio, fine);
   end;
 end;
 @}
@@ -177,6 +217,7 @@ type
       override;
     procedure ProcessaOpzione(opzione:String);
       override;
+    procedure GestioneOpzioneCommenti (opzione:String);
   end;
 
 implementation
@@ -188,6 +229,7 @@ implementation
   @<TSlitStreamDriverMagazzino.ProcessaRigaDocumentazione@>
   @<TSlitStreamDriverMagazzino.ProcessaOpzione@>
   @<TSlitStreamDriverMagazzino.ProcessaAggiungiNellaMacro@>
+  @<TSlitStreamDriverMagazzino.GestioneOpzioneCommenti@>
 end.
 @}
 
