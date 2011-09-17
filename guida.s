@@ -218,7 +218,22 @@ di inizio e fine sezione }
 riga nei file sorgenti generati }
 @ListItem { @F no_line_markers : disabilita la produzione dei marcatori
 di riga nei file sorgenti generati }
+@ListItem { @F comment_markers : questa opzione serve per inserire
+i delimitatori di commento per i linguaggi non ancora supportati da Slit
+oppure per personalizzare quelli gi{@Char agrave} esistenti. }
 @EndList
+
+L'opzione @F comment_markers {@Char egrave} seguita da un parametro
+che indica il linguaggio e i marcatori di inizio e di fine commento.
+Questo parametro ha la forma @F @Verbatim { 
+<separatore><estensione><separatore><inizio><separatore><fine>
+}, dove il separatore pu{@Char ograve} essere qualsiasi carattere @PP
+
+Ad esempio la configurazione predefinita per il linguaggio Pascal
+potrebbe essere espressa nella seguente forma:
+@F @Verbatim @Begin 
+ @x comment_markers /.pas/{/}/
+@End @Verbatim. @PP
 
 @End @Section
 
