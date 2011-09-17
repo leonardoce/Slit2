@@ -14,6 +14,8 @@ macro alla ricerca delle macro che devono generare dei files:
 procedure ProcessaFiles();
 var
   i:Integer;
+  Marcatore_Inizio:String;
+  Marcatore_Fine:String;
 begin
   for i:=0 to store.MacroCount-1 do
   begin
@@ -21,8 +23,11 @@ begin
     begin
       Assign(streamOutputSorgenti, Trim(store.GetRecord(i).macroName));
       Rewrite(streamOutputSorgenti);
-      {TODO gestire marcatori in base all'estensione}
-      ScriviScrapEspanso(True, store.GetRecord(i).macroName, 0, '{', '}');
+
+      PrendiMarcatori (store.GetRecord(i).macroName, 
+        Marcatore_Inizio, Marcatore_Fine);
+      ScriviScrapEspanso(True, store.GetRecord(i).macroName, 0, 
+        Marcatore_Inizio, Marcatore_Fine);
       Close(streamOutputSorgenti);
     end;
   end;
