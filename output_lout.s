@@ -41,18 +41,45 @@ scritta, in un commento, la linea di sorgente dalla quale
 quella linea di documentazione {@Char egrave} derivata. @PP
 
 L'obiettivo {@Char egrave} di semplificare da ricerca di
-errori dati dal compilatore. @PP
+errori dati dal compilatore. Questo per{@Char ograve} 
+deve essere fatto solamente se
+non siamo dentro ad un blocco @F "@Verbatim", altrimenti il commento
+riguardante la riga corrente verrebbe inserito all'interno del documento
+proprio come se fosse testo. 
 
-Questo per{@Char ograve} deve essere fatto solamente se
-non siamo dentro ad un blocco @F "@Verbatim":
+Identificare se siamo dentro ad un blocco @B verbatim {@Char egrave} un
+problema che potrebbe sembrare di semplice soluzione ma in realt{@Char agrave},
+per farlo in modo esatto, bisognerebbe procedere almeno ad una analisi
+lessicale della stringa dal punto di vista Lout. 
+
+Per Slit {@Char egrave} stato scelto un approccio intermedio
+che permette di avere contemporaneamente la comodit{@Char agrave} dei
+commenti che indicano il file sorgente di provenienza e che non
+modificano l'output finale. @PP
+
+Il commento che enuncia lo stato corrente di lettura viene inserito
+solamente se la linea di documentazione inizia per @F "@Section": in
+questo modo siamo ragionevolmente sicuri che la riga non apparterr{@Char agrave}
+a un blocco @B verbatim. La stessa cosa viene fatta per l'inizio di un 
+capitolo e dell'introduzione:
 
 @d TSlitOutputLout.PutLine
 @{
 procedure TSlitOutputLout.PutLine(str:String);
+var
+  tempStr : String;
+
 begin
-  write(handle, str);
-  writeln (handle, ' #', GetCurrentParsingFile(), ':',
-    GetCurrentParsingLine() );
+  tempStr := Trim(str);
+  if (AnsiStartsStr('@Section', tempStr)) or
+     (AnsiStartsStr('@Chapter', tempStr)) or
+     (AnsiStartsStr('@Introduction', tempStr)) then
+  begin
+    writeln (handle, '# ', GetCurrentParsingFile(), ':',
+      GetCurrentParsingLine() );
+  end;
+
+  writeln(handle, str);
 end;
 @}
 
