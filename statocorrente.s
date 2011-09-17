@@ -122,7 +122,7 @@ Slit @Char egrave pronto per supportare i linguaggi:
 @ListItem { Pascal (.pas, .pp), }
 @ListItem { C, C++ (.c, .cpp, .h), }
 @ListItem { Java (.java), }
-@ListItem { C# (.cs), }
+@ListItem { @Verbatim { C# (.cs), } }
 @ListItem { Ada (.ada, .adb, .ads), }
 @ListItem { Haskell (.hs), }
 @ListItem { Python (.py), }
