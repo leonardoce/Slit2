@@ -34,13 +34,25 @@ end;
 
 Le righe di documentazione vengono inserite esattamente come
 sono all'interno del file Lout. Questo permette di
-aggiungere istruzioni lout alla documentazione:
+aggiungere istruzioni lout alla documentazione. @PP
+
+Oltre a scrivere la linea di documentazione viene anche
+scritta, in un commento, la linea di sorgente dalla quale
+quella linea di documentazione {@Char egrave} derivata. @PP
+
+L'obiettivo {@Char egrave} di semplificare da ricerca di
+errori dati dal compilatore. @PP
+
+Questo per{@Char ograve} deve essere fatto solamente se
+non siamo dentro ad un blocco @F "@Verbatim":
 
 @d TSlitOutputLout.PutLine
 @{
 procedure TSlitOutputLout.PutLine(str:String);
 begin
-  writeln(handle, str);
+  write(handle, str);
+  writeln (handle, ' #', GetCurrentParsingFile(), ':',
+    GetCurrentParsingLine() );
 end;
 @}
 
@@ -225,7 +237,7 @@ type
   end;
 
 implementation
-  uses sysutils, strutils, classes;
+  uses sysutils, strutils, classes, slitstatus;
 
   @<TSlitOutputLout.CreateForFileAndStore@>
   @<TSlitOutputLout.Destroy@>
