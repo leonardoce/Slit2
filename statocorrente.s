@@ -121,11 +121,13 @@ Slit @Char egrave pronto per supportare i linguaggi:
 @BulletList
 @ListItem { Pascal (.pas, .pp), }
 @ListItem { C, C++ (.c, .cpp, .h), }
+@ListItem { D (.d), }
 @ListItem { Java (.java), }
 @ListItem { @Verbatim { C# (.cs), } }
 @ListItem { Ada (.ada, .adb, .ads), }
 @ListItem { Haskell (.hs), }
 @ListItem { Python (.py), }
+@ListItem { Lout (.lout), }
 @ListItem { Ruby (.rb). }
 @EndList
 
@@ -136,6 +138,7 @@ I linguaggi elencati vengono direttamente configurati nel codice:
 AggiungiLinguaggio( '.pas', '{', '}' );
 AggiungiLinguaggio( '.pp', '{', '}' );
 AggiungiLinguaggio( '.c', '/*', '*/' );
+AggiungiLinguaggio( '.d', '/*', '*/' );
 AggiungiLinguaggio( '.cpp', '/*', '*/' );
 AggiungiLinguaggio( '.java', '/*', '*/' );
 AggiungiLinguaggio( '.cs', '/*', '*/' );
@@ -145,6 +148,7 @@ AggiungiLinguaggio( '.ads', '--', '' );
 AggiungiLinguaggio( '.hs', '--', '' );
 AggiungiLinguaggio( '.py', '#', '' );
 AggiungiLinguaggio( '.rb', '#', '' );
+AggiungiLinguaggio( '.lout', '#', '' );
 @}
 
 Le informazioni vengono conservate all'interno di un record:
