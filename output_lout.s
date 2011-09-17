@@ -92,12 +92,16 @@ per usarlo con Lout: @PP
 
 @F @Verbatim {
 @LeftDisplay lines @Break {
-@Sym angleleft @I @Verbatim @Begin definizione di ciao @End @Verbatim @Sym angleright @Sym equivalence
+@Sym angleleft @I @Verbatim @Begin definizione di ciao 
+  @End @Verbatim 
+  @Sym angleright @Sym equivalence
     @Verbatim @Begin while(true) { @End @Verbatim 
       @Verbatim @Begin putstrln("ciao!"); @End @Verbatim
     @Verbatim @Begin } @End @Verbatim
 }
 }
+
+@PP
 
 Il nome della definizione viene scritto fra parentesi angolate in italico
 @Verbatim {(@I)}. @PP 
