@@ -190,7 +190,7 @@ var
 begin
   fatto := false;
 
-  for i:=0 to TabellaLinguaggi_Count-1 do
+  for i:=TabellaLinguaggi_Count-1 downto 0 do
   begin
     if AnsiEndsText (TabellaLinguaggi[i].Estensione, NomeFile) then
     begin
@@ -207,6 +207,10 @@ begin
   end;
 end;
 @}
+
+All'interno della tabella le istruzioni vengono cercate all'incontrario
+perch{@Char egrave} in questo modo le indicazioni dell'utente vengono
+prese in considerazione prima di quelle fornite come predefinite.
 
 @End @SubSection
 
