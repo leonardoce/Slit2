@@ -70,7 +70,8 @@ Le macro vengono sempre create con un nome:
 
 @d TMacroRecord.CreateWithData
 @{
-constructor TMacroRecord.CreateWithData(Name:String; Progressivo:Integer; Tipo:EMacroType);
+constructor TMacroRecord.CreateWithData(Name:String; 
+  Progressivo:Integer; Tipo:EMacroType);
 begin
   FMacroName := Name;
   FMacroProgr := Progressivo;
@@ -87,7 +88,8 @@ all'inizio del contenuto passato.
 
 @d TMacroRecord.AddContent
 @{
-procedure TMacroRecord.AddContent (Content:String; FileCorrente:String; LineaCorrente:Integer);
+procedure TMacroRecord.AddContent (Content:String; FileCorrente:String; 
+  LineaCorrente:Integer);
 var
   divisioneRighe:TStringList;
   i:Integer;
@@ -110,7 +112,8 @@ di contenuto ad una macro.
 
 @d TMacroRecord.AddLine
 @{
-procedure TMacroRecord.AddLine (Content:String; FileCorrente:String; LineaCorrente:Integer);
+procedure TMacroRecord.AddLine (Content:String; FileCorrente:String; 
+  LineaCorrente:Integer);
 begin
   if Length(FMacroContent)>=FMacroLinesCount then
   begin
@@ -181,7 +184,8 @@ all'utente.
 
 @d TMacroStore.StoreMacro
 @{
-procedure TMacroStore.StoreMacro(macroName:String; macroContent:String; macroType:EMacroType; FileName:String; CurrentLine:Integer);
+procedure TMacroStore.StoreMacro(macroName:String; macroContent:String; 
+  macroType:EMacroType; FileName:String; CurrentLine:Integer);
 var
   i:Integer;
 begin
@@ -360,7 +364,8 @@ private
 public
   constructor Create;
   function MacroCount:Integer;
-  procedure StoreMacro(macroName:String; macroContent:String; macroType:EMacroType; FileName:String; CurrentLine:Integer);
+  procedure StoreMacro(macroName:String; macroContent:String; 
+    macroType:EMacroType; FileName:String; CurrentLine:Integer);
   function GetMacro(macroName:String):TMacroRecord;
   function GetRecord(i:integer):TMacroRecord;
   procedure CalcolaRiferimenti;
