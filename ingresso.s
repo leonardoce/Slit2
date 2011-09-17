@@ -29,12 +29,12 @@ private
   FParser:TSlitStream;
 
 public
-  procedure ProcessaDefinizioneMacro(nomeMacro:String; scrap:String; scrapStartLine:Integer); 
-    virtual; abstract;
-  procedure ProcessaAggiungiNellaMacro(nomeMacro:String; scrap:String; scrapStartLine:Integer);
-    virtual; abstract;
-  procedure ProcessaDefinizioneFile(nomeMacro:String; scrap:String; scrapStartLine:Integer);  
-    virtual; abstract;
+  procedure ProcessaDefinizioneMacro(nomeMacro:String; scrap:String; 
+    scrapStartLine:Integer); virtual; abstract;
+  procedure ProcessaAggiungiNellaMacro(nomeMacro:String; scrap:String; 
+    scrapStartLine:Integer); virtual; abstract;
+  procedure ProcessaDefinizioneFile(nomeMacro:String; scrap:String; 
+    scrapStartLine:Integer); virtual; abstract;
   procedure ProcessaRigaDocumentazione(riga:String);
     virtual; abstract;
   procedure ProcessaOpzione(opzione:String);
