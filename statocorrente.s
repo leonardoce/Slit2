@@ -105,6 +105,78 @@ distinguere fra linguaggio e linguaggio. @PP
 
 Slit fa questa distinzione utilizzando l'estensione del file. @PP
 
+Ad ogni estensione viengono associati un marcatore di inizio e un marcatore
+di fine commento. All'interno del programma questa tabella di associazione
+@Char egrave gi{@Char agrave} popolata con dei valori utili per i
+linguaggi di programmazione pi{@Char ugrave} popolari. @PP
+
+Slit inserisce solamente commenti alla fine della riga dei files sorgenti
+e quindi questo meccanismo funziona anche per i linguaggi che non
+prevedono aree di commento all'interno della linea di codice ma solamente
+alla fine (ad esempio Ada). In questo caso basta lasciare il marcatore
+di fine commento vuoto. @PP
+
+Slit @Char egrave pronto per supportare i linguaggi:
+
+@BulletList
+@ListItem { Pascal (.pas, .pp), }
+@ListItem { C, C++ (.c, .cpp, .h), }
+@ListItem { Java (.java), }
+@ListItem { C# (.cs), }
+@ListItem { Ada (.ada, .adb, .ads), }
+@ListItem { Haskell (.hs), }
+@ListItem { Python (.py), }
+@ListItem { Ruby (.rb). }
+@EndList
+
+I linguaggi elencati vengono direttamente configurati nel codice:
+
+@d slitstatus, configurazione delle estensioni predefinite
+@{
+AggiungiLinguaggio( '.pas', '{', '}' );
+AggiungiLinguaggio( '.pp', '{', '}' );
+AggiungiLinguaggio( '.c', '/*', '*/' );
+AggiungiLinguaggio( '.cpp', '/*', '*/' );
+AggiungiLinguaggio( '.java', '/*', '*/' );
+AggiungiLinguaggio( '.cs', '/*', '*/' );
+AggiungiLinguaggio( '.ada', '--', '' );
+AggiungiLinguaggio( '.adb', '--', '' );
+AggiungiLinguaggio( '.ads', '--', '' );
+AggiungiLinguaggio( '.hs', '--', '' );
+AggiungiLinguaggio( '.py', '#', '' );
+AggiungiLinguaggio( '.rb', '#', '' );
+@}
+
+Le informazioni vengono conservate all'interno di un record:
+
+@d slitstatus, RInformazioniLinguaggi
+@{
+RInformazioniLinguaggi = record
+  Estensione:String;
+  Inizio:String;
+  Fine:String;
+end;
+@}
+
+Queste informazioni vengono aggiunte ad una tabella che viene
+tenuta nello stato globale della configurazione di Slit:
+
+@d slitstatus, AggiungiLinguaggio
+@{
+procedure AggiungiLinguaggio (Estensione, Inizio, Fine:String);
+begin
+  if Length(TabellaLinguaggi)>=TabellaLinguaggi_Count then
+  begin
+    SetLength (TabellaLinguaggi, TabellaLinguaggi_Count+50);
+  end;
+
+  TabellaLinguaggi[TabellaLinguaggi_Count].Estensione := Estensione;
+  TabellaLinguaggi[TabellaLinguaggi_Count].Inizio := Inizio;
+  TabellaLinguaggi[TabellaLinguaggi_Count].Fine := Fine;
+  TabellaLinguaggi_Count := TabellaLinguaggi_Count + 1;
+end;
+@}
+
 @End @SubSection
 
 @SubSection @Title { Generazione dei marcatori di inizio e file sezione }
@@ -297,10 +369,14 @@ function GetGenerazioneNumeriRigaAbilitata:Boolean;
 procedure SetGenerazioneNumeriRigaAbilitata(value:Boolean);
 function GetColonnaNumeriRiga:Integer;
 procedure SetColonnaNumeriRiga(value:Integer);
+procedure AggiungiLinguaggio (Estensione, Inizio, Fine:String);
 
 implementation
 
 uses sysutils, slithtml, slitlout, slittxt;
+
+type
+  @<slitstatus, RInformazioniLinguaggi@>
 
 var
   NomeProcessoreInformazioni:String;
@@ -309,6 +385,8 @@ var
   StreamStack: array of TSlitStream;
   StreamStackCount: Integer;
   ColonnaNumeriRiga:Integer;
+  TabellaLinguaggi:array of RInformazioniLinguaggi;
+  TabellaLinguaggi_Count:Integer;
 
 @<slitstatus, gestore del processore di documentazione@>
 @<slitstatus, crea lo stream di output@>
@@ -320,14 +398,20 @@ var
 @<Get/Set GenerazioneMarcatoriAbilitata@>
 @<Get/Set GenerazioneNumeriRigaAbilitata@>
 @<Get/Set ColonnaNumeriRiga@>
+@<slitstatus, AggiungiLinguaggio@>
 
 initialization
 
-NomeProcessoreInformazioni := 'lout';
-StreamStackCount := 0;
-GenerazioneMarcatoriAbilitata := True;
-GenerazioneNumeriRigaAbilitata := True;
-ColonnaNumeriRiga := 100;
+  NomeProcessoreInformazioni := 'lout';
+  StreamStackCount := 0;
+  GenerazioneMarcatoriAbilitata := True;
+  GenerazioneNumeriRigaAbilitata := True;
+  ColonnaNumeriRiga := 100;
+  TabellaLinguaggi_Count := 0;
+  SetLength (TabellaLinguaggi, 0);
+
+  @<slitstatus, configurazione delle estensioni predefinite@>
+
 end.
 @}
 
