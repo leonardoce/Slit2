@@ -177,6 +177,37 @@ begin
 end;
 @}
 
+Per prelevare queste informazioni il programma utilizza questa
+funzione:
+
+@d slitstatus, PrendiMarcatori
+@{
+procedure PrendiMarcatori (NomeFile:String; var Inizio:String; var Fine:String);
+var 
+  i:Integer;
+  fatto:Boolean;
+
+begin
+  fatto := false;
+
+  for i:=0 to TabellaLinguaggi_Count-1 do
+  begin
+    if AnsiEndsText (TabellaLinguaggi[i].Estensione, NomeFile) then
+    begin
+      Inizio := TabellaLinguaggi[i].Inizio;
+      Fine := TabellaLinguaggi[i].Fine;
+      Fatto := True;
+    end;
+  end;
+
+  if not fatto then
+  begin
+    Inizio := '';
+    Fine := '';
+  end;
+end;
+@}
+
 @End @SubSection
 
 @SubSection @Title { Generazione dei marcatori di inizio e file sezione }
@@ -370,10 +401,11 @@ procedure SetGenerazioneNumeriRigaAbilitata(value:Boolean);
 function GetColonnaNumeriRiga:Integer;
 procedure SetColonnaNumeriRiga(value:Integer);
 procedure AggiungiLinguaggio (Estensione, Inizio, Fine:String);
+procedure PrendiMarcatori (NomeFile:String; var Inizio:String; var Fine:String);
 
 implementation
 
-uses sysutils, slithtml, slitlout, slittxt;
+uses sysutils, slithtml, slitlout, slittxt, strutils;
 
 type
   @<slitstatus, RInformazioniLinguaggi@>
@@ -399,6 +431,7 @@ var
 @<slitstatus, Get/Set GenerazioneNumeriRigaAbilitata@>
 @<slitstatus, Get/Set ColonnaNumeriRiga@>
 @<slitstatus, AggiungiLinguaggio@>
+@<slitstatus, PrendiMarcatori@>
 
 initialization
 
