@@ -175,10 +175,6 @@ begin
     inizio := ExtractDelimited (3, opzione, delimitatori);
     fine := ExtractDelimited (4, opzione, delimitatori);
 
-    writeln (estensione);
-    writeln (inizio);
-    writeln (fine);
-
     AggiungiLinguaggio (estensione, inizio, fine);
   end;
 end;
