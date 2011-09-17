@@ -38,13 +38,14 @@ Ogni file viene generato con lo scrap che corrisponde al suo nome. La
 procedura che scrive lo scrap divide in righe il codice dello scrap
 alla ricerca del riferimento ad una macro. @PP
 
-Sei il riferimento è quello di una macro si richiama ricorsivamente
+Se il riferimento @Char egrave quello di una macro si richiama ricorsivamente
 per generare il file, altrimenti stampa la riga al livello di indentazione
-desiderato, che inizialmente è 0. 
+desiderato, che inizialmente @Char egrave 0. 
 
 @d procedure ScriviScrapEspanso
 @{
-procedure ScriviScrapEspanso(isMain:Boolean; nome:String; indent:Integer; inizioCommento:String; fineCommento:String);
+procedure ScriviScrapEspanso(isMain:Boolean; nome:String; 
+  indent:Integer; inizioCommento:String; fineCommento:String);
 var
   rec:TMacroRecord;
   i, j:integer;
@@ -62,14 +63,16 @@ begin
 
   if (not isMain) and GetGenerazioneMarcatoriAbilitata() then
   begin
-    writeln (streamOutputSorgenti, tempIndentazione, inizioCommento, '[open] ', nome, fineCommento);
+    writeln (streamOutputSorgenti, tempIndentazione, inizioCommento, 
+      '[open] ', nome, fineCommento);
   end;
 
   @<ScriviScrapEspanso, scrittura righe del file sorgente@>
 
   if (not isMain) and GetGenerazioneMarcatoriAbilitata() then
   begin
-    writeln (streamOutputSorgenti, tempIndentazione, inizioCommento, '[close] ', nome, fineCommento);
+    writeln (streamOutputSorgenti, tempIndentazione, inizioCommento, 
+      '[close] ', nome, fineCommento);
   end;
 end;
 @}
