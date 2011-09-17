@@ -185,7 +185,7 @@ end;
 Nei file sorgenti generati @Char egrave possibile conservare il nome
 della macro Slit che @Char egrave stata letta per generarli. @PP
 
-@d Get/Set GenerazioneMarcatoriAbilitata
+@d slitstatus, Get/Set GenerazioneMarcatoriAbilitata
 @{
 function GetGenerazioneMarcatoriAbilitata:Boolean;
 begin
@@ -210,7 +210,7 @@ e il numero di riga corrispondente. @PP
 Queste informazioni permettono di rintracciare facilmente un errere
 emesso dal compilatore. @PP
 
-@d Get/Set GenerazioneNumeriRigaAbilitata
+@d slitstatus, Get/Set GenerazioneNumeriRigaAbilitata
 @{
 function GetGenerazioneNumeriRigaAbilitata:Boolean;
 begin
@@ -227,7 +227,7 @@ I marcatori, per non dare noia, vengono messi ad una precisa
 colonna se disponibile oppure alla fine della riga di codice
 sorgente. Questa colonna @Char egrave configurabile:
 
-@d Get/Set ColonnaNumeriRiga
+@d slitstatus, Get/Set ColonnaNumeriRiga
 @{
 function GetColonnaNumeriRiga:Integer;
 begin
@@ -395,9 +395,9 @@ var
 @<slitstatus, LogErrorMessage@>
 @<slitstatus, GetCurrentParsingFile@>
 @<slitstatus, GetCurrentParsingLine@>
-@<Get/Set GenerazioneMarcatoriAbilitata@>
-@<Get/Set GenerazioneNumeriRigaAbilitata@>
-@<Get/Set ColonnaNumeriRiga@>
+@<slitstatus, Get/Set GenerazioneMarcatoriAbilitata@>
+@<slitstatus, Get/Set GenerazioneNumeriRigaAbilitata@>
+@<slitstatus, Get/Set ColonnaNumeriRiga@>
 @<slitstatus, AggiungiLinguaggio@>
 
 initialization
