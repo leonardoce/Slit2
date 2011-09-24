@@ -12,10 +12,9 @@
 @Title { Introduzione }
 @Begin @PP
 
-Slit {@Char egrave} un programma che permette di scrivere codice e documentazione all'interno dello stesso
-file. Il rapporto fra il codice e la documentazione {@Char egrave} per{@Char ograve} ribaltato: se normalmente si
-scrive il codice e all'interno di questo si inserisce la documentazione usando Slit si
-scrive la documentazione e all'interno di questa il codice. @PP
+Slit is a software which can write code and documentation into the same file.
+The relation between code and documentation is inverted: if usually we write the code and into this we put the documentation
+using Slit we write the documentation and into that the code. @PP
 
 Inoltre a questo il codice può essere diviso in frammenti che si richiamano per comporre
 l'intero programma. Per avere maggiori informazioni su questa modalità di lavoro
