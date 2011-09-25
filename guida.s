@@ -21,40 +21,30 @@ the macro can be used into others macro or only to write a sourced file. @PP
 this is an example of a directive "@d":
 @IndentedDisplay @F 
 @Verbatim @Begin
- @d funzione sum
-@{
+ @d function sum
+
 function sum (a,b:Integer) return Integer
 begin
   return a+b;
 end;
-@}
+
 @End @Verbatim
 How we see the directive "@d" is followed to a  @I scrap. A @I scrap, for the Slit terminology, is
 the content of the defined macro. @PP
 A scrap became to "@{" and finished with "@}". All that is between this two lines 
 is see like the content of the macro that will be define. @PP
-
-In base al tipo di processore scelto per l'output Slit enuncia il
-nome della macro e il suo contenuto all'interno della documentazione.
-Ad ogni macro viene associato un numero che la identifica e alla fine
-della macro vengono enunciati i numeri di macro che utilizzano la macro
-appena definita. @PP
-
-Una macro pu{@Char ograve} anche essere non utilizzata, in questo 
-caso Slit avverte
-l'utente alla fine del processo di produzione dei files sorgenti. @PP
-
+According to the type of processor select for the output Slit enounce the name of the macro and its content into the
+documentation. @PP
+To each macro is associate a number that identify it and at the and of the macro are enounce 
+the number of macro that use the just define macro. @PP
+A macro can be not used too, in this case Slit advise the user at the end of the process of production 
+of source files. @PP
 @End @Section
-
 @Section @Title { La direttiva "@o" e sintassi degli scrap }
 @Begin @PP
-
-La direttiva "@o" @Char egrave molto simile, dal punto di vista sintattico,
-a quella "@d". Infatti viene utilizzata per definire un tipo particolare di
-macro, il cui nome viene utilizzato per scrivere un file. @PP
-
-Ad esempio: 
-
+The directive "@o" is very similar, according to the syntactic point of view, to that "@d".
+Infact is used to define a particular type of macro, which name is used to write a file. @PP
+For example:
 @IndentedDisplay @F 
 @Verbatim @Begin
  @o prova.c
@@ -68,9 +58,7 @@ int main(int argc, char **argv)
 }
 @}
 @End @Verbatim
-
-All'interno di uno scrap si pu{@Char ograve} includere un riferimento ad
-un'altro:
+Into a scrap we can include a reference to an other:
 
 @IndentedDisplay @F 
 @Verbatim @Begin
