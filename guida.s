@@ -1,56 +1,38 @@
 @Chapter
-@Title { Guida per l'utente }
+@Title { User guide}
 @Begin
 @LP
-
-I files in formato Slit sono composti da linee di testo di documentazione e da
-direttive. Le direttive sono linee che iniziano per un carattere chiocciola
-("@") e sono seguite da una lettera che identifica la direttiva. @PP
-
-In questo documento le direttive supportate sono le seguenti: @PP
-
+Slit's files are composed of text's lines of documentation and instructions. Instructions are lines 
+that became to a "@" character and are followed to a letter which determine the directive. @PP
+In this document the supported instructions are this: @PP
 @BulletList
-@ListItem { "@d" @Char egrave la direttiva che definisce una macro, }
-@ListItem { "@o" @Char egrave la direttiva che serve per scrivere un file
-sorgente }
-@ListItem { "@i" @Char egrave la direttiva che serve per includere 
-un file slit da un'altro. }
+@ListItem { "@d" is the instruction which define a macro.} @PP
+@ListItem { "@o" is the instruction that we use to write a  source file} @PP
+@ListItem { "@i" is the instruction who we use to include a slit file to another.}@PP
 @EndList
-
-C'@Char egrave una cosa molto importante da ricordare: le direttive sono
-valide solamente se sono scritte al primo carattere della linea. Questo
-per fare in modo che slit non interpreti una stringa come una direttiva. @PP
-
+There is a very important thing to remember: the directive are valid only if that are write at the firt character of the line. This to 
+avoid that slit don't exchange a string like an instruction. @PP
 @BeginSections
 @Section @Title { La direttiva "@d" }
 @Begin @PP
-
-La direttiva "@d" @Char egrave la direttiva principale di Slit. @PP
-
-Questa direttiva serve per memorizzare una macro di testo all'interno del
-sistema. La macro pu{@Char ograve} essere utilizzata all'interno di altre
-macro oppure semplicimente per scrivere un certo file sorgente. @PP
-
-Ecco un esempio di una direttiva "@d":
-
+The directive "@d" is the primary instruction of Slit:
+this instruction is used to memorize a text's macro into the sistem.
+the macro can be used into others macro or only to write a sourced file. @PP
+this is an example of a directive "@d":
 @IndentedDisplay @F 
 @Verbatim @Begin
- @d funzione somma
+ @d funzione sum
 @{
-function somma(a,b:Integer) return Integer
+function sum (a,b:Integer) return Integer
 begin
   return a+b;
 end;
 @}
 @End @Verbatim
-
-Come si vede la direttiva "@d" @Char egrave seguita da uno @I scrap. Uno
-@I scrap, secondo la terminologia Slit, @Char egrave il contenuto della
-macro definita. @PP
-
-Uno scrap inizia per "@{" e finisce con "@}". Tutto quello che 
-@Char egrave fra queste due righe @Char egrave considerato come
-contenuto della macro in corso di definizione. @PP
+How we see the directive "@d" is followed to a  @I scrap. A @I scrap, for the Slit terminology, is
+the content of the defined macro. @PP
+A scrap became to "@{" and finished with "@}". All that is between this two lines 
+is see like the content of the macro that will be define. @PP
 
 In base al tipo di processore scelto per l'output Slit enuncia il
 nome della macro e il suo contenuto all'interno della documentazione.
