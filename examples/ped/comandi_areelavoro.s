@@ -51,7 +51,7 @@ def comandoE(comando):
   sNomeFile = comando.txtComando[2:].strip()
   if len( sNomeFile ) == 0:
     comando.stampaSchermo = False
-    print "Sintassi: o <nomefile>"
+    print "Sintassi: e <nomefile>"
     return
 
   idxAreaLavoro = 0
@@ -63,15 +63,20 @@ def comandoE(comando):
       return
 
   oNuovaArea = AreaLavoro( comando.ped )
-  try:
-    oNuovaArea.leggiFile( sNomeFile )
-  except IOError, e:
+  if os.path.exists( sNomeFile ):
+    try:
+      oNuovaArea.leggiFile( sNomeFile )
+      comando.stampaSchermo = True
+    except IOError, e:
+      comando.stampaSchermo = False
+      print str(e)
+      return
+  else:
+    oNuovaArea.setNomeBuffer( sNomeFile )
     comando.stampaSchermo = False
-    print str(e)
-    return
+    print "New file"
 
   comando.ped.addAreaLavoro( oNuovaArea )
-  comando.stampaSchermo = True
 @}
 
 Il comando @F q permette invece di chiudere il buffer corrente se non
