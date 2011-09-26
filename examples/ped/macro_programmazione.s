@@ -1,30 +1,35 @@
 @Chapter
-@Title { Macro per programmare in Java }
+@Title { Macro per programmare }
 @Begin @LP
 
 Queste sono delle macro utili per programmare in Java e vengono
 invocate direttamente da Ped. @PP
 
-La prima macro Š un semplice browser per le classi Java che, assuemndo
-che la directory corrente sia quella dove sono depositati i sorgenti
-propone un elenco dei package e, fra i package, un elenco delle classi.
+@BeginSections
+
+@Section
+@Title { Browser fra i files sorgenti }
+@Begin @PP
+
+La prima macro Š un semplice browser per i files sorgenti che
+propone un elenco dei package e, fra i package, un elenco dei files.
 @PP
 
-Quando l'utente seleziona una classe quella classe viene direttamente
-aperta nell'editor. @PP
+Quando l'utente seleziona un file quel file viene direttamente
+aperto nell'editor. @PP
 
-@o javab.py
+@o bro.py
 @{
 import os
 import os.path
 
-aEstensioniSorgenti = [ ".java", ".as", ".s", ".py" ]
+aEstensioniSorgenti = [ ".java", ".as", ".s", ".py", ".mxml" ]
 
 def main():
-  @<macroj, scorre directory@>
-  @<macroj, sceglie package@>
-  @<macroj, sceglie classe@>
-  @<macroj, apre editor@>
+  @<bro, scorre directory@>
+  @<bro, sceglie package@>
+  @<bro, sceglie classe@>
+  @<bro, apre editor@>
 
 main()
 @}
@@ -35,11 +40,11 @@ I files all'interno delle directory vengono filtrati in modo da prendere
 solamente quelli con estensioni "buone" ovvero con estensioni
 presenti nella lista @F {aEstensioniSorgenti}.
 
-@d macroj, scorre directory
+@d bro, scorre directory
 @{
 def callbackWalk(aListaDirectory, sNomeDirectory, aNomiFiles):
   aNomiClassi = filter(lambda x: os.path.splitext(x.lower())[1] in aEstensioniSorgenti, aNomiFiles)
-  aNomiClassi = map(lambda x: [ os.path.realpath( os.path.join( sNomeDirectory, x ) ), os.path.splitext(x)[0] ], aNomiClassi)
+  aNomiClassi = map(lambda x: [ os.path.realpath( os.path.join( sNomeDirectory, x ) ), x ], aNomiClassi)
   sNomePackage = ".".join(sNomeDirectory.split( os.path.sep )[1:])
 
   dInfo = {}
@@ -67,7 +72,7 @@ e il secondo Š il nome della classe. @PP
 
 I package vengono proposti all'utente uno per uno:
 
-@d macroj, sceglie package
+@d bro, sceglie package
 @{
 i = 0
 for d in aDirectorySorgenti:
@@ -80,7 +85,7 @@ aCurrPackage = aDirectorySorgenti[ nPackage-1 ]
 
 A questo punto l'utente sceglie fra le classi presenti:
 
-@d macroj, sceglie classe
+@d bro, sceglie classe
 @{
 i = 0
 for c in aCurrPackage[ 'classi' ]:
@@ -92,11 +97,55 @@ nClasse = int( raw_input( "classe> " ) ) -1
 
 Manca solo da aprire l'editor direttamente alla classe desiderata.
 
-@d macroj, apre editor
+@d bro, apre editor
 @{
 sNomeFile = aCurrPackage[ 'classi' ][ nClasse ][0]
 risultato = comando.ped.eseguiComando( "e " + sNomeFile )
 comando.stampaSchermo = risultato.stampaSchermo
 @}
 
+@End @Section
+
+@Section
+@Title { tab2spaces - Converte i tabs in spazi }
+@Begin @PP
+
+La macro @F {tab2spaces} converte i tabs che sono all'inizio delle righe in
+coppie di spazi. Questo serve per togliere tutti i tab che servono per
+l'indentazione in un file sorgente e sostituirli con due spazi. Come
+discusso altrove (@I {tabs are evil}) gli spazi sono quasi sempre meglio
+dei tabs. @PP
+
+La macro in questione lavora sempre sull'intero buffer e sostituisce solamente
+gli spazi che sono all'inizio di una riga per evitare di stroncare il file sorgente.
+@PP
+
+@o tabs2spaces.py
+@{
+import re
+
+prog = re.compile( "([\t ]*)(.*)" )
+
+def main():
+  comando.areaLavoro.inserisciInUndo( "tab2spaces" )
+  for iRiga in comando.areaLavoro.getNumeriLineeFra( 1, len( comando.areaLavoro.getBuffer() ) ):
+    @<tabs2spaces, processa riga@>
+
+main()
+@}
+
+Ogni riga viene elaborata e divisa in prefisso (spazi e tabs) e suffisso
+(altre cose). La riga viene poi ricomposta sostituendo i tabs con i doppi
+spazi nel prefisso. @PP
+
+@d tabs2spaces, processa riga
+@{
+gruppi = prog.match( comando.areaLavoro.getLinea( iRiga ) ).groups()
+prefisso = re.sub( "\t", "  ", gruppi[0] )
+comando.areaLavoro.setLinea( iRiga, prefisso + gruppi[1] )
+@}
+
+@End @Section
+
+@EndSections
 @End @Chapter

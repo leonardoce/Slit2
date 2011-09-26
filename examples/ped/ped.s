@@ -13,7 +13,7 @@
 @i comandi_areelavoro.s
 @i comandi_programmazione.s
 @i comandi_macro.s
-@i macro_java.s
+@i macro_programmazione.s
 @i sodeps.s
 
 @o ped.py

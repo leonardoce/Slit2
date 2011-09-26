@@ -32,10 +32,10 @@ class AreaLavoro:
   @<class AreaLavoro, metodi@>
 @}
 
-I flag possono essere letti e scritti attraverso gli appositi metodi getter e
+Gli attributi della classe possono essere letti e scritti attraverso gli appositi metodi getter e
 setter:
 
-@d class AreaLavoro, flags
+@d class AreaLavoro, getter e setter
 @{
 def resetModificato( self ):
   self.modificato = False
@@ -54,6 +54,9 @@ def isTemporaneo( self ):
 
 def setTemporaneo( self, flag ):
   self.temporaneo = flag
+
+def getBuffer( self ):
+  return self.buffer
 @}
 
 Il caricamento e lo scaricamento di un file viene direttamente effettuato
@@ -82,7 +85,7 @@ def salvaSu( self, nome ):
 @d class AreaLavoro, metodi
 @{
 @<class AreaLavoro, gestione files@>
-@<class AreaLavoro, flags@>
+@<class AreaLavoro, getter e setter@>
 
 def risolviIndirizzo(self, sIndirizzo):
   if re.match( "\\d+", sIndirizzo ):
