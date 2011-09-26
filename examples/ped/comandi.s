@@ -325,7 +325,6 @@ def comandoG( comando ):
     sComandoConLinea = str( linea ) + sComandoDaEseguire
     comando.ped.eseguiComando( str( linea ) + "k0" )
     comando.ped.eseguiComando( sComandoConLinea )
-    print sComandoConLinea
 
 def comandoS( comando ):
   if comando.lineaInizio == None:
