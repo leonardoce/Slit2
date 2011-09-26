@@ -1,4 +1,4 @@
-@Chapter
+﻿@Chapter
 @Title { Area di lavoro }
 @Begin @LP
 
@@ -148,21 +148,24 @@ class AreaLavoro:
 
     lineaDaStampare = lineaInizio
     while lineaDaStampare <= lineaFine:
-      if self.isLineaValida( lineaDaStampare ):
-        if lineaDaStampare in self.rmarks:
-          mark = self.rmarks[lineaDaStampare]
-        else:
-          mark = ' '
-
-        if lineaDaStampare == self.cursore:
-          print mark+"<%5d> %s" % ( lineaDaStampare, self.getLinea( lineaDaStampare ) )
-        else:
-          print mark+" %5d  %s" % ( lineaDaStampare, self.getLinea( lineaDaStampare ) )
+      self.stampaLinea( lineaDaStampare )
       lineaDaStampare += 1
 
     if self.isLineaValida( self.cursore ):
       print
       print self.getLinea( self.cursore )
+
+  def stampaLinea( self, lineaDaStampare ):
+    if self.isLineaValida( lineaDaStampare ):
+      if lineaDaStampare in self.rmarks:
+        mark = self.rmarks[lineaDaStampare]
+      else:
+        mark = ' '
+
+      if lineaDaStampare == self.cursore:
+        print mark+"<%5d> %s" % ( lineaDaStampare, self.getLinea( lineaDaStampare ) )
+      else:
+        print mark+" %5d  %s" % ( lineaDaStampare, self.getLinea( lineaDaStampare ) )
 
   def setCursore( self, i ):
     if self.isLineaValida( i ):

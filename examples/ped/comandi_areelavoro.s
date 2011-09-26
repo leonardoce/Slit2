@@ -58,6 +58,7 @@ def comandoE(comando):
     return
 
   comando.ped.addAreaLavoro( oNuovaArea )
+  comando.stampaSchermo = True
 @}
 
 @d comandoQ

@@ -282,7 +282,7 @@ def comandoG( comando ):
   clearScreen()
   while lineaDaControllare <= comando.lineaFine:
     if prog.search( comando.areaLavoro.getLinea(lineaDaControllare) ):
-      print "  %5d  %s" % ( lineaDaControllare, comando.areaLavoro.getLinea(lineaDaControllare) )
+      comando.areaLavoro.stampaLinea( lineaDaControllare )
     lineaDaControllare+=1
 
   comando.stampaSchermo = False
@@ -313,6 +313,7 @@ def comandoS( comando ):
     dest = prog.sub( regOut, orig, numeroSost )
     if orig!=dest:
       comando.areaLavoro.setLinea( lineaDaControllare, dest )
+      comando.areaLavoro.stampaLinea( lineaDaControllare )
     lineaDaControllare+=1
 
 def comandoPut( comando ):
