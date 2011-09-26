@@ -76,7 +76,7 @@ for c in aCurrPackage[ 'classi' ]:
   i = i+1
   print i, c[1]
 
-nClasse = int( raw_input( "classe> " ) )
+nClasse = int( raw_input( "classe> " ) ) -1
 @}
 
 Manca solo da aprire l'editor direttamente alla classe desiderata.
