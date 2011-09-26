@@ -1,4 +1,4 @@
-﻿@Chapter
+@Chapter
 @Title { Area di lavoro }
 @Begin @LP
 
@@ -151,11 +151,18 @@ class AreaLavoro:
       lineaInizio = 1
 
     lineaFine = lineaInizio + self.ped.getDimensioneFinestra()
+    if not self.isLineaValida( lineaFine ):
+      lineaFine = len( self.buffer )
 
-    lineaDaStampare = lineaInizio
-    while lineaDaStampare <= lineaFine:
+    if (lineaFine - lineaInizio) < self.ped.getDimensioneFinestra():
+      if lineaInizio == 1:
+        lineaFine = self.ped.getDimensioneFinestra()
+
+      if lineaFine == len( self.buffer ):
+        lineaInizio = len( self.buffer ) - self.ped.getDimensioneFinestra()
+
+    for lineaDaStampare in self.getNumeriLineeFra( lineaInizio, lineaFine ):
       self.stampaLinea( lineaDaStampare )
-      lineaDaStampare += 1
 
     if self.isLineaValida( self.cursore ):
       print
