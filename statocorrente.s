@@ -128,7 +128,9 @@ Slit @Char egrave pronto per supportare i linguaggi:
 @ListItem { Haskell (.hs), }
 @ListItem { Python (.py), }
 @ListItem { Lout (.lout), }
-@ListItem { Ruby (.rb). }
+@ListItem { Ruby (.rb), }
+@ListItem { Assembler (.s, .asm), }
+@ListItem { Basic (.bas) }
 @EndList
 
 I linguaggi elencati vengono direttamente configurati nel codice:
@@ -149,6 +151,9 @@ AggiungiLinguaggio( '.hs', '--', '' );
 AggiungiLinguaggio( '.py', '#', '' );
 AggiungiLinguaggio( '.rb', '#', '' );
 AggiungiLinguaggio( '.lout', '#', '' );
+AggiungiLinguaggio( '.s', '; ', '' );
+AggiungiLinguaggio( '.asm', '; ', '' );
+AggiungiLinguaggio( '.bas', '''''', '' );
 @}
 
 Le informazioni vengono conservate all'interno di un record:
