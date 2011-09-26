@@ -206,7 +206,7 @@ def risolviIndirizzo(self, sIndirizzo):
 
     linea = self.cursore + offset
     if not self.isLineaValida( linea ):
-      linea = len(buffer)
+      linea = len( self.buffer )
     return linea
 
   elif sIndirizzo.startswith("-"):
