@@ -17,7 +17,7 @@ def comandoShiftL( comando ):
     comando.lineaFine = comando.lineaInizio
 
   try:
-    spaziDaGestire = int( comando.txtComando[3:] )
+    spaziDaGestire = int( comando.txtComando[2:].strip() )
   except ValueError, e:
     spaziDaGestire = 2
 
@@ -47,7 +47,7 @@ def comandoShiftR( comando ):
     comando.lineaFine = comando.lineaInizio
 
   try:
-    spaziDaGestire = int( comando.txtComando[3:] )
+    spaziDaGestire = int( comando.txtComando[2:].strip() )
   except ValueError, e:
     spaziDaGestire = 2
 
