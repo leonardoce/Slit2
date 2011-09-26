@@ -49,6 +49,12 @@ def comandoE(comando):
     print "Sintassi: o <nomefile>"
     return
 
+  for area in comando.ped.getAreeLavoro():
+    if os.path.realpath( area.getNomeBuffer() ) == os.path.realpath( sNomeFile ):
+      comando.stampaSchermo = False
+      print "File gia' aperto."
+      return
+
   oNuovaArea = AreaLavoro( comando.ped )
   try:
     oNuovaArea.leggiFile( sNomeFile )
