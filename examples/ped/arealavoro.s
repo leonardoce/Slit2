@@ -1,4 +1,4 @@
-@Chapter
+﻿@Chapter
 @Title { Area di lavoro }
 @Begin @LP
 
@@ -251,6 +251,18 @@ class AreaLavoro:
 
   def isModificato( self ):
     return self.modificato
+
+  @<class AreaLavoro, comandi@>
+@}
+
+L'area di lavoro gestisce anche l'esecuzione dei comandi:
+
+@d class AreaLavoro, comandi
+@{
+def eseguiComando( self, sComando ):
+  cmd = Comando( self.ped, self, sComando )
+  cmd.esegui()
+  return cmd
 @}
 
 @End @Chapter

@@ -22,6 +22,7 @@ def main():
   @<macroj, scorre directory@>
   @<macroj, sceglie package@>
   @<macroj, sceglie classe@>
+  @<macroj, apre editor@>
 
 main()
 @}
@@ -32,7 +33,7 @@ Le directory vengono scorse dalla funzione callback @F {callbackWalk}:
 @{
 def callbackWalk(aListaDirectory, sNomeDirectory, aNomiFiles):
   aNomiClassi = filter(lambda x: x.lower().endswith(".java"), aNomiFiles)
-  aNomiClassi = map(lambda x: [ os.path.realpath(x), x[:-5] ], aNomiClassi)
+  aNomiClassi = map(lambda x: [ os.path.realpath( os.path.join( sNomeDirectory, x ) ), x[:-5] ], aNomiClassi)
   sNomePackage = ".".join(sNomeDirectory.split( os.path.sep )[1:])
 
   dInfo = {}
@@ -76,6 +77,14 @@ for c in aCurrPackage[ 'classi' ]:
   print i, c[1]
 
 nClasse = int( raw_input( "classe> " ) )
+@}
+
+Manca solo da aprire l'editor direttamente alla classe desiderata.
+
+@d macroj, apre editor
+@{
+sNomeFile = aCurrPackage[ 'classi' ][ nClasse ][0]
+comando.areaLavoro.eseguiComando( "e " + sNomeFile )
 @}
 
 @End @Chapter
