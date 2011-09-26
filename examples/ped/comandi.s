@@ -9,7 +9,11 @@ Supponendo che @F c sia un carattere e che @F n sia un numero, allora i possibil
 ad una riga hanno la sintassi seguente: @PP
 
 @TaggedList
-@DropTagItem { @F @Verbatim { 'c }} { Indica la linea il cui mark è il carattere indicato }
+@DropTagItem { @F @Verbatim { 'c }} { Indica la linea il cui mark è il carattere indicato.
+La linea viene cercata a partire dalla linea successiva a quella corrente. }
+@DropTagItem { @F @Verbatim { ^c }} { Indica la linea il cui mark è il carattere indicato.
+La linea viene cercata, all'indietro, a partire dalla linea che precede quella dove è posizionato
+il cursore. }
 @DropTagItem { @F @Verbatim { nnnn }} { Dove c'è almeno una cifra indica un certo numero di
   linea specificato }
 @DropTagItem { @F @Verbatim { . }} { Indica la linea corrente }
@@ -33,7 +37,7 @@ da una barra rovescia di escape @F @Verbatim { "\" }. @PP
 L'espressione regolare che indica un riferimento ad una linea è quindi la seguente: @PP
 
 @Display @F @Verbatim {
-'[a-z]|\.|\$|\++|\-+|/(?:[^\\]|\\.)*?/|\?(?:[^\\]|\\.)*?\?|\d+
+'[0-9a-z]|\^[0-9a-z]|\.|\$|\++|\-+|/(?:[^\\]|\\.)*?/|\?(?:[^\\]|\\.)*?\?|\d+
 }
 
 @d class Comando
@@ -43,7 +47,7 @@ class Comando:
     self.ped = oPed
     self.areaLavoro = oAreaLavoro
 
-    reLinea = "'[0-9a-z]|\\.|\\$|\\+(?:\d*)|\\-(?:\d*)|/(?:[^\\\\]|\\\\.)*?/|\\?(?:[^\\\\]|\\\\.)*?\\?|\\d+"
+    reLinea = "'[0-9a-z]|\\^[0-9a-z]|\\.|\\$|\\+(?:\d*)|\\-(?:\d*)|/(?:[^\\\\]|\\\\.)*?/|\\?(?:[^\\\\]|\\\\.)*?\\?|\\d+"
     reComando = "(?P<inizio>" + reLinea + ")?(?:,(?P<fine>" + reLinea +"))?(?P<comando>.*)"
     sMatch = re.match( reComando, sComando )
 
@@ -89,6 +93,8 @@ class Comando:
       comandoD(self)
     elif re.match( "k.", self.txtComando):
       comandoK(self)
+    elif self.txtComando == "r":
+      comandoR(self)
     elif self.txtComando[0] == "w":
       comandoW(self)
     elif self.txtComando.startswith("g/"):
@@ -140,111 +146,6 @@ def comandoZ( comando ):
 def comandoU( comando ):
   comando.areaLavoro.undo()
 
-def comandoI( comando ):
-  if comando.lineaInizio != None:
-    if not comando.areaLavoro.isLineaValida( comando.lineaInizio ):
-      print "Linea non valida"
-      return
-    comando.areaLavoro.setCursore( comando.lineaInizio )
-  else:
-    comando.lineaInizio = comando.areaLavoro.cursore
-
-  if not comando.areaLavoro.isLineaValida( comando.areaLavoro.cursore ):
-    print "Cursore non valido"
-    comando.stampaSchermo = False
-    return
-
-  linee = leggiRigheDaUtente()
-  comando.areaLavoro.inserisciInUndo( "Inserimento" )
-  comando.areaLavoro.inserisciDopo( comando.lineaInizio-1, linee )
-  comando.areaLavoro.setCursore( comando.lineaInizio + len(linee) )
-
-def comandoA( comando ):
-  if comando.lineaInizio != None:
-    if not comando.areaLavoro.isLineaValida( comando.lineaInizio ):
-      print "Linea non valida"
-      return
-    comando.areaLavoro.setCursore( comando.lineaInizio )
-  else:
-    comando.lineaInizio = comando.areaLavoro.cursore
-
-  linee = leggiRigheDaUtente()
-  comando.areaLavoro.inserisciInUndo( "Append" )
-  comando.areaLavoro.inserisciDopo( comando.lineaInizio, linee )
-  comando.areaLavoro.setCursore( comando.lineaInizio + len(linee) )
-
-def comandoBA( comando ):
-  if comando.lineaInizio != None:
-    if not comando.areaLavoro.isLineaValida( comando.lineaInizio ):
-      print "Linea non valida"
-      return
-    comando.areaLavoro.setCursore( comando.lineaInizio )
-  else:
-    comando.lineaInizio = comando.areaLavoro.cursore
-
-  if not comando.areaLavoro.isLineaValida( comando.areaLavoro.cursore ):
-    print "Cursore non valido"
-    comando.stampaSchermo = False
-    return
-
-  comando.areaLavoro.inserisciInUndo( "Block Append" )
-  linee = comando.ped.getCopyBuf()
-  comando.areaLavoro.inserisciDopo( comando.lineaInizio, linee )
-  comando.areaLavoro.setCursore( comando.lineaInizio + len(linee) )
-  comando.stampaSchermo = True
-
-def comandoBI( comando ):
-  if comando.lineaInizio != None:
-    if not comando.areaLavoro.isLineaValida( comando.lineaInizio ):
-      print "Linea non valida"
-      return
-    comando.areaLavoro.setCursore( comando.lineaInizio )
-  else:
-    comando.lineaInizio = comando.areaLavoro.cursore
-
-  if not comando.areaLavoro.isLineaValida( comando.areaLavoro.cursore ):
-    print "Cursore non valido"
-    comando.stampaSchermo = False
-    return
-
-  comando.areaLavoro.inserisciInUndo( "Block Insert" )
-  linee = comando.ped.getCopyBuf()
-  comando.areaLavoro.inserisciDopo( comando.lineaInizio-1, linee )
-  comando.areaLavoro.setCursore( comando.lineaInizio + len(linee) )
-  comando.stampaSchermo = True
-
-def comandoD( comando ):
-  if comando.lineaInizio == None:
-    comando.lineaInizio = comando.areaLavoro.cursore
-
-  if comando.lineaFine == None:
-    comando.lineaFine = comando.lineaInizio
-
-  lineeDaCancellare = comando.lineaFine - comando.lineaInizio + 1
-
-  if lineeDaCancellare > 0:
-    comando.ped.setCopyBuf( comando.areaLavoro.getLinee(
-      comando.lineaInizio, comando.lineaFine ) )
-    comando.areaLavoro.inserisciInUndo( "Delete" )
-    comando.areaLavoro.cancellaLinee( comando.lineaInizio, lineeDaCancellare )
-
-  comando.stampaSchermo = True
-
-def comandoY( comando ):
-  if comando.lineaInizio == None:
-    if comando.areaLavoro.hasMark( 'a' ) and comando.areaLavoro.hasMark( 'b' ):
-      comando.lineaInizio = comando.areaLavoro.getMark( 'a' )
-      comando.lineaFine = comando.areaLavoro.getMark( 'b' )
-    else:
-      comando.lineaInizio = comando.areaLavoro.cursore
-
-  if comando.lineaFine == None:
-    comando.lineaFine = comando.lineaInizio
-
-  if comando.lineaFine >= comando.lineaInizio:
-    l = comando.areaLavoro.getLinee( comando.lineaInizio, comando.lineaFine )
-    comando.ped.setCopyBuf( l )
-
 def comandoC( comando ):
   if comando.lineaInizio == None:
     comando.lineaInizio = comando.areaLavoro.cursore
@@ -258,18 +159,6 @@ def comandoC( comando ):
   comando.areaLavoro.cancellaLinee( comando.lineaInizio, lineeDaCancellare )
   linee = leggiRigheDaUtente()
   comando.areaLavoro.inserisciDopo( comando.lineaInizio-1, linee )
-
-def comandoK( comando ):
-  if comando.lineaInizio == None:
-    comando.lineaInizio = comando.areaLavoro.cursore
-
-  if comando.lineaFine == None:
-    comando.lineaFine = comando.lineaInizio
-
-  for l in comando.areaLavoro.getNumeriLineeFra( comando.lineaInizio, comando.lineaFine ):
-    comando.areaLavoro.setMark( comando.txtComando[1], l )
-
-  comando.stampaSchermo = True
 
 def comandoG( comando ):
   if comando.lineaInizio == None:
@@ -365,9 +254,234 @@ def comandoPut( comando ):
     except IOError, e:
       print str(e)
 
+@<comandi killring@>
+@<comandi inserimento@>
 @<comandi aree di lavoro@>
+@<comandi marks@>
 @<comandi programmazione@>
 @<comandoMacro@>
 @}
+
+@BeginSections
+
+@Section
+@Title { Comandi per l'inserimento di contenuti }
+@Begin @PP
+
+Il comando A inserisce del testo dopo la linea specificata.
+
+@d comandoA
+@{
+def comandoA( comando ):
+  if comando.lineaInizio != None:
+    if not comando.areaLavoro.isLineaValida( comando.lineaInizio ):
+      print "Linea non valida"
+      return
+    comando.areaLavoro.setCursore( comando.lineaInizio )
+  else:
+    comando.lineaInizio = comando.areaLavoro.cursore
+
+  linee = leggiRigheDaUtente()
+  comando.areaLavoro.inserisciInUndo( "Append" )
+  comando.areaLavoro.inserisciDopo( comando.lineaInizio, linee )
+  comando.areaLavoro.setCursore( comando.lineaInizio + len(linee) )
+@}
+
+Il comando I inserisce il testo prima della linea specificata.
+
+@d comandoI
+@{
+def comandoI( comando ):
+  if comando.lineaInizio != None:
+    if not comando.areaLavoro.isLineaValida( comando.lineaInizio ):
+      print "Linea non valida"
+      return
+    comando.areaLavoro.setCursore( comando.lineaInizio )
+  else:
+    comando.lineaInizio = comando.areaLavoro.cursore
+
+  if not comando.areaLavoro.isLineaValida( comando.areaLavoro.cursore ):
+    print "Cursore non valido"
+    comando.stampaSchermo = False
+    return
+
+  linee = leggiRigheDaUtente()
+  comando.areaLavoro.inserisciInUndo( "Inserimento" )
+  comando.areaLavoro.inserisciDopo( comando.lineaInizio-1, linee )
+  comando.areaLavoro.setCursore( comando.lineaInizio + len(linee) )
+@}
+
+@d comandi inserimento
+@{
+@<comandoA@>
+@<comandoI@>
+@}
+
+@End @Section
+
+@Section
+@Title { Comandi di cancellazione e copia e incolla }
+@Begin @PP
+
+Ped mantiene un buffer che viene popolato esplicitamente
+(comando Y) oppure con le cancellazioni (comando D). @PP
+
+Il comando Y inserisce le righe specificate all'interno del buffer.
+
+@d comandoY
+@{
+def comandoY( comando ):
+  if comando.lineaInizio == None:
+    if comando.areaLavoro.hasMark( 'a' ) and comando.areaLavoro.hasMark( 'b' ):
+      comando.lineaInizio = comando.areaLavoro.getMark( 'a' )
+      comando.lineaFine = comando.areaLavoro.getMark( 'b' )
+    else:
+      comando.lineaInizio = comando.areaLavoro.cursore
+
+  if comando.lineaFine == None:
+    comando.lineaFine = comando.lineaInizio
+
+  if comando.lineaFine >= comando.lineaInizio:
+    l = comando.areaLavoro.getLinee( comando.lineaInizio, comando.lineaFine )
+    comando.ped.setCopyBuf( l )
+@}
+
+Il comando D invece popola il buffer con le righe selezionate, che
+vengono rimosse dal file editato.
+
+@d comandoD
+@{
+def comandoD( comando ):
+  if comando.lineaInizio == None:
+    comando.lineaInizio = comando.areaLavoro.cursore
+
+  if comando.lineaFine == None:
+    comando.lineaFine = comando.lineaInizio
+
+  lineeDaCancellare = comando.lineaFine - comando.lineaInizio + 1
+
+  if lineeDaCancellare > 0:
+    comando.ped.setCopyBuf( comando.areaLavoro.getLinee(
+      comando.lineaInizio, comando.lineaFine ) )
+    comando.areaLavoro.inserisciInUndo( "Delete" )
+    comando.areaLavoro.cancellaLinee( comando.lineaInizio, lineeDaCancellare )
+
+  comando.stampaSchermo = True
+@}
+
+Il comando BA inserisce il contenuto del buffer dopo la riga specificata, alla
+maniera del comando A.
+
+@d comandoBA
+@{
+def comandoBA( comando ):
+  if comando.lineaInizio != None:
+    if not comando.areaLavoro.isLineaValida( comando.lineaInizio ):
+      print "Linea non valida"
+      return
+    comando.areaLavoro.setCursore( comando.lineaInizio )
+  else:
+    comando.lineaInizio = comando.areaLavoro.cursore
+
+  if not comando.areaLavoro.isLineaValida( comando.areaLavoro.cursore ):
+    print "Cursore non valido"
+    comando.stampaSchermo = False
+    return
+
+  comando.areaLavoro.inserisciInUndo( "Block Append" )
+  linee = comando.ped.getCopyBuf()
+  comando.areaLavoro.inserisciDopo( comando.lineaInizio, linee )
+  comando.areaLavoro.setCursore( comando.lineaInizio + len(linee) )
+  comando.stampaSchermo = True
+@}
+
+Il comando BI inserisce il contenuto del buffer prima della riga
+specificata.
+
+@d comandoBI
+@{
+def comandoBI( comando ):
+  if comando.lineaInizio != None:
+    if not comando.areaLavoro.isLineaValida( comando.lineaInizio ):
+      print "Linea non valida"
+      return
+    comando.areaLavoro.setCursore( comando.lineaInizio )
+  else:
+    comando.lineaInizio = comando.areaLavoro.cursore
+
+  if not comando.areaLavoro.isLineaValida( comando.areaLavoro.cursore ):
+    print "Cursore non valido"
+    comando.stampaSchermo = False
+    return
+
+  comando.areaLavoro.inserisciInUndo( "Block Insert" )
+  linee = comando.ped.getCopyBuf()
+  comando.areaLavoro.inserisciDopo( comando.lineaInizio-1, linee )
+  comando.areaLavoro.setCursore( comando.lineaInizio + len(linee) )
+  comando.stampaSchermo = True
+@}
+
+@d comandi killring
+@{
+@<comandoY@>
+@<comandoD@>
+@<comandoBA@>
+@<comandoBI@>
+@}
+
+@End @Section
+
+@Section
+@Title { Comandi per la gestione dei marks }
+@Begin @PP
+
+Ped si conserva, all'interno dell'area di lavoro, un flag di un carattere per
+ogni riga del buffer. Questo flag può essere utilizzato per muoversi all'interno del buffer
+oppure per indicare genericamente una riga. @PP
+
+La riga successiva con un certo flag è indicata da un apostrofo e dal flag. La riga
+precedente viene indicata in modo simile attraverso il carattere "^". @PP
+
+Per impostare un flag su un insieme di righe si utilizza il comando K.
+
+@d comandoK
+@{
+def comandoK( comando ):
+  if comando.lineaInizio == None:
+    comando.lineaInizio = comando.areaLavoro.cursore
+
+  if comando.lineaFine == None:
+    comando.lineaFine = comando.lineaInizio
+
+  for l in comando.areaLavoro.getNumeriLineeFra( comando.lineaInizio, comando.lineaFine ):
+    comando.areaLavoro.setMark( comando.txtComando[1], l )
+@}
+
+Per rimuovere i flag impostati su un insieme di righe si utilizza il comando
+R.
+
+@d comandoR
+@{
+def comandoR( comando ):
+  if comando.lineaInizio == None:
+    comando.lineaInizio = comando.areaLavoro.cursore
+
+  if comando.lineaFine == None:
+    comando.lineaFine = comando.lineaInizio
+
+  comando.areaLavoro.cancellaMarksFra( comando.lineaInizio, comando.lineaFine )
+@}
+
+I comandi che lavorano sui marks sono quindi:
+
+@d comandi marks
+@{
+@<comandoK@>
+@<comandoR@>
+@}
+
+@End @Section
+
+@EndSections
 
 @End @Chapter
