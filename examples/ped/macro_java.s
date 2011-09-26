@@ -18,6 +18,8 @@ aperta nell'editor. @PP
 import os
 import os.path
 
+aEstensioniSorgenti = [ ".java", ".as", ".s", ".py" ]
+
 def main():
   @<macroj, scorre directory@>
   @<macroj, sceglie package@>
@@ -29,12 +31,15 @@ main()
 
 Le directory vengono scorse dalla funzione callback @F {callbackWalk} iniziando
 dalla directory corrente oppure da quella specificata nel comando.
+I files all'interno delle directory vengono filtrati in modo da prendere
+solamente quelli con estensioni "buone" ovvero con estensioni
+presenti nella lista @F {aEstensioniSorgenti}.
 
 @d macroj, scorre directory
 @{
 def callbackWalk(aListaDirectory, sNomeDirectory, aNomiFiles):
-  aNomiClassi = filter(lambda x: x.lower().endswith(".java"), aNomiFiles)
-  aNomiClassi = map(lambda x: [ os.path.realpath( os.path.join( sNomeDirectory, x ) ), x[:-5] ], aNomiClassi)
+  aNomiClassi = filter(lambda x: os.path.splitext(x.lower())[1] in aEstensioniSorgenti, aNomiFiles)
+  aNomiClassi = map(lambda x: [ os.path.realpath( os.path.join( sNomeDirectory, x ) ), os.path.splitext(x)[0] ], aNomiClassi)
   sNomePackage = ".".join(sNomeDirectory.split( os.path.sep )[1:])
 
   dInfo = {}
