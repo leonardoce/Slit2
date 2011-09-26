@@ -64,7 +64,8 @@ def comandoShiftR( comando ):
 @}
 
 Il comando @F ! permette invece l'esecuzione di un comando del sistema
-operativo in uso. @PP
+operativo in uso.  Se il comando inizia con il carattere @F {<} allora l'output del
+comando viene redirezionato e inserito in un nuovo buffer temporaneo. @PP
 
 @d comandoSo
 @{
@@ -72,7 +73,20 @@ def comandoSo( comando ):
   sComandoSo = comando.txtComando[1:].strip()
   if len( sComandoSo ) > 0:
     try:
-      os.system( sComandoSo )
+      if sComandoSo[0] == "<":
+        f = os.popen( sComandoSo[1:] )
+        linee = f.readlines()
+        f.close()
+
+        area = AreaLavoro( comando.ped )
+        area.setNomeBuffer( "** " + sComandoSo[1:] + " **" )
+        area.inserisciDopo( 0, linee )
+        area.resetModificato()
+
+        comando.stampaSchermo = True
+        comando.ped.addAreaLavoro( area )
+      else:
+        os.system( sComandoSo )
     except Exception, e:
       print str(e)
 @}

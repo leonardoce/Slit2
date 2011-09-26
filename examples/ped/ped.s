@@ -24,7 +24,6 @@ import re
 import os
 import os.path
 
-
 @<dipendenze da so@>
 
 try:
