@@ -271,25 +271,6 @@ def comandoK( comando ):
 
   comando.stampaSchermo = True
 
-def comandoW( comando ):
-  nomeFile = comando.txtComando[1:].strip()
-
-  if nomeFile=="":
-    nomeFile = comando.areaLavoro.nomeBuffer
-
-  try:
-    stato = "=> " + nomeFile
-    comando.areaLavoro.salvaSu( nomeFile )
-  except IOError, e:
-    stato = str(e)
-
-  comando.stampaSchermo = False
-  print stato
-  if comando.txtComando[1:].strip() == "":
-    comando.areaLavoro.resetModificato()
-
-  comando.areaLavoro.setNomeBuffer( nomeFile )
-
 def comandoG( comando ):
   if comando.lineaInizio == None:
     comando.lineaInizio = 1

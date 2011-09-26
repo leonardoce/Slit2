@@ -98,6 +98,30 @@ def comandoQ( comando ):
       comando.stampaSchermo = True
 @}
 
+Il comando @F w permette all'utente di salvare l'area di lavoro corrente
+nel file il cui nome è il nome del buffer:
+
+@d comandoW
+@{
+def comandoW( comando ):
+  nomeFile = comando.txtComando[1:].strip()
+
+  if nomeFile=="":
+    nomeFile = comando.areaLavoro.nomeBuffer
+
+  try:
+    stato = "=> " + nomeFile
+    comando.areaLavoro.salvaSu( nomeFile )
+
+    if comando.txtComando[1:].strip() == "":
+      comando.areaLavoro.resetModificato()
+  except IOError, e:
+    stato = str(e)
+
+  print stato
+  comando.stampaSchermo = False
+  comando.areaLavoro.setNomeBuffer( nomeFile )
+@}
 
 Il comando @F h permette di visualizzare la storia dei comandi
 che l'utente ha dato all'editor. Ogni comando può essere richiamato
@@ -129,6 +153,7 @@ def comandoH( comando ):
 @<comandoBuf@>
 @<comandoE@>
 @<comandoQ@>
+@<comandoW@>
 @<comandoH@>
 @}
 
