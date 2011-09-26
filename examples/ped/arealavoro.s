@@ -129,6 +129,12 @@ class AreaLavoro:
       self.buffer[i-1] = txt
     self.modificato = True
 
+  def getNumeriLineeFra( self, inizio, fine ):
+    if fine>=inizio:
+      for l in xrange(inizio, fine+1):
+        if self.isLineaValida( l ):
+          yield l
+
   def stampaSchermo( self ):
     clearScreen()
 

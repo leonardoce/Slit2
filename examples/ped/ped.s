@@ -11,10 +11,12 @@
 @i arealavoro.s
 @i comandi.s
 @i comandi_areelavoro.s
+@i comandi_programmazione.s
 @i sodeps.s
 
 @o ped.py
 @{
+#!/usr/bin/env python
 import sys
 import re
 import os

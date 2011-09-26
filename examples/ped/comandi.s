@@ -108,6 +108,10 @@ class Comando:
       comandoBuf( self )
     elif self.txtComando.startswith("e "):
       comandoE( self )
+    elif self.txtComando.startswith("<<"):
+      comandoShiftL( self )
+    elif self.txtComando.startswith(">>"):
+      comandoShiftR( self )
     else:
       raise ErrorePed( "Comando non valido: " + self.txtComando )
 
@@ -180,6 +184,7 @@ def comandoBA( comando ):
   linee = comando.ped.getCopyBuf()
   comando.areaLavoro.inserisciDopo( comando.lineaInizio, linee )
   comando.areaLavoro.setCursore( comando.lineaInizio + len(linee) )
+  comando.stampaSchermo = True
 
 def comandoBI( comando ):
   if comando.lineaInizio != None:
@@ -199,6 +204,7 @@ def comandoBI( comando ):
   linee = comando.ped.getCopyBuf()
   comando.areaLavoro.inserisciDopo( comando.lineaInizio-1, linee )
   comando.areaLavoro.setCursore( comando.lineaInizio + len(linee) )
+  comando.stampaSchermo = True
 
 def comandoD( comando ):
   if comando.lineaInizio == None:
@@ -214,6 +220,8 @@ def comandoD( comando ):
       comando.lineaInizio, comando.lineaFine ) )
     comando.areaLavoro.inserisciInUndo( "Delete" )
     comando.areaLavoro.cancellaLinee( comando.lineaInizio, lineeDaCancellare )
+
+  comando.stampaSchermo = True
 
 def comandoY( comando ):
   if comando.lineaInizio == None:
@@ -249,6 +257,7 @@ def comandoK( comando ):
     comando.lineaInizio = comando.areaLavoro.cursore
 
   comando.areaLavoro.setMark( comando.txtComando[1], comando.lineaInizio )
+  comando.stampaSchermo = True
 
 def comandoW( comando ):
   nomeFile = comando.txtComando[1:].strip()
@@ -276,7 +285,14 @@ def comandoG( comando ):
   if comando.lineaFine == None:
     comando.lineaFine = len( comando.areaLavoro.buffer )
 
-  prog = re.compile( comando.txtComando[2:-1] )
+  comando.stampaSchermo = False
+
+  try:
+    prog = re.compile( comando.txtComando[2:-1] )
+  except Exception, e:
+    print str(e)
+    return
+
   lineaDaControllare = comando.lineaInizio
 
   clearScreen()
@@ -284,8 +300,6 @@ def comandoG( comando ):
     if prog.search( comando.areaLavoro.getLinea(lineaDaControllare) ):
       comando.areaLavoro.stampaLinea( lineaDaControllare )
     lineaDaControllare+=1
-
-  comando.stampaSchermo = False
 
 def comandoS( comando ):
   if comando.lineaInizio == None:
@@ -303,7 +317,12 @@ def comandoS( comando ):
   regIn = gruppi[0]
   regOut = gruppi[1]
 
-  prog = re.compile( regIn )
+  try:
+    prog = re.compile( regIn )
+  except Exception, e:
+    print str(e)
+    return
+
   lineaDaControllare = comando.lineaInizio
 
   comando.areaLavoro.inserisciInUndo( "Sostituzione" )
@@ -341,6 +360,7 @@ def comandoPut( comando ):
       print str(e)
 
 @<comandi aree di lavoro@>
+@<comandi programmazione@>
 @}
 
 @End @Chapter
