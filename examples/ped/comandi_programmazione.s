@@ -1,8 +1,8 @@
-ï»¿@Chapter
+@Chapter
 @Title { Comandi per la programmazione }
 @Begin @LP
 
-Per comprende anche qualche comando che Ã¨ utile principalmente per
+Per comprende anche qualche comando che è utile principalmente per
 i programmatori. Due tra questi sono i comandi per l'indentazione
 ovvero @F {>>} e @F {<<}, che aggiungono e tolgono spazi dall'inizio
 delle righe sulle quali vengono invocati. @PP
@@ -34,7 +34,7 @@ def comandoShiftL( comando ):
     comando.stampaSchermo = True
 @}
 
-Questo comando Ã¨ il viceversa del precedente, ovvero serve per indentare di piÃ¹
+Questo comando è il viceversa del precedente, ovvero serve per indentare di più
 una riga. @PP
 
 @d comandoShiftR

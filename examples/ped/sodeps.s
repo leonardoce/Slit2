@@ -4,25 +4,25 @@
 
 Nonostante l'interfaccia di ped sia volutamente scarna ci sono delle funzioni
 che sono dipendenti dal sistema operativo sul quale viene eseguito. Prima
-fra tutte Ã¨ la funzione che calcola la lunghezza della console sulla quale
+fra tutte è la funzione che calcola la lunghezza della console sulla quale
 Ped viene eseguito. @PP
 
-Su Linux c'Ã¨ un comando, @F {stty size}, che puÃ² essere utilizzato per
+Su Linux c'è un comando, @F {stty size}, che può essere utilizzato per
 lo scopo. Il comando restituisce, separati da uno spazio, il numero di righe
 e il numero di colonne del terminale corrente. @PP
 
-Su Windows, almeno per quello che ho trovato io, non c'Ã¨ niente di simile.
-L'unico modo Ã¨ implementare un piccolo programmino C che chiama la API
+Su Windows, almeno per quello che ho trovato io, non c'è niente di simile.
+L'unico modo è implementare un piccolo programmino C che chiama la API
 di Windows @F GetConsoleScreenBufferInfo che produce una struttura nella quale
 uno dei membri enuncia anche la larghezza e l'altezza della console corrente. @PP
 
 Il programma ha bisogno che lo stream di output (hStdout) sia connesso
 direttamente alla console, altrimenti non funziona. Per questo motivo
-l'eseguibile non pu• essere utilizzato con la popen di Python, che
+l'eseguibile non può essere utilizzato con la popen di Python, che
 per funzionare redirige l'input e l'output del processo figlio. @PP
 
 Per comunicare le dimenzioni della console viene quindi scritto un file,
-il cui nome Š passato come primo argomenti, che contiene le coordinate in formato
+il cui nome è passato come primo argomenti, che contiene le coordinate in formato
 simile a quello del comando "stty size". @PP
 
 Quindi:
@@ -63,8 +63,8 @@ int main(int argc, char **argv) {
 }
 @}
 
-Questo programma pu• anche essere compilato con Tcc (Tiny C Compiler)
-cha ha gi… a disposizione le dichiarazioni delle API di Windows. @PP
+Questo programma può anche essere compilato con Tcc (Tiny C Compiler)
+cha ha già a disposizione le dichiarazioni delle API di Windows. @PP
 
 @d getScreenHeight
 @{
@@ -87,10 +87,10 @@ def getScreenHeight():
 @}
 
 
-Un'altra funzione che Ã¨ strettamente dipendente dal sistema operativo
-Ã¨ quella per la pulizia dello schermo. Su linux c'Ã¨ il comando "clear"
+Un'altra funzione che è strettamente dipendente dal sistema operativo
+è quella per la pulizia dello schermo. Su linux c'è il comando "clear"
 oppure le sequenze ANSI per la pulizia dello schermo. Su windows l'unico
-modo Ã¨ sfruttare il comando "cls". Quindi:
+modo è sfruttare il comando "cls". Quindi:
 
 @d clearScreen
 @{

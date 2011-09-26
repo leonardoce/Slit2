@@ -2,14 +2,14 @@
 @Title { Oggetto Ped }
 @Begin @LP
 
-L'oggetto Ped √® il contenitore di tutti gli altri oggetti dell'editor. Esso
-infatti contiene le propriet√† generali dell'editor e una lista di aree di
+L'oggetto Ped Ë il contenitore di tutti gli altri oggetti dell'editor. Esso
+infatti contiene le propriet‡ generali dell'editor e una lista di aree di
 lavoro possibili. @PP
 
 Per selezionare l'area di lavoro corrente si utilizza il comando @F {buf},
-che √® commentato nel capitolo relativo ai comandi. @PP
+che Ë commentato nel capitolo relativo ai comandi. @PP
 
-Il programma √® pensato per avere sempre una area di lavoro: per questo motivo
+Il programma Ë pensato per avere sempre una area di lavoro: per questo motivo
 alla rimozione di una area di lavoro ci si assicura di crearne un'altra se
 le aree di lavoro sono finite. @PP
 

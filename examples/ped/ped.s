@@ -6,6 +6,8 @@
   @Author { Leonardo Cecchi }
 //
 
+# Questo documento è scritto secondo l'encoding CP1252
+
 @i introduzione.s
 @i universo.s
 @i arealavoro.s
@@ -16,6 +18,12 @@
 @i macro_programmazione.s
 @i macro_generiche.s
 @i sodeps.s
+
+@Chapter
+@Title { Codice sorgente }
+@Begin @LP
+
+Riassumendo il codice sorgente di Ped è il seguente:
 
 @o ped.py
 @{
@@ -94,3 +102,5 @@ def main():
 if __name__=="__main__":
   main()
 @}
+
+@End @Chapter

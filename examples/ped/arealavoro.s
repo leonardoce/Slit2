@@ -2,16 +2,16 @@
 @Title { Area di lavoro }
 @Begin @LP
 
-L'area di lavoro Ã¨ l'entitÃ  fondamentale sulla quale i comandi di Ped lavorano. Essa Ã¨ composta
-principalmente da un buffer di righe che puÃ² essere manipolato attraverso i metodi della classe.
+L'area di lavoro è l'entità fondamentale sulla quale i comandi di Ped lavorano. Essa è composta
+principalmente da un buffer di righe che può essere manipolato attraverso i metodi della classe.
 Le modifiche vengono tenute in una apposita area che permette di annullarle quando desiderato.
 @PP
 
 Inoltre a questo l'area di lavoro dispone di un cursore che punta sempre ad una riga all'interno
-del buffer: questa riga Ã¨ raggiungibile con l'indirizzo @F @Verbatim { "." }. @PP
+del buffer: questa riga è raggiungibile con l'indirizzo @F @Verbatim { "." }. @PP
 
-Il buffer di righe pu• corrispondere ad un file oppure pu• essere un buffer
-@I {dummy}. Un buffer dummy non Š stato creato leggendo un file ma Š presente
+Il buffer di righe può corrispondere ad un file oppure può essere un buffer
+@I {dummy}. Un buffer dummy non è stato creato leggendo un file ma è presente
 solamente nella memoria dell'editor. I buffer temporanei possono essere comunque
 salvati su files concreti. @PP
 

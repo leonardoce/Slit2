@@ -8,9 +8,9 @@ sono divisi in sezioni in base a cosa fanno.
 Supponendo che @F c sia un carattere e che @F n sia un numero, allora i possibili riferimenti
 ad una riga hanno la sintassi seguente: @PP
 
-@TagList
-@DropTagItem { @F @Verbatim { 'c }} { Indica la linea il cui mark Ã¨ il carattere indicato }
-@DropTagItem { @F @Verbatim { nnnn }} { Dove c'Ã¨ almeno una cifra indica un certo numero di
+@TaggedList
+@DropTagItem { @F @Verbatim { 'c }} { Indica la linea il cui mark è il carattere indicato }
+@DropTagItem { @F @Verbatim { nnnn }} { Dove c'è almeno una cifra indica un certo numero di
   linea specificato }
 @DropTagItem { @F @Verbatim { . }} { Indica la linea corrente }
 @DropTagItem { @F @Verbatim { $ }} { Indica l'ultima riga del buffer }
@@ -24,13 +24,13 @@ all'indietro dal cursore }
 @EndList
 
 @PP
-L'espressione regolare per i mark Ã¨ quindi @F @Verbatim { '[a-z] }. Quella per le
-espressioni regolari Ã¨ invece @F @Verbatim { /(?:[^\\]|\\.)*?/ }. Questa espressione
-regolare Ã¨ dovuta al fatto che le espressioni regolari al loro interno non devono
+L'espressione regolare per i mark è quindi @F @Verbatim { '[a-z] }. Quella per le
+espressioni regolari è invece @F @Verbatim { /(?:[^\\]|\\.)*?/ }. Questa espressione
+regolare è dovuta al fatto che le espressioni regolari al loro interno non devono
 avere barre diritte @F @Verbatim { "/" }, oppure se le hanno devono essere precedute
 da una barra rovescia di escape @F @Verbatim { "\" }. @PP
 
-L'espressione regolare che indica un riferimento ad una linea Ã¨ quindi la seguente: @PP
+L'espressione regolare che indica un riferimento ad una linea è quindi la seguente: @PP
 
 @Display @F @Verbatim {
 '[a-z]|\.|\$|\++|\-+|/(?:[^\\]|\\.)*?/|\?(?:[^\\]|\\.)*?\?|\d+

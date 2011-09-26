@@ -11,7 +11,7 @@ invocate direttamente da Ped. @PP
 @Title { Browser fra i files sorgenti }
 @Begin @PP
 
-La prima macro Š un semplice browser per i files sorgenti che
+La prima macro è un semplice browser per i files sorgenti che
 propone un elenco dei package e, fra i package, un elenco dei files.
 @PP
 
@@ -64,11 +64,11 @@ else:
 os.path.walk( sNomeDirectory, callbackWalk, aDirectorySorgenti )
 @}
 
-Le informazioni vengono messe in una lista dove ogni elemento Š un
+Le informazioni vengono messe in una lista dove ogni elemento è un
 dizionario che rappresenta le informazioni di un package. Le classi
-vengono inserite in questo dizionario e ogni classe Š rappresentata da
-una lista il cui primo elemento Š la path assoluta della classe
-e il secondo Š il nome della classe. @PP
+vengono inserite in questo dizionario e ogni classe è rappresentata da
+una lista il cui primo elemento è la path assoluta della classe
+e il secondo è il nome della classe. @PP
 
 I package vengono proposti all'utente uno per uno:
 

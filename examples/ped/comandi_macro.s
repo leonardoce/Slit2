@@ -4,13 +4,13 @@
 
 Ped ammette di essere esteso con delle macro che vengono scritte
 in Python. Le macro devono risiedere in files con estensione @F {.py} nella
-stessa directory dove c'Š il file @F {ped.py}. @PP
+stessa directory dove c'è il file @F {ped.py}. @PP
 
-Le macro possono accedere all'oggetto @F {command} che Š l'unica interfaccia
+Le macro possono accedere all'oggetto @F {command} che è l'unica interfaccia
 fra l'editor e i comandi e che viene inserito nel dizionario globale
 della macro. @PP
 
-Il comando per lanciare una macro Š quindi il seguente:
+Il comando per lanciare una macro è quindi il seguente:
 
 @d comandoMacro
 @{

@@ -80,7 +80,7 @@ def comandoE(comando):
 @}
 
 Il comando @F q permette invece di chiudere il buffer corrente se non
-modificato. Se Š modificato il comando deve essere rafforzato con
+modificato. Se è modificato il comando deve essere rafforzato con
 la versione @F {qq}. Quando tutti i buffer dell'editor sono stati
 esauriti l'editor viene terminato. @PP
 
@@ -100,7 +100,7 @@ def comandoQ( comando ):
 
 
 Il comando @F h permette di visualizzare la storia dei comandi
-che l'utente ha dato all'editor. Ogni comando pu• essere richiamato
+che l'utente ha dato all'editor. Ogni comando può essere richiamato
 facendo seguire alla @F h il numero del comando. Il comando @F h non rimane nella storia
 dei comandi.
 

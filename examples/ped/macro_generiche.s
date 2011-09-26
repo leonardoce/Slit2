@@ -3,7 +3,7 @@
 @Begin @LP
 
 Queste macro non sono pensate per un uso particolare e sono quindi di
-ausilio alla globalit… degli utenti. @PP
+ausilio alla globalità degli utenti. @PP
 
 @BeginSections
 
@@ -12,11 +12,11 @@ ausilio alla globalit… degli utenti. @PP
 @Begin @PP
 
 Questa macro permette di modificare i contenuti di una singola
-linea. Viene implementata una modalit… di editing "diversa" da
+linea. Viene implementata una modalità di editing "diversa" da
 quella di Ped dove i comandi hanno un significato differente. La
 linea da editare viene presa direttamente dal numero inserito prima del comando
 e se non viene specificata si assume che si indenta editare la linea sulla quale il
-cursore Š puntato. @PP
+cursore è puntato. @PP
 
 @o le.py
 @{
@@ -70,7 +70,7 @@ comando.areaLavoro.inserisciInUndo( "lineedit" )
 comando.areaLavoro.setLinea( comando.lineaInizio, lineaCorrente )
 @}
 
-I comandi operano su un offset che Š dato dal numero di spazi presenti
+I comandi operano su un offset che è dato dal numero di spazi presenti
 prima del comando. Provare per credere ma funziona. @PP
 
 Il comando "i" e il comando "a" inseriscono dei caratteri all'interno
@@ -126,7 +126,7 @@ def comandoD( comando, lineaCorrente ):
 @Title { Cerca e rimpiazza su files }
 @Begin @PP
 
-Questa macro Š una funzionalit… di cerca e rimpiazza su tutti i files
+Questa macro è una funzionalità di cerca e rimpiazza su tutti i files
 che rispettano una certa maschera. @PP
 
 @o pgrep.py
@@ -174,8 +174,8 @@ if sStartingPath == "":
   sStartingPath = "."
 @}
 
-Se la stringa da sostituire Š vuota e l'utente non seleziona in modo esplicito
-la modalit… di sostituzione il programma cerca la stringa nei files e
+Se la stringa da sostituire è vuota e l'utente non seleziona in modo esplicito
+la modalità di sostituzione il programma cerca la stringa nei files e
 non sostituisce la stringa all'interno delle linee. @PP
 
 Per ogni file viene chiamata una funzione che effettua il lavoro:
@@ -185,7 +185,7 @@ Per ogni file viene chiamata una funzione che effettua il lavoro:
 os.path.walk( sStartingPath, fileCallback, None )
 @}
 
-La funzione che viene chiamata Š la @F {fileCallback}, che deve comunque
+La funzione che viene chiamata è la @F {fileCallback}, che deve comunque
 verificare che il file passato aderisca alla maschera inserita dall'utente:
 
 @d pgrep, fileCallback
