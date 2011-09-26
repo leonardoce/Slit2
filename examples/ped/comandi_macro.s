@@ -22,7 +22,7 @@ def comandoMacro( comando ):
   if os.path.exists( sNomeFileMacro ):
     try:
       execfile( sNomeFileMacro, { 'comando':comando } )
-    except Exception, e:
+    except BaseException, e:
       comando.stampaSchermo = False
       print str(e)
   else:
