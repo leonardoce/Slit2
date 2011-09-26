@@ -128,6 +128,8 @@ def comandoZ( comando ):
   nuovoCursore = comando.areaLavoro.cursore + comando.ped.getDimensioneFinestra() + 1
   if comando.areaLavoro.isLineaValida( nuovoCursore ):
     comando.areaLavoro.setCursore( nuovoCursore)
+  else:
+    comando.areaLavoro.setCursore( comando.areaLavoro.risolviIndirizzo( "$" ) )
   comando.stampaSchermo = True
 
 def comandoU( comando ):
