@@ -24,7 +24,12 @@ def comandoBuf(comando):
       else:
         markAttivo = "  "
 
-      print markAttivo, i, "-", a.getNomeBuffer()
+      if a.isModificato():
+        modificato = "<Mod>"
+      else:
+        modificato = "     "
+
+      print markAttivo, i, "-", a.getNomeBuffer(), modificato
       i += 1
   else:
     try:
@@ -49,10 +54,12 @@ def comandoE(comando):
     print "Sintassi: o <nomefile>"
     return
 
+  idxAreaLavoro = 0
   for area in comando.ped.getAreeLavoro():
+    idxAreaLavoro = idxAreaLavoro + 1
     if os.path.realpath( area.getNomeBuffer() ) == os.path.realpath( sNomeFile ):
-      comando.stampaSchermo = False
-      print "File gia' aperto."
+      comando.stampaSchermo = True
+      comando.ped.setAreaCorrente( idxAreaLavoro )
       return
 
   oNuovaArea = AreaLavoro( comando.ped )
