@@ -120,6 +120,29 @@ def setMark( self, nome, linea ):
     if linea in self.rmarks:
       prec = self.rmarks[ linea ]
     self.rmarks[ linea ] = nome
+
+def aggiornaMarksDopo( self, inizio, offset ):
+  cleanRmarks = {}
+
+  for l in self.rmarks:
+    if l>=inizio:
+      name = self.rmarks[l]
+      cleanRmarks[ l + offset ] = self.rmarks[l]
+    else:
+      cleanRmarks[ l ] = self.rmarks[ l ]
+
+  self.rmarks = cleanRmarks
+
+def cancellaMarksFra( self, inizio, fine ):
+  cleanRmarks = {}
+
+  for l in self.rmarks:
+   if inizio <= l and l <= fine:
+     pass
+   else:
+     cleanRmarks[ l ] = self.rmarks[ l ]
+
+  self.rmarks = cleanRmarks
 @}
 
 @d class AreaLavoro, metodi
@@ -286,26 +309,14 @@ def aggiungiRighe( self, n ):
     self.buffer.append("")
   self.modificato = True
 
-def cancellaMarksDopo( self, inizio ):
-  cleanRmarks = []
-  cleanMarks = []
-
-  for l in self.rmarks:
-    if l>=inizio:
-      name = self.rmarks[l]
-      cleanRmarks.append(l)
-      cleanMarks.append(name)
-
-  for l in cleanMarks: del self.marks[l]
-  for l in cleanRmarks: del self.rmarks[l]
-
 def cancellaLinee( self, inizio, linee ):
-  self.cancellaMarksDopo( inizio )
+  self.cancellaMarksFra( inizio, inizio + linee - 1 )
+  self.aggiornaMarksDopo( inizio, -1 * linee )
   self.buffer=self.buffer[:inizio - 1] + self.buffer[inizio + linee - 1:]
   self.modificato = True
 
 def inserisciDopo( self, inizio, contenuti ):
-  self.cancellaMarksDopo( inizio )
+  self.aggiornaMarksDopo( inizio, len(contenuti) )
   self.buffer = self.buffer[:inizio] + contenuti + self.buffer[inizio:]
   self.modificato = True
 
