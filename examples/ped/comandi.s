@@ -112,8 +112,10 @@ class Comando:
       comandoShiftL( self )
     elif self.txtComando.startswith(">>"):
       comandoShiftR( self )
+    elif self.txtComando.startswith("!"):
+      comandoSo( self )
     else:
-      raise ErrorePed( "Comando non valido: " + self.txtComando )
+      comandoMacro( self )
 
 def comandoP( comando ):
   if comando.lineaInizio == None:
@@ -363,6 +365,7 @@ def comandoPut( comando ):
 
 @<comandi aree di lavoro@>
 @<comandi programmazione@>
+@<comandoMacro@>
 @}
 
 @End @Chapter

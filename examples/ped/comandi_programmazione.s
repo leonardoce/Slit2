@@ -1,4 +1,4 @@
-@Chapter
+﻿@Chapter
 @Title { Comandi per la programmazione }
 @Begin @LP
 
@@ -63,9 +63,24 @@ def comandoShiftR( comando ):
     comando.stampaSchermo = True
 @}
 
+Il comando @F ! permette invece l'esecuzione di un comando del sistema
+operativo in uso. @PP
+
+@d comandoSo
+@{
+def comandoSo( comando ):
+  sComandoSo = comando.txtComando[1:].strip()
+  if len( sComandoSo ) > 0:
+    try:
+      os.system( sComandoSo )
+    except Exception, e:
+      print str(e)
+@}
+
 @d comandi programmazione
 @{
 @<comandoShiftL@>
 @<comandoShiftR@>
+@<comandoSo@>
 @}
 @End @Chapter
