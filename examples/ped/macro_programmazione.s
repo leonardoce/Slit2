@@ -130,6 +130,7 @@ def main():
   comando.areaLavoro.inserisciInUndo( "tab2spaces" )
   for iRiga in comando.areaLavoro.getNumeriLineeFra( 1, len( comando.areaLavoro.getBuffer() ) ):
     @<tabs2spaces, processa riga@>
+  comando.stampaSchermo = True
 
 main()
 @}
