@@ -43,7 +43,7 @@ class Comando:
     self.ped = oPed
     self.areaLavoro = oAreaLavoro
 
-    reLinea = "'[a-z]|\\.|\\$|\\+(?:\d*)|\\-(?:\d*)|/(?:[^\\\\]|\\\\.)*?/|\\?(?:[^\\\\]|\\\\.)*?\\?|\\d+"
+    reLinea = "'[0-9a-z]|\\.|\\$|\\+(?:\d*)|\\-(?:\d*)|/(?:[^\\\\]|\\\\.)*?/|\\?(?:[^\\\\]|\\\\.)*?\\?|\\d+"
     reComando = "(?P<inizio>" + reLinea + ")?(?:,(?P<fine>" + reLinea +"))?(?P<comando>.*)"
     sMatch = re.match( reComando, sComando )
 
@@ -91,7 +91,7 @@ class Comando:
       comandoK(self)
     elif self.txtComando[0] == "w":
       comandoW(self)
-    elif self.txtComando.startswith("g/") and self.txtComando.endswith("/") and len(self.txtComando)>=3:
+    elif self.txtComando.startswith("g/"):
       comandoG(self)
     elif re.match( "s/((?:[^/]|\\\\.)*?)/((?:[^/]|\\\\.)*?)/(\\d*)", self.txtComando):
       comandoS(self)
@@ -292,21 +292,30 @@ def comandoG( comando ):
   if comando.lineaFine == None:
     comando.lineaFine = len( comando.areaLavoro.buffer )
 
-  comando.stampaSchermo = False
+  match = re.match( "g/((?:[^/]|\\\\.)*?)/(.*)$", comando.txtComando)
+  if match == None:
+    print "Sintassi errata."
+    return
+
+  gruppi = match.groups()
+  regEx = gruppi[0]
+  sComandoDaEseguire = gruppi[1]
+  print "reg", regEx, "com", sComandoDaEseguire
 
   try:
-    prog = re.compile( comando.txtComando[2:-1] )
+    prog = re.compile( regEx )
   except Exception, e:
     print str(e)
     return
 
-  lineaDaControllare = comando.lineaInizio
-
-  clearScreen()
-  while lineaDaControllare <= comando.lineaFine:
+  for lineaDaControllare in comando.areaLavoro.getNumeriLineeFra( comando.lineaInizio, comando.lineaFine ):
     if prog.search( comando.areaLavoro.getLinea(lineaDaControllare) ):
-      comando.areaLavoro.stampaLinea( lineaDaControllare )
-    lineaDaControllare+=1
+      if sComandoDaEseguire == None or len( sComandoDaEseguire.strip() ) == 0:
+        comando.areaLavoro.stampaLinea( lineaDaControllare )
+      else:
+        sComandoConLinea = str(lineaDaControllare)+sComandoDaEseguire
+        print sComandoConLinea
+        comando.ped.eseguiComando( sComandoConLinea )
 
 def comandoS( comando ):
   if comando.lineaInizio == None:

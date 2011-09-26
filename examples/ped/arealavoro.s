@@ -24,7 +24,6 @@ class AreaLavoro:
     self.bufferUndoRing = []
     self.cursore = 0
     self.nomeBuffer = "** scratch **"
-    self.marks = {}
     self.rmarks = {}
     self.modificato = False
     self.temporaneo = True
@@ -82,17 +81,55 @@ def salvaSu( self, nome ):
   self.temporaneo = False
 @}
 
+Le linee dell'area di lavoro possono essere marcate con indicatori di un carattere
+alfabetico oppure con un carattere numerico.
+Gli indicatori possono indicare anche piu' linee contemporaneamente e l'indicatore "0"
+rimuove ogni altro indicatore.
+
+@d class AreaLavoro, marks
+@{
+def hasMark( self, nome ):
+  if nome == '0':
+    return False
+  else:
+    for l in self.rmarks:
+      if self.rmarks[ l ] == nome:
+        return True
+    return False
+
+def getMark( self, nome ):
+  if nome == '0':
+    return 0
+  else:
+    for l in self.rmarks:
+     if self.rmarks[ l ] == nome:
+       return l
+    return 0
+
+def setMark( self, nome, linea ):
+  if nome == '0' and ( linea in self.rmarks ):
+    del self.rmarks[ linea ]
+  else:
+    if linea in self.rmarks:
+      prec = self.rmarks[ linea ]
+    self.rmarks[ linea ] = nome
+@}
+
 @d class AreaLavoro, metodi
 @{
 @<class AreaLavoro, gestione files@>
 @<class AreaLavoro, getter e setter@>
+@<class AreaLavoro, marks@>
 
 def risolviIndirizzo(self, sIndirizzo):
   if re.match( "\\d+", sIndirizzo ):
     return int( sIndirizzo )
 
-  elif re.match( "\\'[a-z]", sIndirizzo ) and ( sIndirizzo[1] in self.marks ):
-    return self.marks[ sIndirizzo[1] ]
+  elif re.match( "\\'[a-z0-9]", sIndirizzo ):
+    for l in self.rmarks:
+      if self.rmarks[l] == sIndirizzo[1]:
+        return l
+    raise ErrorePed( "mark non trovato" )
 
   elif sIndirizzo == ".":
     return self.cursore
@@ -264,24 +301,6 @@ def inserisciDopo( self, inizio, contenuti ):
   self.cancellaMarksDopo( inizio )
   self.buffer = self.buffer[:inizio] + contenuti + self.buffer[inizio:]
   self.modificato = True
-
-def hasMark( self, nome ):
-  return nome in self.marks
-
-def getMark( self, nome ):
-  if nome in self.marks:
-    return self.marks[nome]
-  else:
-    return 0
-
-def setMark( self, nome, linea ):
-  if nome in self.marks:
-    v = self.marks[nome]
-    del self.marks[nome]
-    del self.rmarks[v]
-
-  self.marks[ nome ] = linea
-  self.rmarks[ linea ] = nome
 
 def undo(self):
   if self.bufferUndoRing != []:

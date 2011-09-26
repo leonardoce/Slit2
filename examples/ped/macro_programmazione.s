@@ -79,7 +79,11 @@ for d in aDirectorySorgenti:
   i = i+1
   print i, d['package']
 
-nPackage = int( raw_input( "package> " ) )
+sPackage = raw_input( "package> " )
+if len( sPackage.strip() ) == 0:
+  return
+
+nPackage = int( sPackage )
 aCurrPackage = aDirectorySorgenti[ nPackage-1 ]
 @}
 
@@ -92,7 +96,11 @@ for c in aCurrPackage[ 'classi' ]:
   i = i+1
   print i, c[1]
 
-nClasse = int( raw_input( "classe> " ) ) -1
+sClasse = raw_input( "classe> " )
+if len( sClasse.strip() ) == 0:
+  return
+
+nClasse = int( sClasse ) -1
 @}
 
 Manca solo da aprire l'editor direttamente alla classe desiderata.
