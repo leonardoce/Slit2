@@ -114,8 +114,9 @@ def getMark( self, nome ):
     return 0
 
 def setMark( self, nome, linea ):
-  if nome == '0' and ( linea in self.rmarks ):
-    del self.rmarks[ linea ]
+  if nome == '0':
+    if linea in self.rmarks:
+      del self.rmarks[ linea ]
   else:
     if linea in self.rmarks:
       prec = self.rmarks[ linea ]
