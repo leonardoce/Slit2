@@ -1,4 +1,4 @@
-@Chapter
+﻿@Chapter
 @Title { Comandi }
 @Begin @LP
 
@@ -48,7 +48,7 @@ class Comando:
     sMatch = re.match( reComando, sComando )
 
     self.continua = True
-    self.stampaSchermo = True
+    self.stampaSchermo = False
 
     if sMatch != None:
       dMatch = sMatch.groupdict()
@@ -113,16 +113,18 @@ class Comando:
 
 def comandoP( comando ):
   if comando.lineaInizio == None:
-    print "Inserire la linea alla quale andare"
+    comando.lineaInizio = comando.areaLavoro.cursore
   elif not comando.areaLavoro.isLineaValida( comando.lineaInizio ):
     print "Linea non valida"
   else:
     comando.areaLavoro.setCursore( comando.lineaInizio )
+  comando.stampaSchermo = True
 
 def comandoZ( comando ):
   nuovoCursore = comando.areaLavoro.cursore + comando.ped.getDimensioneFinestra() + 1
   if comando.areaLavoro.isLineaValida( nuovoCursore ):
     comando.areaLavoro.setCursore( nuovoCursore)
+  comando.stampaSchermo = True
 
 def comandoU( comando ):
   comando.areaLavoro.undo()
