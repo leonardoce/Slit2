@@ -27,7 +27,8 @@ def main():
 main()
 @}
 
-Le directory vengono scorse dalla funzione callback @F {callbackWalk}:
+Le directory vengono scorse dalla funzione callback @F {callbackWalk} iniziando
+dalla directory corrente oppure da quella specificata nel comando.
 
 @d macroj, scorre directory
 @{
@@ -45,7 +46,12 @@ def callbackWalk(aListaDirectory, sNomeDirectory, aNomiFiles):
     aListaDirectory.append( dInfo )
 
 aDirectorySorgenti = []
-os.path.walk( ".", callbackWalk, aDirectorySorgenti )
+if " " in comando.txtComando.strip():
+  sNomeDirectory = comando.txtComando.strip()
+  sNomeDirectory = sNomeDirectory[ sNomeDirectory.index(" ") + 1:]
+else:
+  sNomeDirectory = "."
+os.path.walk( sNomeDirectory, callbackWalk, aDirectorySorgenti )
 @}
 
 Le informazioni vengono messe in una lista dove ogni elemento Š un
