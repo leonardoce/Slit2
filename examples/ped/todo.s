@@ -1,1 +1,2 @@
-@ListItem { Far fungere ped anche senza files aperti }
+@ListItem { Esecuzione comando con output su buffer }
+@ListItem { Edit di una linea "le" }

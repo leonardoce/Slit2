@@ -57,20 +57,18 @@ def leggiRigheDaUtente():
   return linee
 
 def main():
-  if len(sys.argv) <= 1:
-    print "Uso: " , sys.argv[0], " <nomefile>"
-    return
-
   oPed = Ped()
   oAreaLavoro = oPed.getAreaLavoroCorrente()
-  if os.path.exists( sys.argv[1] ):
-    try:
-      oAreaLavoro.leggiFile( sys.argv[1] )
-    except IOError, e:
-      print str(e)
-      raw_input()
-  else:
-    oAreaLavoro.setNomeBuffer( sys.argv[1] )
+
+  if len(sys.argv) > 1:
+    if os.path.exists( sys.argv[1] ):
+      try:
+        oAreaLavoro.leggiFile( sys.argv[1] )
+      except IOError, e:
+        print str(e)
+        raw_input()
+    else:
+      oAreaLavoro.setNomeBuffer( sys.argv[1] )
 
   oPed.setDimensioneFinestra(  getScreenHeight() - 8 )
 
