@@ -242,6 +242,8 @@ class AreaLavoro:
   def undo(self):
     if self.bufferUndoRing != []:
       self.buffer = self.bufferUndoRing[-1]['buffer']
+      self.bufferUndoRing = self.bufferUndoRing[:-1]
+
     self.modificato = True
 
   def resetModificato( self ):

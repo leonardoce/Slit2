@@ -1,4 +1,4 @@
-﻿@Chapter
+@Chapter
 @Title { Comandi }
 @Begin @LP
 
