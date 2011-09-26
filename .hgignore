@@ -5,3 +5,4 @@ dist
 *.ppu
 *.exe
 bootstrap/slit
+.svn
