@@ -85,6 +85,13 @@ Le linee dell'area di lavoro possono essere marcate con indicatori di un caratte
 alfabetico oppure con un carattere numerico.
 Gli indicatori possono indicare anche piu' linee contemporaneamente e l'indicatore "0"
 rimuove ogni altro indicatore.
+@PP
+
+Il codice dell'area di lavoro non assume che gli indicatori siano sempre
+in questo range di caratteri accettati. Questo permette ai comandi e alle
+macro di inserire indicatori con caratteri diversi per "marcare" delle linee
+in modo temporaneo. @PP
+
 
 @d class AreaLavoro, marks
 @{
