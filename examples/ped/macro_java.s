@@ -84,7 +84,8 @@ Manca solo da aprire l'editor direttamente alla classe desiderata.
 @d macroj, apre editor
 @{
 sNomeFile = aCurrPackage[ 'classi' ][ nClasse ][0]
-comando.areaLavoro.eseguiComando( "e " + sNomeFile )
+risultato = comando.areaLavoro.eseguiComando( "e " + sNomeFile )
+comando.stampaSchermo = risultato.stampaSchermo
 @}
 
 @End @Chapter

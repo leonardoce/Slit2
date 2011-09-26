@@ -78,6 +78,7 @@ def comandoQ( comando ):
       comando.continua = False
     else:
       comando.ped.deleteAreaLavoro( comando.areaLavoro )
+      comando.stampaSchermo = True
 @}
 
 @d comandi aree di lavoro
