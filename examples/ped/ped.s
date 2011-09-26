@@ -14,6 +14,7 @@
 @i comandi_programmazione.s
 @i comandi_macro.s
 @i macro_programmazione.s
+@i macro_generiche.s
 @i sodeps.s
 
 @o ped.py
