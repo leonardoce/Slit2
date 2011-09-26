@@ -81,7 +81,7 @@ def main():
 
     try:
       sComando = raw_input( "ped> " )
-      cmd = oAreaLavoro.eseguiComando( sComando )
+      cmd = oPed.eseguiComando( sComando )
     except ErrorePed, e:
       print "?", str(e)
       bStampaSchermo = False

@@ -74,6 +74,11 @@ def comandoE(comando):
   comando.stampaSchermo = True
 @}
 
+Il comando @F q permette invece di chiudere il buffer corrente se non
+modificato. Se Š modificato il comando deve essere rafforzato con
+la versione @F {qq}. Quando tutti i buffer dell'editor sono stati
+esauriti l'editor viene terminato. @PP
+
 @d comandoQ
 @{
 def comandoQ( comando ):
@@ -88,11 +93,38 @@ def comandoQ( comando ):
       comando.stampaSchermo = True
 @}
 
+
+Il comando @F h permette di visualizzare la storia dei comandi
+che l'utente ha dato all'editor. Ogni comando pu• essere richiamato
+facendo seguire alla @F h il numero del comando. Il comando @F h non rimane nella storia
+dei comandi.
+
+@d comandoH
+@{
+def comandoH( comando ):
+  comando.conservaInHistory = False
+  if len( comando.txtComando[1:].strip() ) == 0:
+    storia = comando.ped.getStoriaComandi()
+    i = 0
+    for sComando in storia:
+      i = i+1
+      print i, sComando
+  else:
+    try:
+      iNumeroComando = int( comando.txtComando[1:].strip() )
+    except ValueError, e:
+      print "Non valido"
+
+    risultato = comando.ped.eseguiComando( comando.ped.getStoriaComandi()[ iNumeroComando - 1 ] )
+    comando.stampaSchermo = risultato.stampaSchermo
+@}
+
 @d comandi aree di lavoro
 @{
 @<comandoBuf@>
 @<comandoE@>
 @<comandoQ@>
+@<comandoH@>
 @}
 
 @End @Chapter

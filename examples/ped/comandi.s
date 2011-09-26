@@ -49,6 +49,7 @@ class Comando:
 
     self.continua = True
     self.stampaSchermo = False
+    self.conservaInHistory = True
 
     if sMatch != None:
       dMatch = sMatch.groupdict()
@@ -114,6 +115,8 @@ class Comando:
       comandoShiftR( self )
     elif self.txtComando.startswith("!"):
       comandoSo( self )
+    elif self.txtComando.startswith("h"):
+      comandoH( self )
     else:
       comandoMacro( self )
 

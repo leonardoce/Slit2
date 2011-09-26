@@ -20,11 +20,14 @@ class Ped:
     self.areeLavoro = [ AreaLavoro( self ) ]
     self.copybuf = []
     self.dimensioneFinestra = 20
+    self.dimensioneHistory = 20
     self.areaCorrente = 1
+    self.history = []
 
   @<class Ped, metodi aree lavoro@>
   @<class Ped, buffer@>
   @<class Ped, configurazione@>
+  @<class Ped, comandi@>
 @}
 
 L'oggetto Ped ha un insieme di metodi che servono per gestire
@@ -76,6 +79,27 @@ def getDimensioneFinestra(self):
 
 def setDimensioneFinestra(self, d):
   self.dimensioneFinestra = d
+@}
+
+I comandi vengono eseguiti direttamente sull'area di lavoro corrente
+e ogni comando eseguito viene inserito in buffer per proporre la
+storia dei comandi che l'utente ha dato nella sessione.
+
+@d class Ped, comandi
+@{
+def eseguiComando( self, sComando ):
+  cmd = Comando( self, self.getAreaLavoroCorrente(), sComando )
+  cmd.esegui()
+
+  if cmd.conservaInHistory:
+    self.history = [ sComando ] + self.history
+    if len( self.history ) > self.dimensioneHistory:
+      self.history = self.history[:self.dimensioneHistory]
+
+  return cmd
+
+def getStoriaComandi( self ):
+  return self.history
 @}
 
 @End @Chapter

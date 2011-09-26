@@ -286,18 +286,6 @@ def undo(self):
     self.bufferUndoRing = self.bufferUndoRing[:-1]
 
   self.modificato = True
-
-@<class AreaLavoro, comandi@>
-@}
-
-L'area di lavoro gestisce anche l'esecuzione dei comandi:
-
-@d class AreaLavoro, comandi
-@{
-def eseguiComando( self, sComando ):
-  cmd = Comando( self.ped, self, sComando )
-  cmd.esegui()
-  return cmd
 @}
 
 @End @Chapter
