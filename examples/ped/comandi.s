@@ -263,7 +263,12 @@ def comandoK( comando ):
   if comando.lineaInizio == None:
     comando.lineaInizio = comando.areaLavoro.cursore
 
-  comando.areaLavoro.setMark( comando.txtComando[1], comando.lineaInizio )
+  if comando.lineaFine == None:
+    comando.lineaFine = comando.lineaInizio
+
+  for l in comando.areaLavoro.getNumeriLineeFra( comando.lineaInizio, comando.lineaFine ):
+    comando.areaLavoro.setMark( comando.txtComando[1], l )
+
   comando.stampaSchermo = True
 
 def comandoW( comando ):
@@ -300,7 +305,6 @@ def comandoG( comando ):
   gruppi = match.groups()
   regEx = gruppi[0]
   sComandoDaEseguire = gruppi[1]
-  print "reg", regEx, "com", sComandoDaEseguire
 
   try:
     prog = re.compile( regEx )
@@ -313,9 +317,15 @@ def comandoG( comando ):
       if sComandoDaEseguire == None or len( sComandoDaEseguire.strip() ) == 0:
         comando.areaLavoro.stampaLinea( lineaDaControllare )
       else:
-        sComandoConLinea = str(lineaDaControllare)+sComandoDaEseguire
-        print sComandoConLinea
+        sComandoConLinea = str( lineaDaControllare ) + "k/"
         comando.ped.eseguiComando( sComandoConLinea )
+
+  while comando.areaLavoro.hasMark( '/' ):
+    linea = comando.areaLavoro.getMark( '/' )
+    sComandoConLinea = str( linea ) + sComandoDaEseguire
+    comando.ped.eseguiComando( str( linea ) + "k0" )
+    comando.ped.eseguiComando( sComandoConLinea )
+    print sComandoConLinea
 
 def comandoS( comando ):
   if comando.lineaInizio == None:
