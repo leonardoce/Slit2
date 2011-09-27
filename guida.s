@@ -2,24 +2,23 @@
 @Title { User guide}
 @Begin
 @LP
-Slit's files are composed of text's lines of documentation and instructions. Instructions are lines 
-that became to a "@" character and are followed to a letter which determine the directive. @PP
-In this document the supported instructions are this: @PP
-@BulletList
-@ListItem { "@d" is the instruction which define a macro.} @PP
-@ListItem { "@o" is the instruction that we use to write a  source file} @PP
-@ListItem { "@i" is the instruction who we use to include a slit file to another.}@PP
-@EndList
-There is a very important thing to remember: the directive are valid only if that are write at the firt character of the line. This to 
-avoid that slit don't exchange a string like an instruction. @PP
+Slit's files are composed of text's lines of documentation and instructions. Instructions are lines
+that starts by a "@" character and are followed by a letter which determine the directive. @PP
+
+There is a very important thing to remember: the directive is valid only if it is written at the first
+character of the line. If you want you can make Slit ignore a directive inserting a space before
+the @I at character. @PP
+
 @BeginSections
-@Section @Title { La direttiva "@d" }
+@Section @Title { The definition directive: "@d" }
 @Begin @PP
+
 The directive "@d" is the primary instruction of Slit:
 this instruction is used to memorize a text's macro into the sistem.
 the macro can be used into others macro or only to write a sourced file. @PP
 this is an example of a directive "@d":
-@IndentedDisplay @F 
+
+@IndentedDisplay @F
 @Verbatim @Begin
  @d function sum
 
@@ -29,15 +28,16 @@ begin
 end;
 
 @End @Verbatim
-How we see the directive "@d" is followed to a  @I scrap. A @I scrap, for the Slit terminology, is
+
+How we can see the directive "@d" is followed to an @I scrap. An @I scrap, in the Slit terminology, is
 the content of the defined macro. @PP
-A scrap became to "@{" and finished with "@}". All that is between this two lines 
-is see like the content of the macro that will be define. @PP
-According to the type of processor select for the output Slit enounce the name of the macro and its content into the
+A scrap starts with "@{" and is finished by "@}". The text between this two lines
+is the content of the macro that will be defined. @PP
+According to the type of processor selected for the output Slit enounce the name of the macro and its content into the
 documentation. @PP
-To each macro is associate a number that identify it and at the and of the macro are enounce 
+To each macro is associate a number that identify it and at the and of the macro are enounce
 the number of macro that use the just define macro. @PP
-A macro can be not used too, in this case Slit advise the user at the end of the process of production 
+A macro can be not used too, in this case Slit advise the user at the end of the process of production
 of source files. @PP
 @End @Section
 @Section @Title { La direttiva "@o" e sintassi degli scrap }
@@ -45,7 +45,7 @@ of source files. @PP
 The directive "@o" is very similar, according to the syntactic point of view, to that "@d".
 Infact is used to define a particular type of macro, which name is used to write a file. @PP
 For example:
-@IndentedDisplay @F 
+@IndentedDisplay @F
 @Verbatim @Begin
  @o prova.c
 @{
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 @End @Verbatim
 Into a scrap we can include a reference to an other:
 
-@IndentedDisplay @F 
+@IndentedDisplay @F
 @Verbatim @Begin
  @d saluta
 @{
@@ -68,7 +68,7 @@ printf("Hello world!\n");
 @}
 @End @Verbatim
 
-@IndentedDisplay @F 
+@IndentedDisplay @F
 @Verbatim @Begin
  @o provadue.c
 @{
@@ -195,13 +195,13 @@ oppure per personalizzare quelli gi{@Char agrave} esistenti. }
 
 L'opzione @F comment_markers {@Char egrave} seguita da un parametro
 che indica il linguaggio e i marcatori di inizio e di fine commento.
-Questo parametro ha la forma @F @Verbatim { 
+Questo parametro ha la forma @F @Verbatim {
 <separatore><estensione><separatore><inizio><separatore><fine>
 }, dove il separatore pu{@Char ograve} essere qualsiasi carattere @PP
 
 Ad esempio la configurazione predefinita per il linguaggio Pascal
 potrebbe essere espressa nella seguente forma:
-@F @Verbatim @Begin 
+@F @Verbatim @Begin
  @x comment_markers /.pas/{/}/
 @End @Verbatim. @PP
 
@@ -210,7 +210,7 @@ potrebbe essere espressa nella seguente forma:
 @Section @Title { Documentazione }
 @Begin @PP
 
-Tutto quello che non @Char egrave una direttiva viene direttamente passato 
+Tutto quello che non @Char egrave una direttiva viene direttamente passato
 nel file di documentazione generato senza alcuna trasformazione
 intermedia. @PP
 
@@ -226,7 +226,7 @@ In questo momento si pu{@Char ograve} utilizzare:
 La documentazione deve essere inserita in modo coerente con il formato
 scelto. @PP
 Il formato Lout permette anche la generazione di una cross-reference
-fra le macro inserite: ogni macro viene numerata e al termine della 
+fra le macro inserite: ogni macro viene numerata e al termine della
 macro viene inserita la lista di tutte le macro che la utilizzano. @PP
 
 @End @Section
@@ -340,7 +340,7 @@ Viene adesso avviata la generazione della documentazione:
 @d slit generazione della documentazione
 @{
 streamOutputDocumentazione := CreaStreamOutputDaOpzioni(ParamStr(1), store);
-driverScriviDocumentazione := 
+driverScriviDocumentazione :=
   TSlitStreamDriverGenerazioneDoc.CreateWithOutputStream( streamOutputDocumentazione );
 
 stream.Driver := driverScriviDocumentazione;
