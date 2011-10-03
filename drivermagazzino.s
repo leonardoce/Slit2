@@ -1,5 +1,5 @@
 # :mode=slitpascal:folding=explicit:
-@Chapter 
+@Chapter
 @Title { Driver per il magazzino delle macro e le opzioni }
 @Begin @LP
 
@@ -29,7 +29,7 @@ questa viene direttamente inserita nel magazzino:
 @d TSlitStreamDriverMagazzino.ProcessaDefinizioneMacro
 @{
 procedure TSlitStreamDriverMagazzino.ProcessaDefinizioneMacro(
-  nomeMacro:String; scrap:String; scrapStartLine:Integer); 
+  nomeMacro:String; scrap:String; scrapStartLine:Integer);
 var
   tempMacro : TMacroRecord;
 begin
@@ -40,19 +40,19 @@ begin
   end
   else
   begin
-    FMacroStore.StoreMacro(nomeMacro, scrap, ScrapMacro, Parser.CurrentFile, 
+    FMacroStore.StoreMacro(nomeMacro, scrap, ScrapMacro, Parser.CurrentFile,
       scrapStartLine);
   end;
 end;
 @}
 
-Anche quando viene ricevuta una definizione di file questa viene 
+Anche quando viene ricevuta una definizione di file questa viene
 inserita nel magazzino:
 
 @d TSlitStreamDriverMagazzino.ProcessaDefinizioneFile
 @{
 procedure TSlitStreamDriverMagazzino.ProcessaDefinizioneFile(
-  nomeMacro:String; scrap:String; scrapStartLine:Integer); 
+  nomeMacro:String; scrap:String; scrapStartLine:Integer);
 var
   tempMacro : TMacroRecord;
 begin
@@ -63,7 +63,7 @@ begin
   end
   else
   begin
-    FMacroStore.StoreMacro(nomeMacro , scrap, FileMacro, 
+    FMacroStore.StoreMacro(nomeMacro , scrap, FileMacro,
       Parser.CurrentFile, scrapStartLine);
   end;
 end;
@@ -77,7 +77,7 @@ di aggiungerci altre cose. @PP
 @d TSlitStreamDriverMagazzino.ProcessaAggiungiNellaMacro
 @{
 procedure TSlitStreamDriverMagazzino.ProcessaAggiungiNellaMacro(
-  nomeMacro:String; scrap:String; scrapStartLine:Integer);       
+  nomeMacro:String; scrap:String; scrapStartLine:Integer);
 var
   tempMacro : TMacroRecord;
 begin
@@ -142,6 +142,10 @@ begin
   begin
     SetGenerazioneNumeriRigaAbilitata(true);
   end
+  else if opzione='no_line_markers' then
+  begin
+    SetGenerazioneNumeriRigaAbilitata(false);
+  end
   else if AnsiStartsStr('comment_markers', opzione) then
   begin
     GestioneOpzioneCommenti (opzione);
@@ -165,7 +169,7 @@ var
   delimitatori: TSysCharSet;
 
 begin
-  opzione := MidStr (opzione, Length('comment_markers')+1, 
+  opzione := MidStr (opzione, Length('comment_markers')+1,
     Length(opzione)-Length('comment_markers')-1);
   opzione := Trim (opzione);
 
@@ -209,11 +213,11 @@ type
     FTipoOutput: String;
   public
     constructor CreateWithMacroStore(ms:TMacroStore);
-    procedure ProcessaDefinizioneMacro(nomeMacro:String; scrap:String; 
+    procedure ProcessaDefinizioneMacro(nomeMacro:String; scrap:String;
       scrapStartLine:Integer); override;
-    procedure ProcessaAggiungiNellaMacro(nomeMacro:String; scrap:String; 
+    procedure ProcessaAggiungiNellaMacro(nomeMacro:String; scrap:String;
       scrapStartLine:Integer); override;
-    procedure ProcessaDefinizioneFile(nomeMacro:String; scrap:String; 
+    procedure ProcessaDefinizioneFile(nomeMacro:String; scrap:String;
       scrapStartLine:Integer); override;
     procedure ProcessaRigaDocumentazione(riga:String);
       override;
