@@ -83,6 +83,8 @@ class Comando:
       comandoP(self)
     elif self.txtComando == "z":
       comandoZ(self)
+    elif self.txtComando == "Z" or self.txtComando == "zz":
+      comandoZZ(self)
     elif self.txtComando == "u":
       comandoU(self)
     elif self.txtComando == "i":
@@ -135,14 +137,6 @@ def comandoP( comando ):
     comando.areaLavoro.setCursore( comando.lineaInizio )
   comando.stampaSchermo = True
 
-def comandoZ( comando ):
-  nuovoCursore = comando.areaLavoro.cursore + comando.ped.getDimensioneFinestra() + 1
-  if comando.areaLavoro.isLineaValida( nuovoCursore ):
-    comando.areaLavoro.setCursore( nuovoCursore)
-  else:
-    comando.areaLavoro.setCursore( comando.areaLavoro.risolviIndirizzo( "$" ) )
-  comando.stampaSchermo = True
-
 def comandoU( comando ):
   comando.areaLavoro.undo()
 
@@ -190,6 +184,7 @@ def comandoPut( comando ):
 @<comandi marks@>
 @<comandi programmazione@>
 @<comandi ricerca e sostituzione@>
+@<comandi per movimento a pagine@>
 @<comandoMacro@>
 @}
 
@@ -514,6 +509,48 @@ Riassumendo, i comandi che operano con le ricerche di stringhe, sono questi:
 @{
 @<comandoS@>
 @<comandoG@>
+@}
+
+@End @Section
+
+@Section
+@Title { Comandi di movimento }
+@Begin @LP
+
+Oltre che ai classici target per la selezione di una riga {@Char egrave} possibile
+muoversi di pagina in pagina utilizzando il comando Z per muoversi in avanti
+e il comando ZZ per muoversi in indietro.
+
+@d comandoZ
+@{
+def comandoZ( comando ):
+  nuovoCursore = comando.areaLavoro.cursore + comando.ped.getDimensioneFinestra() + 1
+  if comando.areaLavoro.isLineaValida( nuovoCursore ):
+    comando.areaLavoro.setCursore( nuovoCursore)
+  else:
+    comando.areaLavoro.setCursore( comando.areaLavoro.risolviIndirizzo( "$" ) )
+  comando.stampaSchermo = True
+@}
+
+Il comando ZZ, per muoversi nella direzione opposta, {@Char egrave} praticamente equivalente:
+
+@d comandoZZ
+@{
+def comandoZZ( comando ):
+  nuovoCursore = comando.areaLavoro.cursore - comando.ped.getDimensioneFinestra() + 1
+  if comando.areaLavoro.isLineaValida( nuovoCursore ):
+    comando.areaLavoro.setCursore( nuovoCursore)
+  else:
+    comando.areaLavoro.setCursore( comando.areaLavoro.risolviIndirizzo( "1" ) )
+  comando.stampaSchermo = True
+@}
+
+Quindi i comandi per il movimento a pagine sono i seguenti:
+
+@d comandi per movimento a pagine
+@{
+@<comandoZ@>
+@<comandoZZ@>
 @}
 
 @End @Section
