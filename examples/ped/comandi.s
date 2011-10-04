@@ -101,7 +101,7 @@ class Comando:
       comandoW(self)
     elif self.txtComando.startswith("g/"):
       comandoG(self)
-    elif re.match( "s/((?:[^/]|\\\\.)*?)/((?:[^/]|\\\\.)*?)/(\\d*)", self.txtComando):
+    elif re.match( "s/((?:[^/\\\\]|\\\\.)*?)/((?:[^/\\\\]|\\\\.)*?)/(\\d*)", self.txtComando):
       comandoS(self)
     elif self.txtComando == "c":
       comandoC(self)
@@ -434,9 +434,7 @@ def comandoS( comando ):
 
   regIn = gruppi[0]
   regOut = gruppi[1]
-  print "regOut \""+regOut+"\""
-  print gruppi
-  # leo
+  regOut = re.sub("\\\\(.)", "\\1", regOut)
 
   try:
     prog = re.compile( regIn )
