@@ -160,79 +160,6 @@ def comandoC( comando ):
   linee = leggiRigheDaUtente()
   comando.areaLavoro.inserisciDopo( comando.lineaInizio-1, linee )
 
-def comandoG( comando ):
-  if comando.lineaInizio == None:
-    comando.lineaInizio = 1
-
-  if comando.lineaFine == None:
-    comando.lineaFine = len( comando.areaLavoro.buffer )
-
-  match = re.match( "g/((?:[^/]|\\\\.)*?)/(.*)$", comando.txtComando)
-  if match == None:
-    print "Sintassi errata."
-    return
-
-  gruppi = match.groups()
-  regEx = gruppi[0]
-  sComandoDaEseguire = gruppi[1]
-
-  try:
-    prog = re.compile( regEx )
-  except Exception, e:
-    print str(e)
-    return
-
-  for lineaDaControllare in comando.areaLavoro.getNumeriLineeFra( comando.lineaInizio, comando.lineaFine ):
-    if prog.search( comando.areaLavoro.getLinea(lineaDaControllare) ):
-      if sComandoDaEseguire == None or len( sComandoDaEseguire.strip() ) == 0:
-        comando.areaLavoro.stampaLinea( lineaDaControllare )
-      else:
-        sComandoConLinea = str( lineaDaControllare ) + "k/"
-        comando.ped.eseguiComando( sComandoConLinea )
-
-  while comando.areaLavoro.hasMark( '/' ):
-    linea = comando.areaLavoro.getMark( '/' )
-    sComandoConLinea = str( linea ) + sComandoDaEseguire
-    comando.ped.eseguiComando( str( linea ) + "k0" )
-    comando.ped.eseguiComando( sComandoConLinea )
-
-def comandoS( comando ):
-  if comando.lineaInizio == None:
-    comando.lineaInizio = comando.areaLavoro.cursore
-
-  if comando.lineaFine == None:
-    comando.lineaFine = comando.lineaInizio
-
-  gruppi = re.match( "s/((?:[^/]|\\\\.)*?)/((?:[^/]|\\\\.)*?)/(\\d*)", comando.txtComando).groups()
-  if gruppi[2] == "":
-    numeroSost = 1
-  else:
-    numeroSost = int(gruppi[2])
-
-  regIn = gruppi[0]
-  regOut = gruppi[1]
-
-  try:
-    prog = re.compile( regIn )
-  except Exception, e:
-    print str(e)
-    return
-
-  lineaDaControllare = comando.lineaInizio
-
-  comando.areaLavoro.inserisciInUndo( "Sostituzione" )
-
-  try:
-    while lineaDaControllare <= comando.lineaFine:
-      orig = comando.areaLavoro.getLinea(lineaDaControllare)
-      dest = prog.sub( regOut, orig, numeroSost )
-      if orig!=dest:
-        comando.areaLavoro.setLinea( lineaDaControllare, dest )
-        comando.areaLavoro.stampaLinea( lineaDaControllare )
-      lineaDaControllare+=1
-  except Exception, e:
-    print str(e)
-
 def comandoPut( comando ):
   comando.stampaSchermo = False
 
@@ -262,6 +189,7 @@ def comandoPut( comando ):
 @<comandi aree di lavoro@>
 @<comandi marks@>
 @<comandi programmazione@>
+@<comandi ricerca e sostituzione@>
 @<comandoMacro@>
 @}
 
@@ -481,6 +409,111 @@ I comandi che lavorano sui marks sono quindi:
 @{
 @<comandoK@>
 @<comandoR@>
+@}
+
+@End @Section
+
+@Section
+@Title { Comandi per la ricerca e la sostituzione }
+@Begin @LP
+
+Il comando S permette di cercare una espressione regolare e di rimpiazzarla
+con una stringa arbitaria. Se l'espressione regolare contiene dei gruppi
+il contenuto di questi si pu{@Char ograve} riferire dalla stringa di
+sostituzione con sequenze di escape del tipo "\\1", "\\2", etc.
+
+@d comandoS
+@{
+def comandoS( comando ):
+  if comando.lineaInizio == None:
+    comando.lineaInizio = comando.areaLavoro.cursore
+
+  if comando.lineaFine == None:
+    comando.lineaFine = comando.lineaInizio
+
+  gruppi = re.match( "s/((?:[^/\\\\]|\\\\.)*?)/((?:[^/\\\\]|\\\\.)*?)/(\\d*)", comando.txtComando).groups()
+  if gruppi[2] == "":
+    numeroSost = 1
+  else:
+    numeroSost = int(gruppi[2])
+
+  regIn = gruppi[0]
+  regOut = gruppi[1]
+  print "regOut \""+regOut+"\""
+  print gruppi
+  # leo
+
+  try:
+    prog = re.compile( regIn )
+  except Exception, e:
+    print str(e)
+    return
+
+  lineaDaControllare = comando.lineaInizio
+
+  comando.areaLavoro.inserisciInUndo( "Sostituzione" )
+
+  try:
+    while lineaDaControllare <= comando.lineaFine:
+      orig = comando.areaLavoro.getLinea(lineaDaControllare)
+      dest = prog.sub( regOut, orig, numeroSost )
+      if orig!=dest:
+        comando.areaLavoro.setLinea( lineaDaControllare, dest )
+        comando.areaLavoro.stampaLinea( lineaDaControllare )
+      lineaDaControllare+=1
+  except Exception, e:
+    print str(e)
+@}
+
+Il comando G invece ripete il comando che segue per tutte le righe che rispettano una
+certa espressione regolare. Se non viene specificato alcun comando allora si intende,
+come default, il comando P, che stampa la riga selezionata.
+
+@d comandoG
+@{
+def comandoG( comando ):
+  if comando.lineaInizio == None:
+    comando.lineaInizio = 1
+
+  if comando.lineaFine == None:
+    comando.lineaFine = len( comando.areaLavoro.buffer )
+
+  match = re.match( "g/((?:[^/]|\\\\.)*?)/(.*)$", comando.txtComando)
+  if match == None:
+    print "Sintassi errata."
+    return
+
+  gruppi = match.groups()
+  regEx = gruppi[0]
+  sComandoDaEseguire = gruppi[1]
+
+  try:
+    prog = re.compile( regEx )
+  except Exception, e:
+    print str(e)
+    return
+
+  for lineaDaControllare in comando.areaLavoro.getNumeriLineeFra( comando.lineaInizio, comando.lineaFine ):
+    if prog.search( comando.areaLavoro.getLinea(lineaDaControllare) ):
+      if sComandoDaEseguire == None or len( sComandoDaEseguire.strip() ) == 0:
+        comando.areaLavoro.stampaLinea( lineaDaControllare )
+      else:
+        sComandoConLinea = str( lineaDaControllare ) + "k/"
+        comando.ped.eseguiComando( sComandoConLinea )
+
+  while comando.areaLavoro.hasMark( '/' ):
+    linea = comando.areaLavoro.getMark( '/' )
+    sComandoConLinea = str( linea ) + sComandoDaEseguire
+    comando.ped.eseguiComando( str( linea ) + "k0" )
+    comando.ped.eseguiComando( sComandoConLinea )
+@}
+
+Riassumendo, i comandi che operano con le ricerche di stringhe, sono questi:
+
+@d comandi ricerca e sostituzione
+@{
+@<comandoS@>
+@<comandoG@>
 @}
 
 @End @Section
