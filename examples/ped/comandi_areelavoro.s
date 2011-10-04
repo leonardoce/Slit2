@@ -141,11 +141,10 @@ def comandoH( comando ):
   else:
     try:
       iNumeroComando = int( comando.txtComando[1:].strip() )
+      risultato = comando.ped.eseguiComando( comando.ped.getStoriaComandi()[ iNumeroComando - 1 ] )
+      comando.stampaSchermo = risultato.stampaSchermo
     except ValueError, e:
       print "Non valido"
-
-    risultato = comando.ped.eseguiComando( comando.ped.getStoriaComandi()[ iNumeroComando - 1 ] )
-    comando.stampaSchermo = risultato.stampaSchermo
 @}
 
 @d comandi aree di lavoro
