@@ -222,13 +222,16 @@ def comandoS( comando ):
 
   comando.areaLavoro.inserisciInUndo( "Sostituzione" )
 
-  while lineaDaControllare <= comando.lineaFine:
-    orig = comando.areaLavoro.getLinea(lineaDaControllare)
-    dest = prog.sub( regOut, orig, numeroSost )
-    if orig!=dest:
-      comando.areaLavoro.setLinea( lineaDaControllare, dest )
-      comando.areaLavoro.stampaLinea( lineaDaControllare )
-    lineaDaControllare+=1
+  try:
+    while lineaDaControllare <= comando.lineaFine:
+      orig = comando.areaLavoro.getLinea(lineaDaControllare)
+      dest = prog.sub( regOut, orig, numeroSost )
+      if orig!=dest:
+        comando.areaLavoro.setLinea( lineaDaControllare, dest )
+        comando.areaLavoro.stampaLinea( lineaDaControllare )
+      lineaDaControllare+=1
+  except Exception, e:
+    print str(e)
 
 def comandoPut( comando ):
   comando.stampaSchermo = False
