@@ -31,6 +31,12 @@ class AreaLavoro:
   @<class AreaLavoro, metodi@>
 @}
 
+@BeginSections
+
+@Section
+@Title { Gestione degli attributi }
+@Begin @LP
+
 Gli attributi della classe possono essere letti e scritti attraverso gli appositi metodi getter e
 setter:
 
@@ -58,6 +64,12 @@ def getBuffer( self ):
   return self.buffer
 @}
 
+@End @Section
+
+@Section
+@Title { Lettura e scrittura files }
+@Begin @LP
+
 Il caricamento e lo scaricamento di un file viene direttamente effettuato
 da metodi dell'area di lavoro. Oltre al riempimento del buffer questi
 metodi impostano i flag dell'area di lavoro in modo appropriato. @PP
@@ -80,6 +92,144 @@ def salvaSu( self, nome ):
   f.close()
   self.temporaneo = False
 @}
+
+@End @Section
+
+@Section
+@Title {Indirizzamento delle righe}
+@Begin @LP
+
+I comandi permettono di indirizzare le righe interessate utilizzando una
+sintassi simile a quella dell'editor @I ed. Questi sono i modi
+disponibili:
+
+@BulletList
+@ListItem { @I { con un numero }, che viene interpretato come un numero
+di riga a partire dall'inizio del file }
+@ListItem { @I { con un numero preceduto dal segno }, che viene
+interpretato come una distanza dalla riga corrente }
+@ListItem { @I { con il carattere } @F { . }, che viene interpretata
+come la riga corrente
+}
+@ListItem { @I { con il carattere } @F { $ }, che viene interpretata
+come l'ultima riga del file }
+@ListItem { @I { con una espressione regolare }, separata da barre diritte
+se intende cercare in avanti, e da punto interrogativo ( @F {?} ) se si intende
+cercare in indietro. }
+@ListItem { @I { con il carattere apostrofo } @F { ' } seguito da una lettera,
+che indica la linea che ha il marcatore con il nome che corrisponde alla
+lettera scelta }
+@EndList
+
+Gli indirizzi relativi vengono risolti con una semplice somma. Se
+il numero ottenuto va fuori rango viene riportato su una linea
+presente nel file.
+
+@d class AreaLavoro, risolvi indirizzi relativi
+@{
+elif sIndirizzo.startswith("+"):
+  if len(sIndirizzo)>1:
+    offset = int(sIndirizzo[1:])
+  else:
+    offset = 1
+
+  linea = self.cursore + offset
+  if not self.isLineaValida( linea ):
+    linea = len( self.buffer )
+  return linea
+
+elif sIndirizzo.startswith("-"):
+  if len(sIndirizzo)>1:
+    offset = int(sIndirizzo[1:])
+  else:
+    offset = 1
+
+  linea = self.cursore - offset
+  if not self.isLineaValida( linea ):
+    linea = 1
+  return linea
+@}
+
+Gli indirizzi forniti con delle espressioni regolari vengono
+cercati in ogni linea. Appena si trova una linea che fa il
+match la linea viene selezionata.
+@PP
+
+La ricerca inizia sempre dalla linea corrente.
+
+@d class AreaLavoro, risolvi indirizzi regexp
+@{
+elif sIndirizzo[0] == '/' and sIndirizzo[-1] == '/':
+  prog = re.compile( sIndirizzo[1:-1] )
+  # Ricerca in avanti
+  lineaInizio = self.cursore + 1
+  lineaFine = len( self.buffer )
+  lineaDaControllare = lineaInizio
+
+  while lineaDaControllare <= lineaFine:
+    l = self.getLinea( lineaDaControllare )
+    if prog.search(l):
+      return lineaDaControllare
+    lineaDaControllare+=1
+
+  raise ErrorePed( "Pattern non trovato: " + sIndirizzo )
+
+elif sIndirizzo[0] == '?' and sIndirizzo[-1] == '?':
+  prog = re.compile( sIndirizzo[1:-1] )
+  # Ricerca in indietro
+  lineaInizio = 1
+  lineaFine = self.cursore - 1
+  lineaDaControllare = lineaInizio
+
+  while lineaDaControllare <= lineaFine:
+    l = self.getLinea( lineaDaControllare )
+    if prog.search(l):
+      return lineaDaControllare
+    lineaDaControllare+=1
+
+  raise ErrorePed( "Pattern non trovato: " + sIndirizzo )
+@}
+
+La ricerca di una riga in base al marcatore impostato si traduce,
+semplicemente nel cercare quel marcatore nel dizionario.
+
+@d class AreaLavoro, risolvi indirizzo da marcatore
+@{
+elif re.match( "\\'[a-z0-9]", sIndirizzo ):
+  for l in self.rmarks:
+    if self.rmarks[l] == sIndirizzo[1]:
+      return l
+  raise ErrorePed( "mark non trovato" )
+@}
+
+A questa carrellata di sintassi mancano solo gli indirizzi
+simbolici:
+
+@d class AreaLavoro, risolvi indirizzo
+@{
+def risolviIndirizzo(self, sIndirizzo):
+  if re.match( "\\d+", sIndirizzo ):
+    return int( sIndirizzo )
+
+  elif sIndirizzo == ".":
+    return self.cursore
+
+  elif sIndirizzo == "$":
+    return len( self.buffer )
+
+  @<class AreaLavoro, risolvi indirizzo da marcatore@>
+  @<class AreaLavoro, risolvi indirizzi relativi@>
+  @<class AreaLavoro, risolvi indirizzi regexp@>
+
+  else:
+    raise ErrorePed( "Indirizzo di linea non valido: " + sIndirizzo )
+@}
+
+@End @Section
+
+@Section
+@Title {Gestione segnalibri}
+@Begin @LP
 
 Le linee dell'area di lavoro possono essere marcate con indicatori di un carattere
 alfabetico oppure con un carattere numerico.
@@ -121,7 +271,14 @@ def setMark( self, nome, linea ):
     if linea in self.rmarks:
       prec = self.rmarks[ linea ]
     self.rmarks[ linea ] = nome
+@}
 
+Su queste funzione primitive sono implementate altre funzioni sui segnalibri
+che servono per implementare con pi{@Char ugrave} facilit{@Char agrave} i
+comandi dell'editor.
+
+@d class AreaLavoro, funzioni addizionali marks
+@{
 def aggiornaMarksDopo( self, inizio, offset ):
   cleanRmarks = {}
 
@@ -146,82 +303,19 @@ def cancellaMarksFra( self, inizio, fine ):
   self.rmarks = cleanRmarks
 @}
 
+@End @Section
+
+@Section
+@Title { Altri metodi }
+@Begin @LP
+
 @d class AreaLavoro, metodi
 @{
 @<class AreaLavoro, gestione files@>
 @<class AreaLavoro, getter e setter@>
 @<class AreaLavoro, marks@>
-
-def risolviIndirizzo(self, sIndirizzo):
-  if re.match( "\\d+", sIndirizzo ):
-    return int( sIndirizzo )
-
-  elif re.match( "\\'[a-z0-9]", sIndirizzo ):
-    for l in self.rmarks:
-      if self.rmarks[l] == sIndirizzo[1]:
-        return l
-    raise ErrorePed( "mark non trovato" )
-
-  elif sIndirizzo == ".":
-    return self.cursore
-
-  elif sIndirizzo == "$":
-    return len( self.buffer )
-
-  elif sIndirizzo[0] == '/' and sIndirizzo[-1] == '/':
-    prog = re.compile( sIndirizzo[1:-1] )
-    # Ricerca in avanti
-    lineaInizio = self.cursore + 1
-    lineaFine = len( self.buffer )
-    lineaDaControllare = lineaInizio
-
-    while lineaDaControllare <= lineaFine:
-      l = self.getLinea( lineaDaControllare )
-      if prog.search(l):
-        return lineaDaControllare
-      lineaDaControllare+=1
-
-    raise ErrorePed( "Pattern non trovato: " + sIndirizzo )
-
-  elif sIndirizzo[0] == '?' and sIndirizzo[-1] == '?':
-    prog = re.compile( sIndirizzo[1:-1] )
-    # Ricerca in indietro
-    lineaInizio = 1
-    lineaFine = self.cursore - 1
-    lineaDaControllare = lineaInizio
-
-    while lineaDaControllare <= lineaFine:
-      l = self.getLinea( lineaDaControllare )
-      if prog.search(l):
-        return lineaDaControllare
-      lineaDaControllare+=1
-
-    raise ErrorePed( "Pattern non trovato: " + sIndirizzo )
-
-  elif sIndirizzo.startswith("+"):
-    if len(sIndirizzo)>1:
-      offset = int(sIndirizzo[1:])
-    else:
-      offset = 1
-
-    linea = self.cursore + offset
-    if not self.isLineaValida( linea ):
-      linea = len( self.buffer )
-    return linea
-
-  elif sIndirizzo.startswith("-"):
-    if len(sIndirizzo)>1:
-      offset = int(sIndirizzo[1:])
-    else:
-      offset = 1
-
-    linea = self.cursore - offset
-    if not self.isLineaValida( linea ):
-      linea = 1
-    return linea
-
-  else:
-    raise ErrorePed( "Indirizzo di linea non valido: " + sIndirizzo )
+@<class AreaLavoro, funzioni addizionali marks@>
+@<class AreaLavoro, risolvi indirizzo@>
 
 def isLineaValida( self, i ):
   i = i-1
@@ -328,5 +422,9 @@ def undo(self):
 
   self.modificato = True
 @}
+
+@End @Section
+
+@EndSections
 
 @End @Chapter
