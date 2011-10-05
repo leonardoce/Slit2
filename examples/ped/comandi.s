@@ -129,6 +129,7 @@ class Comando:
       comandoMacro( self )
 
 def comandoP( comando ):
+  comando.conservaInHistory = False
   if comando.lineaInizio == None:
     comando.lineaInizio = comando.areaLavoro.cursore
   elif not comando.areaLavoro.isLineaValida( comando.lineaInizio ):
@@ -522,6 +523,7 @@ e il comando ZZ per muoversi in indietro.
 @d comandoZ
 @{
 def comandoZ( comando ):
+  comando.conservaInHistory = False
   nuovoCursore = comando.areaLavoro.cursore + comando.ped.getDimensioneFinestra() + 1
   if comando.areaLavoro.isLineaValida( nuovoCursore ):
     comando.areaLavoro.setCursore( nuovoCursore)
@@ -535,6 +537,7 @@ Il comando ZZ, per muoversi nella direzione opposta, {@Char egrave} praticamente
 @d comandoZZ
 @{
 def comandoZZ( comando ):
+  comando.conservaInHistory = False
   nuovoCursore = comando.areaLavoro.cursore - comando.ped.getDimensioneFinestra() + 1
   if comando.areaLavoro.isLineaValida( nuovoCursore ):
     comando.areaLavoro.setCursore( nuovoCursore)
