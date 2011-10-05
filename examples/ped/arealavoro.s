@@ -176,12 +176,13 @@ elif sIndirizzo[0] == '/' and sIndirizzo[-1] == '/':
 
 elif sIndirizzo[0] == '?' and sIndirizzo[-1] == '?':
   prog = re.compile( sIndirizzo[1:-1] )
+
   # Ricerca in indietro
-  lineaInizio = 1
-  lineaFine = self.cursore - 1
+  lineaInizio = self.cursore - 1
+  lineaFine = 1
   lineaDaControllare = lineaInizio
 
-  while lineaDaControllare <= lineaFine:
+  while lineaDaControllare > 0:
     l = self.getLinea( lineaDaControllare )
     if prog.search(l):
       return lineaDaControllare
