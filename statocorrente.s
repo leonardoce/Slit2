@@ -130,7 +130,8 @@ Slit @Char egrave pronto per supportare i linguaggi:
 @ListItem { Lout (.lout), }
 @ListItem { Ruby (.rb), }
 @ListItem { Assembler (.s, .asm), }
-@ListItem { Basic (.bas) }
+@ListItem { Basic (.bas), }
+@ListItem { NSIS (.NSI) }
 @EndList
 
 I linguaggi elencati vengono direttamente configurati nel codice:
@@ -154,6 +155,7 @@ AggiungiLinguaggio( '.lout', '#', '' );
 AggiungiLinguaggio( '.s', '; ', '' );
 AggiungiLinguaggio( '.asm', '; ', '' );
 AggiungiLinguaggio( '.bas', '''''', '' );
+AggiungiLinguaggio( '.nsi', '; ', '' );
 @}
 
 Le informazioni vengono conservate all'interno di un record:
