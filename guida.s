@@ -166,30 +166,29 @@ void funzionePrincipale();
 @Section @Title { Options ("@x" directive) }
 @Begin @PP
 
-Slit pu{@Char ograve} essere configurato attraverso delle opzioni. Le opzioni
-si comunicano utilizzando la direttiva @F @Verbatim { @x }. @PP
-Questa direttiva @Char egrave seguita da una stringa che @Char egrave
-il nome dell'opzione stessa. Ad esempio:
+Slit can be configured via options. Options are configurated 
+using the @F @Verbatim { @x } directive. @PP
+
+This directive must be followed by a string whi is the name of the
+option being configured. For example:
 
 @IndentedDisplay @F @Verbatim { @x output_html }
 
-Questa @Char egrave la lista delle opzioni supportate:
+This is the list of the supported options:
 
 @BulletList
-@ListItem { @F output_html : seleziona il formato html per l'output }
-@ListItem { @F output_txt : seleziona il formato testo per l'output }
-@ListItem { @F output_lout : seleziona il formato lout per l'output }
-@ListItem { @F section_markers : abilita la produzione dei marcatori di
-inizio e fine sezione }
-@ListItem { @F no_section_markers : disabilita la produzione dei marcatori
-di inizio e fine sezione }
-@ListItem { @F line_markers : abilita la produzione dei marcatori di
-riga nei file sorgenti generati }
-@ListItem { @F no_line_markers : disabilita la produzione dei marcatori
-di riga nei file sorgenti generati }
-@ListItem { @F comment_markers : questa opzione serve per inserire
-i delimitatori di commento per i linguaggi non ancora supportati da Slit
-oppure per personalizzare quelli gi{@Char agrave} esistenti. }
+@ListItem { @F output_html : select HTML as output format }
+@ListItem { @F output_txt : select TXT as output format }
+@ListItem { @F output_lout : select LOUT as output format }
+@ListItem { @F section_markers : enable start/end section markers in 
+source code }
+@ListItem { @F no_section_markers : disable start/end section markers
+in source code }
+@ListItem { @F line_markers : enable line markers in source code }
+@ListItem { @F no_line_markers : disable line markers in source code }
+@ListItem { @F comment_markers : this options customize the comment markers
+for programming languages not already supported by Slit or can be used
+to personalize existing languages support. }
 @EndList
 
 L'opzione @F comment_markers {@Char egrave} seguita da un parametro
