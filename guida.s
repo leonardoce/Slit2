@@ -120,15 +120,14 @@ int main(int argc, char **argv)
 
 @End @Section
 
-@Section @Title { La direttiva "@+" }
+@Section @Title { "@+" directive }
 @Begin @PP
 
-La direttiva @F "@+" aggiunge uno scrap in coda a una macro gi{@Char agrave}
-esistente. Questo serve per ridurre la quantit{@Char agrave} dei nomi di
-macro utilizzati e per non essere costretti ad inventarsi nomi non utili.
+The @F "@+" directive append a scrap to the end of an already existent one.
+This behaviour is useful when you need to reduce the used macro names.
 @PP
 
-Ad esempio:
+For example:
 
 @IndentedDisplay @F
 @Verbatim @Begin
@@ -164,7 +163,7 @@ void funzionePrincipale();
 
 @End @Section
 
-@Section @Title { Opzioni (la direttiva "@x") }
+@Section @Title { Options ("@x" directive) }
 @Begin @PP
 
 Slit pu{@Char ograve} essere configurato attraverso delle opzioni. Le opzioni
