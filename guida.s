@@ -82,21 +82,21 @@ int main(int argc, char **argv)
 @}
 @End @Verbatim
 
-Nello scrivere il codice sorgente slit ricorda il livello di indentazione dei
-riferimenti alle macro e li utilizza per scrivere il codice.
+Slit remembers the source code indentation level and uses that information
+to write the target source code.
 
 @End @Section
 
-@Section @Title { La direttiva "@i" }
+@Section @Title { "@i" directive }
 @Begin @PP
 
-La direttiva "@i" invece serve per includere un file slit da un'altro. @PP
+The "@i" directive can be used to include a slit file in another slit file. @PP
 
-Molto spesso i programmi scritti con Slit sono composti da pi{@Char ugrave}
-files Slit. La direttiva "@i" dice a Slit di andare a leggere un'altro file
-e ritornare al file chiamante quando la lettura viene completata. @PP
+Often, the software written using Slit, are composed by more Slit files. The
+"@i" directive make Slit read another source file and return to the caller 
+file when the included file is readden. @PP
 
-Ad esempio:
+For example:
 
 @IndentedDisplay @F @Verbatim { @i provatre_funzioni.s }
 @IndentedDisplay @F @Verbatim { @i provatre_dichiarazioni.s }
