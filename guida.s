@@ -180,9 +180,9 @@ This is the list of the supported options:
 @ListItem { @F output_html : select HTML as output format }
 @ListItem { @F output_txt : select TXT as output format }
 @ListItem { @F output_lout : select LOUT as output format }
-@ListItem { @F section_markers : enable start/end section markers in 
+@ListItem { @F section_markers : enable start or end section markers in 
 source code }
-@ListItem { @F no_section_markers : disable start/end section markers
+@ListItem { @F no_section_markers : disable start or end section markers
 in source code }
 @ListItem { @F line_markers : enable line markers in source code }
 @ListItem { @F no_line_markers : disable line markers in source code }
