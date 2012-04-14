@@ -271,7 +271,7 @@ begin
   end
   else
   begin
-    writeln('Uso: ', ParamStr(0), ' <nomefile>');
+    writeln('Use: ', ParamStr(0), ' <nomefile>');
   end;
 end.
 @}
