@@ -1,35 +1,33 @@
-@Chapter @Title { Lo stato della traduzione }
+# -*- mode:lout -*-
+
+@Chapter @Title { The translation status }
 @Begin @LP
 
-All'interno di slit esiste un modulo il cui scopo @Char egrave contenere
-lo stato corrente del processo di traduzione. @PP
+Slit has a unit to manage the translation process and the translation
+status. @PP
 
-Le informazioni presenti in questo modulo sono trattate in questo 
-capitolo. @PP
+The informations in this unit and the data structured are documented
+in this chapter. @PP
 
 @BeginSections
-@Section @Title { Gestione delle opzioni }
+@Section @Title { Options management }
 @Begin @PP
 
-Slit ha un insieme di parametri di configurazione che permette all'utente
-di adattare il motore di traduzione in base alle sue preferenze. @PP
+The Slit parameters system makes the translation process configurable
+and adaptable to the user preferences. @PP
 
-Questo insieme di parametri, chiamati @I opzioni, viene gestito da una
-unit apposita, che gestisce tutti i dati e fornisce delle operazioni
-di alto livello che operano su questi. @PP
+This parameters set, called @I options, is managed by a unit, who
+provides high-level operation managing that data. @PP
 
 @BeginSubSections
-@SubSection @Title { Formato di output della documentazione }
+@SubSection @Title { The output format }
 @Begin @PP
 
-Slit deve scrivere, all'interno della documentazione del codice, il
-contenuto delle varie macro presenti all'interno del documento. Per
-questa ragione deve sapere qual @Char egrave il formato della documentazione.
-@PP
+Slit must write, in the documentation, the content of the macros. So
+he need to know the documentation format. @PP
 
-Il valore di questa opzione memorizza proprio questo formato, in modo che
-possa essere creata la corrispondente implementazione del driver per la
-generazione della documentazione. @PP
+This parameters rembember the format used and this information is used
+to create the right documentation driver. @PP
 
 @d slitstatus, gestore del processore di documentazione
 @{
@@ -60,9 +58,8 @@ begin
 end;
 @}
 
-Visto che adesso sappiamo qual @Char egrave il processore delle informazioni
-da utilizzare @Char egrave possibile anche creare una funzione che crea
-il file di output per slit.
+Now that we know the documentation format we can write a function to
+generated the right instance of the documentation driver. 
 
 @d slitstatus, crea lo stream di output
 @{
@@ -89,34 +86,26 @@ end;
 
 @End @SubSection
 
-@SubSection @Title { Marcatore di inizio e fine dei commenti }
+@SubSection @Title { Comment start and end markers }
 @Begin @PP
 
-Nei file sorgenti generati da Slit @Char egrave possibile inserire
-o meno un riferimento al file originale, che contiene la documentazione
-e il codice. @PP
+In the source code generated Slit can insert a reference to the
+original documentation file. @PP
 
-In questo caso il commento deve essere racchiuso fra delimitatori che
-lo caratterizzino come commento valido per il linguaggio generato. @PP
+This information is enclosed in a comment block that must be valid for
+the generated language. A software can be composed of source code
+written in different languages so we must distuish between the source
+code languages to choose the right comment marker. We do this using
+the extension of the generated source code file. @PP
 
-@Char Egrave possibile che un singolo documento Slit generi 
-pi{@Char ugrave} sorgenti in linguaggi diversi. In questo caso occorre
-distinguere fra linguaggio e linguaggio. @PP
+At every extension corresponds the comment start and end markers. Slit
+has a database with predefines associations for the popular
+programming languages. @PP
 
-Slit fa questa distinzione utilizzando l'estensione del file. @PP
+Slit insert comments only at the end of line so works also for
+languages that doesn't admit comment between the source code lines. @PP
 
-Ad ogni estensione viengono associati un marcatore di inizio e un marcatore
-di fine commento. All'interno del programma questa tabella di associazione
-@Char egrave gi{@Char agrave} popolata con dei valori utili per i
-linguaggi di programmazione pi{@Char ugrave} popolari. @PP
-
-Slit inserisce solamente commenti alla fine della riga dei files sorgenti
-e quindi questo meccanismo funziona anche per i linguaggi che non
-prevedono aree di commento all'interno della linea di codice ma solamente
-alla fine (ad esempio Ada). In questo caso basta lasciare il marcatore
-di fine commento vuoto. @PP
-
-Slit @Char egrave pronto per supportare i linguaggi:
+Slit is ready for the following programming languages:
 
 @BulletList
 @ListItem { Pascal (.pas, .pp), }
@@ -135,7 +124,7 @@ Slit @Char egrave pronto per supportare i linguaggi:
 @ListItem { Zinc (.zc). }
 @EndList
 
-I linguaggi elencati vengono direttamente configurati nel codice:
+These languages are configured directly in the source code of slit:
 
 @d slitstatus, configurazione delle estensioni predefinite
 @{
@@ -160,7 +149,7 @@ AggiungiLinguaggio( '.nsi', '; ', '' );
 AggiungiLinguaggio( '.zc', '// ', '' );
 @}
 
-Le informazioni vengono conservate all'interno di un record:
+This informations are hold in records:
 
 @d slitstatus, RInformazioniLinguaggi
 @{
@@ -171,8 +160,7 @@ RInformazioniLinguaggi = record
 end;
 @}
 
-Queste informazioni vengono aggiunte ad una tabella che viene
-tenuta nello stato globale della configurazione di Slit:
+The records are held in a table inside the Slit global configuration status:
 
 @d slitstatus, AggiungiLinguaggio
 @{
@@ -190,8 +178,7 @@ begin
 end;
 @}
 
-Per prelevare queste informazioni il programma utilizza questa
-funzione:
+To use these informations slit use the following procedure:
 
 @d slitstatus, PrendiMarcatori
 @{
@@ -221,17 +208,18 @@ begin
 end;
 @}
 
-All'interno della tabella le istruzioni vengono cercate all'incontrario
-perch{@Char egrave} in questo modo le indicazioni dell'utente vengono
-prese in considerazione prima di quelle fornite come predefinite.
+Inside the table the instructions are searched in backward manner
+because the configuration made by the user must take precedence over
+the default configurations.
 
 @End @SubSection
 
-@SubSection @Title { Generazione dei marcatori di inizio e file sezione }
+@SubSection @Title { Generation of the section start and end marker }
 @Begin @PP
 
-Nei file sorgenti generati @Char egrave possibile conservare il nome
-della macro Slit che @Char egrave stata letta per generarli. @PP
+The generated source code can also contain the name of the Slit macro
+that has been read. This parameter enable or disable this
+functionality:@PP
 
 @d slitstatus, Get/Set GenerazioneMarcatoriAbilitata
 @{
@@ -248,15 +236,12 @@ end;
 
 @End @SubSection
 
-@SubSection @Title { Generazione dei marcatori di riga }
+@SubSection @Title { Generation of line markers }
 @Begin @PP
 
-Spesso @Char egrave importante conservare, all'interno del
-file sorgente generato, il nome del file di documentazione
-e il numero di riga corrispondente. @PP 
-
-Queste informazioni permettono di rintracciare facilmente un errere
-emesso dal compilatore. @PP
+Sometimes it's important to know, in the generated source code, the
+name of the documentation file and the row number. This is useful to
+decode the error messages given by the compiler. @PP
 
 @d slitstatus, Get/Set GenerazioneNumeriRigaAbilitata
 @{
@@ -271,9 +256,8 @@ begin
 end;
 @}
 
-I marcatori, per non dare noia, vengono messi ad una precisa
-colonna se disponibile oppure alla fine della riga di codice
-sorgente. Questa colonna @Char egrave configurabile:
+The markers, for aestetics reasons, are put at a precise column or at
+the end of the source code line. This column number is configurable:
 
 @d slitstatus, Get/Set ColonnaNumeriRiga
 @{
@@ -295,16 +279,15 @@ end;
 
 @End @Section
 
-@Section @Title { Tracciatura del file correntemente elaborato }
+@Section @Title { Current file name management }
 @Begin @PP
 
-Slit tiene traccia del file correntemente elaborato per emettere
-dei messaggi di errore il pi{@Char ugrave} accurati possibile. Il
-parser, subito dopo l'apertura di un file e subito prima della sua
-chiusura, segnala a questo modulo l'evento. Cos{@Char igrave} viene
-tenuto traccia del file correntemente elaborato. @PP
+The current filename must be hold to make error messages as precise as
+possible. The parser, after opening a file and before closing it,
+signal an event to this module. These events are received and used to
+held the current filename. @PP
 
-Gli streams vengono tenuti in uno stack dinamico:
+Streams are held in a dynamic stack:
 
 @d slitstatus, SegnalaInizioElaborazioneStream
 @{
@@ -332,8 +315,8 @@ begin
 end;
 @}
 
-In questo modo possiamo creare delle chiamate per ottenere il file e
-la riga corrente:
+In this way we can write functions to get the current filename and the
+current row:
 
 @d slitstatus, GetCurrentParsingFile
 @{
@@ -368,9 +351,8 @@ begin
 end;
 @}
 
-Grazie a queste chiamate possiamo creare una procedura per l'emissione
-di messaggi di errori che hanno un riferimento al file correntemente
-processato:
+Thanks to these procedures we can create a procedure to emit error
+messages referring to che current processed file:
 
 @d slitstatus, LogErrorMessage
 @{
@@ -390,7 +372,7 @@ end;
 
 @End @Section
 
-@Section @Title { Definizione della unit slitstatus }
+@Section @Title { slitstatus unit definition }
 @Begin @PP
 
 @o slitstatus.pas
