@@ -276,12 +276,12 @@ begin
 end.
 @}
 
-Il file di ingresso {@Char egrave} rappresentato da un oggetto della classe @F TSlitStream
-mentre il file di uscita della documentazione {@Char egrave} rappresentato da una classe
-della famiglia @F { TSlitOutputTxt }.
+The input file is represented by an object of the class @F TSlitStream
+ant the documentation file is represented by an object of the class 
+@F { TSlitOutputTxt }.
 
-Le macro vengono memorizzate all'interno di un "magazzino" dal quale vengono
-poi riprese per scrivere i files sorgenti.
+Macros are memorized in a @I store and are retrieved when the source
+code is generated.
 
 @d slit preparazione dell'ambiente
 @{
@@ -290,7 +290,7 @@ stream := TSlitStream.CreateForFile(ParamStr(1));
 driverMagazzinoMacro := TSlitStreamDriverMagazzino.CreateWithMacroStore( store );
 @}
 
-La documentazione viene elaborata attraverso un metodo dello stream in ingresso:
+Documentation is read by a method in the input stream:
 
 @d slit riempimento del magazzino delle macro
 @{
@@ -299,22 +299,22 @@ stream.Process();
 stream.ResetStream();
 @}
 
-Dopo aver popolato il magazino delle macro vengono calcolati i riferimenti:
+When the macro store is populated whe cross-reference is calculated:
 
 @d slit calcola riferimenti
 @{
 store.CalcolaRiferimenti();
 @}
 
-Una volta calcolati i riferimenti {@Char egrave} possibile controllare la presenza di macro
-mai utilizzate:
+When the cross-reference is calculated is possible to check
+unreferenced macros:
 
 @d slit controlla macro non utilizzate
 @{
 ControllaMacroNonUtilizzate();
 @}
 
-Il controllo viene fatto scorrendo tutto il magazzino della macro.
+This check is done reading all the macro store:
 
 @d slit ControllaMacroNonUtilizzate
 @{
@@ -328,13 +328,13 @@ begin
     tempMacro := store.GetRecord( i );
     if (tempMacro.macroUsersCount = 0) and (tempMacro.macroType <> FileMacro) then
     begin
-      LogErrorMessage('La macro ' + tempMacro.macroName + ' non e'' mai stata utilizzata.');
+      LogErrorMessage('The macro ' + tempMacro.macroName + ' is never used.');
     end;
   end;
 end;
 @}
 
-Viene adesso avviata la generazione della documentazione:
+Now the documentation can be generated:
 
 @d slit generazione della documentazione
 @{
@@ -348,14 +348,14 @@ stream.ResetStream();
 writeln(store.MacroCount, ' macro processate');
 @}
 
-Viene poi avviata l'elaborazione dei file sorgenti:
+Then the source files are generated:
 
 @d slit generazione del codice sorgente
 @{
 ProcessaFiles();
 @}
 
-Poi vengono deallocati gli oggetti creati:
+And now a bit of cleaning:
 
 @d slit pulizia
 @{
