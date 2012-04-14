@@ -1,10 +1,10 @@
-# :folding=explicit:mode=slitpascal:
+# -*- mode:lout -*-
 
 @Chapter
-@Title { Il magazzino delle macro }
+@Title { The macro store }
 @Begin @PP
 
-Slit conserva le macro all'interno della memoria. 
+Macro are memorized in the macro store.
 
 @d TMacroRecord
 @{
@@ -44,29 +44,28 @@ public
 end;
 @}
 
-Per ogni macro viene memorizzato:
+For every macro the following attribute are memorized:
 
 @BulletList
-@ListItem { il nome; }
-@ListItem { il numero progressivo; }
-@ListItem { il contenuto; }
-@ListItem { il tipo (permette di distinguere le macro che generano 
-dei file dalle macro pure); }
-@ListItem { le macro dove questa macro viene utilizzata (vettore "macroUsers") }
-@ListItem { il numero delle macro dove questa macro viene utilizzata 
-(vettore "macroUsersCount") }
+@ListItem { the name; }
+@ListItem { a progressive number; }
+@ListItem { the content; }
+@ListItem { the type (this permits to remember if it's a file
+generating macro or not); }
+@ListItem { the macros where this macro is used (@F "macroUsers" vector
+and @F "macroUsersCount") }
 @EndList
 
-Una macro viene man mano popolata con Scrap e ogni scrap @Char egrave composto da
-un insieme di righe. Slit deve conservare, per ogni riga degli scrap, il file da
-quale proviene e il numero di riga. In questo modo si pu{@Char ograve} costruire,
-successivamente, una mappa fra le righe della documentazione e quelle dei vari
-sorgenti generati. @PP
+Every macro is populated with scraps and every scrap is created by a
+set of lines. Slit must memorize, for every row in a scrap, the name
+of the input file and the number of the row. In this way we can build,
+afterwords, a map between the row in the documentation file and the
+row in the source code. @PP
 
-Questa mappa e' utile per gli sviluppatori per decodificare i messaggi di errore
-emessi dal compilatore. @PP
+This map is really useful for developer to demangle the error messages
+given by compilers. @PP
 
-Le macro vengono sempre create con un nome:
+Macro are always created with a name:
 
 @d TMacroRecord.CreateWithData
 @{
@@ -81,10 +80,9 @@ begin
 end;
 @}
 
-@Char Egrave possibile aggiungere contenuto ad una macro, e questo viene
-gestito tenendo traccia del file correntemente letto e del numero di
-riga. La riga indicata in questa funzione {@Char egrave} quella relativa
-all'inizio del contenuto passato.
+You can add rows to a macro, and this is managed by hold the current
+filename and the row number. The row number passed to this procedure
+is that of the first row of the content passed.
 
 @d TMacroRecord.AddContent
 @{
@@ -106,9 +104,7 @@ begin
 end;
 @}
 
-La funzione che segue invece tratta l'aggiunta del contenuto riga per riga
-e {@Char egrave} quella che viene utilizzata per implementare l'aggiunta
-di contenuto ad una macro.
+The following function instead add the content line by line:
 
 @d TMacroRecord.AddLine
 @{
@@ -127,8 +123,7 @@ begin
 end;
 @}
 
-Dopo questo trattamento il contenuto della macro {@Char egrave} ugualmente
-prelevabile sommando una ad una le varie stringhe:
+This function gives the content of the macro:
 
 @d TMacroRecord.ReadMacroContent
 @{
@@ -153,8 +148,7 @@ begin
 end;
 @}
 
-Le macro vengono conservate in un vettore dinamico la cui dimensione viene
-fissata, inizialmente, a 50.
+Macros are memorized in a dynamic vector whose size is initially 50.
 
 @d TMacroStore.Create
 @{
@@ -210,8 +204,7 @@ begin
 end;
 @}
 
-Per localizzare una macro per nome {@Char egrave} necessario scorrere tutto il vettore
-delle macro presenti:
+To find a macro by name every element in the vector is read:
 
 @d TMacroStore.GetMacro
 @{
@@ -231,8 +224,7 @@ begin
 end;
 @}
 
-Vengono anche previste delle chiamate per ottenere il numero di
-macro presenti nel magazzino:
+This procedures gives the count of the macro in the store:
 
 @d TMacroStore.MacroCount
 @{
@@ -242,8 +234,7 @@ begin
 end;
 @}
 
-C'{@Char egrave} anche una chiamata per ottenere una macro dal numero progressivo.
-(TODO: quando viene usata?):
+This procedure instead find a macro given it's progressive number:
 
 @d TMacroStore.GetRecord
 @{
@@ -256,17 +247,15 @@ end;
 @BeginSections
 
 @Section
-@Title { Calcolo dei riferimenti }
+@Title { Cross-reference }
 @Begin @PP 
 
-Il magazzino delle macro si occupa anche di calcolare i vari riferimenti
-fra le macro.
+The store computes also the cross-reference database.
 
-Ad esempio, se la macro @I uno include la macro @I {due}, all'interno del record
-che corrisponde alla macro @I due viene inserito il progressivo della macro
-@I {uno}.
+For example if the macro @I one includes the macro @I two, in the
+record of the macro @I two is inserted the ID of the macro @I one.
 
-Il calcolo dei riferimenti viene effettuato dalla procedura
+The cross-reference database if computed by the procedure 
 @I {CalcolaRiferimenti}.
 
 @d TMacroStore.CalcolaRiferimenti
@@ -287,8 +276,7 @@ begin
 end;
 @}
 
-Inizialmente vengono cancellati tutti i riferimenti all'interno del
-magazzino e fatto spazio per 10 riferimenti:
+The cross-reference database is initially cleared:
 
 @d TMacroStore.CalcolaRiferimenti pulizia record
 @{
@@ -299,7 +287,7 @@ begin
 end;
 @}
 
-Poi vengono lette le righe di ogni macro:
+Now all the rows are read:
 
 @d TMacroStore.CalcolaRiferimenti calcolo
 @{
@@ -314,8 +302,8 @@ begin
 end;
 @}
 
-Se la riga corrisponde a un riferimento viene rintracciato il progressivo
-della macro corrispondente e inserito fra i riferimenti:
+If the row is a reference the ID of the corresponding macro is
+retrieved and inserted in the reference database.
 
 @d TMacroStore.CalcolaRiferimenti processa riga
 @{
@@ -332,8 +320,8 @@ begin
 end;
 @}
 
-Per inserire il riferimento viene controllato se c'{@Char egrave} posto per un nuovo
-riferimento e se non c'{@Char egrave} viene creato:
+To insert a now reference the dynamic vector must be checked and
+resized if necessary:
 
 @d TMacroStore.CalcolaRiferimenti inserisci riferimento
 @{
@@ -350,10 +338,10 @@ store[k].macroUsersCount := store[k].macroUsersCount + 1;
 @End @Section
 
 @Section
-@Title { Definizione della unit macrostore }
+@Title { Definition of the macrostore unit }
 @Begin @PP
 
-Riassumendo, la definizione del ""TMacroStore"" {@Char egrave} la seguente:
+To sum up, the definition of the @F TMacroStore class is the following:
 
 @d TMacroStore
 @{
@@ -371,6 +359,8 @@ public
   procedure CalcolaRiferimenti;
 end;
 @}
+
+And this is the definition of the @F macrostore unit:
 
 @o macrostore.pas
 @{
