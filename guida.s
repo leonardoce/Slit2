@@ -191,41 +191,41 @@ for programming languages not already supported by Slit or can be used
 to personalize existing languages support. }
 @EndList
 
-L'opzione @F comment_markers {@Char egrave} seguita da un parametro
-che indica il linguaggio e i marcatori di inizio e di fine commento.
-Questo parametro ha la forma @F @Verbatim {
-<separatore><estensione><separatore><inizio><separatore><fine>
-}, dove il separatore pu{@Char ograve} essere qualsiasi carattere @PP
+The option @F comment_markers is followed by a parameter saying the
+programming language and the comment start and end marker. This
+parameter has the syntax @F @Verbatim {
+<separator><extension><separator><comment-start><separator><comment-end>
+}, where the separator can be any character. @PP
 
-Ad esempio la configurazione predefinita per il linguaggio Pascal
-potrebbe essere espressa nella seguente forma:
+For example, the predefined configuration for @I Pascal can be written
+like this:
+
 @F @Verbatim @Begin
- @x comment_markers /.pas/{/}/
+@x comment_markers /.pas/{/}/
 @End @Verbatim. @PP
 
 @End @Section
 
-@Section @Title { Documentazione }
+@Section @Title { Documentation }
 @Begin @PP
 
-Tutto quello che non @Char egrave una direttiva viene direttamente passato
-nel file di documentazione generato senza alcuna trasformazione
-intermedia. @PP
+All that is not a directory goes in the generated documentation
+without any transformation. @PP
 
-Slit deve essere utilizzato insieme a un formato di interscambio di testi.
-In questo momento si pu{@Char ograve} utilizzare:
+Slit must be used with a documentation syntax. For now the following
+languages can be used: @PP
 
 @BulletList
-@ListItem { il formato HTML, }
-@ListItem { il formato testo, }
-@ListItem { il sistema di elaborazione testi Lout. }
+@ListItem { HTML language, }
+@ListItem { plain old text, }
+@ListItem { the Lout typesetting syntax. }
 @EndList
 
-La documentazione deve essere inserita in modo coerente con il formato
-scelto. @PP
-Il formato Lout permette anche la generazione di una cross-reference
-fra le macro inserite: ogni macro viene numerata e al termine della
-macro viene inserita la lista di tutte le macro che la utilizzano. @PP
+The documentation can must be written using the choosen format. @PP
+
+The Lout format will also generate a cross-reference between the
+scraps: every scrap is numbered and, at the end, the list
+of all the using scraps is generated automatically. @PP
 
 @End @Section
 
@@ -235,25 +235,26 @@ macro viene inserita la lista di tutte le macro che la utilizzano. @PP
 
 
 @Chapter
-@Title { Il comando Slit }
+@Title { The Slit command }
 @Begin @LP
 
-I programmi vengono normalmente scritti in file di testo che possono avere qualunque esensione.
-Per separare il codice dalla documentazione di utilizza il comando @F {slit}: @PP
+Slit programs can be written in text files which can have every
+extension. To separate the code from the documentation you can use the
+@F {slit} command: @PP
 
 @Display @F @Verbatim {
 slit <nomefile>
 }
 
-Questo comando processa il file con il nome passato e ne interpreta le direttive. Dal file
-passato vengono quindi generati: @PP
+This command will process the file passed and will process all the
+directives. The @F slit command generates:
 
 @BulletList
-@ListItem { i file della documentazione; }
-@ListItem { i vari file che sono il codice sorgente. }
+@ListItem { the documentation files; }
+@ListItem { the source code. }
 @EndList
 
-La procedura principale infatti recita:
+The main procedure is like this:
 
 @d slit procedura principale
 @{
