@@ -1,4 +1,4 @@
-# :mode=slitpascal:folding=explicit:
+# -*- mode:lout -*-
 @Chapter
 @Title { Driver per la generazione della documentazione }
 @Begin @LP
