@@ -1,13 +1,11 @@
 # -*- mode:lout -*-
 @Chapter
-@Title { Driver per il magazzino delle macro e le opzioni }
+@Title { Macro store and parameters }
 @Begin @LP
 
-Questo driver viene agganciato al parser di Slit per riempire un magazzino
-con le macro. @PP
+With this driver the macro store get populated. @PP
 
-Il driver viene creato collegandolo ad un magazzino di macro e le
-opzioni vengono inizializzate alla stringa vuota.
+This drives is called with a macro store. @PP
 
 @d TSlitStreamDriverMagazzino.CreateWithMacroStore
 @{
@@ -19,12 +17,14 @@ end;
 @}
 
 @BeginSections
-@Section @Title { Immagazzinamento delle macro }
+@Section @Title { Adding a new macro }
 @Begin @PP
 
-Alla ricezione di una definizione di macro viene controllato se esiste
-gi{@Char agrave} una macro con questo nome, e nel caso viene dato uno warning, altrimenti
-questa viene direttamente inserita nel magazzino:
+When a macro get read it's checked and, if a macro with the same name
+already exists, a warning is emitted and the new macro is not
+considerated. @PP
+
+If it's all ok the macro is added to the macro store:
 
 @d TSlitStreamDriverMagazzino.ProcessaDefinizioneMacro
 @{
@@ -46,8 +46,7 @@ begin
 end;
 @}
 
-Anche quando viene ricevuta una definizione di file questa viene
-inserita nel magazzino:
+The same happens for file definition macros:
 
 @d TSlitStreamDriverMagazzino.ProcessaDefinizioneFile
 @{
@@ -69,10 +68,10 @@ begin
 end;
 @}
 
-Il caso nel quale alla macro ne viene aggiunta un'altra @Char egrave un
-po' diverso: bisogna prima controllare l'esistenza della macro prima
-di aggiungerci altre cose. @PP
-
+When a scrap is added to an already existing macro we must do a
+different sequence of checks: in this case the macro must already
+exists. If the macro is already existing, the content of the scrap get
+added. @PP
 
 @d TSlitStreamDriverMagazzino.ProcessaAggiungiNellaMacro
 @{
@@ -94,8 +93,7 @@ begin
 end;
 @}
 
-
-Invece le righe di documentazione vengono scartate:
+The rows of documentation, in this implementation, are discarded:
 
 @d TSlitStreamDriverMagazzino.ProcessaRigaDocumentazione
 @{
@@ -107,11 +105,11 @@ end;
 
 @End @Section
 
-@Section @Title { Trattamento delle opzioni }
+@Section @Title { Parameters }
 @Begin @PP
 
-Le opzioni vengono trattate qui e trasformate in chiamate alle
-opportune funzioni dello stato globale del programma. @PP
+The parameters are treated here and managed calling the functions of
+the Slit global state: @PP
 
 @d TSlitStreamDriverMagazzino.ProcessaOpzione
 @{
@@ -157,9 +155,9 @@ begin
 end;
 @}
 
-L'opzione dei commenti merita un discorso in pi{@Char ugrave} rispetto
-alle altre perch{@Char egrave} il codice per la gestione del parametro
-{@Char egrave} quantomeno particolare. @PP
+The parameters needed to add comment to the generated source code is a
+little different because the markers are to be extracted from the
+option parameter. @PP
 
 @d TSlitStreamDriverMagazzino.GestioneOpzioneCommenti
 @{
@@ -192,11 +190,11 @@ end;
 
 @End @Section
 
-@Section @Title { Definizione del driver }
+@Section @Title { Driver definition }
 @Begin @PP
 
-La definizione della classe ""TSlitStreamDriverMagazzino"" e del file
-dove {@Char egrave} contenuta {@Char egrave} quindi la seguente:
+The definition of the class @F @Verbatim TSlitStreamDriverMagazzino
+and of the relative unit is following:
 
 @o drivermagazzino.pas
 @{
