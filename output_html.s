@@ -3,10 +3,9 @@
 @Title { HTML Output }
 @Begin @PP
 
-L'output in formato HTML permette di creare un file HTML per la documentazione.
-I tag devono essere immessi manualmente (eccetto quegli che gestiscono gli scrap).
+This backend write the output documentation in HTML format. @PP
 
-Il file creato ha l'estensione @F {.html} aggiunta al nome del file di documentazione:
+The created file has @F {.html} extension added to the documentation filename:
 
 @d TSlitOutputHtml.CreateForFile
 @{
@@ -17,7 +16,7 @@ Il file creato ha l'estensione @F {.html} aggiunta al nome del file di documenta
   end;
 @}
 
-Il file viene chiuso quando l'output viene liberato:
+The file is closed when the output stream get destroyed:
 
 @d TSlitOutputHtml.Destroy
 @{
@@ -27,9 +26,8 @@ Il file viene chiuso quando l'output viene liberato:
   end;
 @}
 
-Le righe di documentazione vengono inserite esattamente come
-sono all'interno del file HTML. Questo permette di
-aggiungere dei tag alla documentazione:
+Documentation lines are added exactly as they are in the documentation
+file so you can add your tag to documentation:
 
 @d TSlitOutputHtml.PutLine
 @{
@@ -39,8 +37,7 @@ aggiungere dei tag alla documentazione:
   end;
 @}
 
-La testata viene scritta in un ""div"" e gli scrap vengono inseriti in 
-blocchi preformattati:
+Scraps are wrote as @F div elements and are inserted in preformatted blocks:
 
 @d TSlitOutputHtml.ScriviScrap
 @{
@@ -70,7 +67,7 @@ begin
 end;
 @}
 
-Riassumendo, il codice di gestione del formato HTML @Char egrave il seguente:
+This is the definition of the HTML backend:
 
 @o slithtml.pas
 @{
