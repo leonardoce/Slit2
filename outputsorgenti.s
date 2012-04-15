@@ -1,4 +1,4 @@
-# :folding=explicit:mode=slitpascal:
+# -*- mode:lout -*-
 @Chapter
 @Title { Creazione dei files sorgenti }
 @Begin @PP
