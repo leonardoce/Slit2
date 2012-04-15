@@ -1,4 +1,4 @@
-# :mode=slitpascal:folding=explicit:
+# -*- mode:lout -*-
 @Chapter
 @Title { Driver per il magazzino delle macro e le opzioni }
 @Begin @LP
