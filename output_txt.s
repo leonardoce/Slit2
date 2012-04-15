@@ -3,10 +3,8 @@
 @Title { Output in formato testo }
 @Begin @PP
 
-Slit può anche lavorare con file in formato testo. In questo caso i file sono
-pensati per essere utilizzati con txt2tags. @PP
-
-Al file di documentazione viene aggiunta l'estensione ".txt": 
+Slit can also write text files. The format used is designed to use the
+@F txt2tags software. @PP
 
 @d TSlitOutputTxt.CreateForFile
 @{
@@ -17,7 +15,7 @@ begin
 end;
 @}
 
-E al rilascio del flusso il file viene chiuso:
+When the backend is destroyed the stream get closed:
 
 @d TSlitOutputTxt.Destroy
 @{
@@ -27,7 +25,7 @@ begin
 end;
 @}
 
-Le linee di documentazione vengono inserite nel file direttamente come sono:
+The documentation lines are added to the output file exactly as they are:
 
 @d TSlitOutputTxt.PutLine
 @{
@@ -37,11 +35,9 @@ begin
 end;
 @}
 
-La testata viene scritta in modo che prima e dopo di essa ci sia una
-linea orizzontale. Il titolo della testata viene scritto in grassetto. @PP
-
-Gli scrap vengono scritti fra blocchi di testo in modo che non vengono
-interpretati da txt2tags:
+A scrap is written in @F txt2tags format. The title of the scrap is
+written in bold and the content of the scrap is added to a text
+block. @PP
 
 @d TSlitOutputTxt.ScriviScrap
 @{
@@ -73,7 +69,7 @@ begin
 end;
 @}
 
-Riassumendo:
+This is the definition of the text backend:
 
 @o slittxt.pas
 @{
