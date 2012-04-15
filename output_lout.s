@@ -1,17 +1,15 @@
 # -*- mode: lout -*-
 @Section
-@Title { Output in formato Lout }
+@Title { Lout output }
 @Begin @PP
 
-LOut {@Char egrave} un sistema di typesetting di spirito simile a TeX ma di sintassi pi{@Char ugrave} semplice e pi{@Char ugrave}
-facilmente programmabile. @PP
+Lout is a typesetting system as Tex but has a more simple sintax and
+is easy to program. @PP
 
-Uno dei vantaggi di LOut {@Char egrave} la programmabilit{@Char agrave} e la leggerezza.
+Lout is also really lightweight.
+Slit can create Lout documentation. @PP
 
-Slit pu{@Char ograve} creare documentazione in formato LOut. @PP
-
-I file di lout non hanno una estensione determinata. Per quanto riguarda slit l'estensione
-che viene aggiunta alla documentazione @Char egrave "".lout"".
+Lout files haven't a predefined extension: slit assumes that this extension is @F "".lout"".
 
 @d TSlitOutputLout.CreateForFileAndStore
 @{
@@ -23,7 +21,7 @@ begin
 end;
 @}
 
-La chiusura avviene alla dismissione del flusso:
+Stream get closed when the backend is destroyed:
 
 @d TSlitOutputLout.Destroy
 @{
@@ -33,36 +31,20 @@ begin
 end;
 @}
 
-Le righe di documentazione vengono inserite esattamente come
-sono all'interno del file Lout. Questo permette di
-aggiungere istruzioni lout alla documentazione. @PP
+The documentation lines are added exactly as they are so you can add
+your Lout directives inside Slit files. @PP
 
-Oltre a scrivere la linea di documentazione viene anche
-scritta, in un commento, la linea di sorgente dalla quale
-quella linea di documentazione {@Char egrave} derivata. @PP
+When slit writed the Lout file it write, as a comment, a reference to
+the source file so you can easily fix the errors given by Lout
+compiler. @PP
 
-L'obiettivo {@Char egrave} di semplificare da ricerca di
-errori dati dal compilatore. Questo per{@Char ograve} 
-deve essere fatto solamente se
-non siamo dentro ad un blocco @F "@Verbatim", altrimenti il commento
-riguardante la riga corrente verrebbe inserito all'interno del documento
-proprio come se fosse testo. 
-
-Identificare se siamo dentro ad un blocco @B verbatim {@Char egrave} un
-problema che potrebbe sembrare di semplice soluzione ma in realt{@Char agrave},
-per farlo in modo esatto, bisognerebbe procedere almeno ad una analisi
-lessicale della stringa dal punto di vista Lout. 
-
-Per Slit {@Char egrave} stato scelto un approccio intermedio
-che permette di avere contemporaneamente la comodit{@Char agrave} dei
-commenti che indicano il file sorgente di provenienza e che non
-modificano l'output finale. @PP
-
-Il commento che enuncia lo stato corrente di lettura viene inserito
-solamente se la linea di documentazione inizia per @F "@Section": in
-questo modo siamo ragionevolmente sicuri che la riga non apparterr{@Char agrave}
-a un blocco @B verbatim. La stessa cosa viene fatta per l'inizio di un 
-capitolo e dell'introduzione:
+To write comment lines Slit would identify if we are inside a @B
+verbatim block or not. To exactly identify this condition we should
+laxically analyse the output file. This approach is too heavyweight
+for a simple software like Slit so I have choosen to identify @B
+verbatim blocks by adding this comments only if the line starts with a
+section starting directive like @F "@Section". The same check is done
+when you are starting a chapter or the introduction. @PP
 
 @d TSlitOutputLout.PutLine
 @{
@@ -84,12 +66,9 @@ begin
 end;
 @}
 
-Per quanto riguarda i settori di codice, questi devono essere
-scritti in un formato particolare, che permette a Lout di formattarli
-in modo corretto. @PP
+The scrapt must be formatted in a particular way to make Lout handle them correctly. @PP
 
-Questo {@Char egrave} un estratto di un esempio di codice formattato correttamente
-per usarlo con Lout: @PP
+This is a simple example of a code scrap formatted by Slit: @PP
 
 @F @Verbatim {
 @LeftDisplay lines @Break {
@@ -104,10 +83,9 @@ per usarlo con Lout: @PP
 
 @PP
 
-Il nome della definizione viene scritto fra parentesi angolate in italico
-@Verbatim {(@I)}. @PP 
+The macro name is written in italic inside angular brackets. @PP
 
-La testata viene scritta cos{@Char igrave}:
+The header get written like this:
 
 @d TSlitOutputLout scrivi testata
 @{
