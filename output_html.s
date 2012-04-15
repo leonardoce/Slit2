@@ -1,5 +1,6 @@
+# -*- mode:lout -*-
 @Section
-@Title { Output in formato HTML }
+@Title { HTML Output }
 @Begin @PP
 
 L'output in formato HTML permette di creare un file HTML per la documentazione.
