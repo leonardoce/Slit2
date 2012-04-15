@@ -57,8 +57,7 @@ Every character, if needed, is escaped with the relative HTML entity:
   end;
 @}
 
-Riassumendo esiste una unit definita in modo seguente:
-
+This is the declaration of the @F htmlutils unit:
 
 @d unit htmlutils
 @{
