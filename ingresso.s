@@ -1,24 +1,24 @@
-# :folding=explicit:mode=slitpascal:
+# -*- mode: lout -*-
 
 @Chapter
-@Title { Il parser }
+@Title { Parser }
 @Begin @LP
 
-Slit legge dei file di testo che sono composti da righe di testo normale e da direttive.
-Le direttive sono delle righe che iniziano con il prefisso @Verbatim {@} e che possono essere
-seguite da uno @I {scrap}. @PP
+Slit read text files made be text rows and directives.
+Directives are rows starting with the prefix @Verbatim {@} and
+optionally followed by @I scraps. @PP
 
 @BeginSections
 
 @Section
-@Title { Il driver del parser }
+@Title { Drivers }
 @Begin @PP
 
-Il parser dei files di Slit interpreta direttamente i file e chiama un driver
-per processare le direttive. In questo modo {@Char egrave} possibile sfruttare il parser
-per effettuare pi{@Char ugrave} operazioni in fasi diverse del processo. @PP
+The Slit file parter reads the source files and uses a driver to
+process directives. In this war, we can use the parser to drive
+different phases of the translation process. @PP
 
-Il driver del parser {@Char egrave} una classe che ha la seguente struttura:
+Drivers share this structure:
 
 @d slitstream definizione TSlitStreamDriver
 @{
@@ -46,14 +46,15 @@ end;
 
 @End @Section
 
-@Section @Title { Lettura degli scrap }
+@Section @Title { Scrap reading }
 @Begin @PP
 
-Uno @I {scrap} {@Char egrave} una parte del corpo della macro (oppure l'intera macro) 
-e che inizia con la riga @F @Verbatim @Begin @{ @End @Verbatim e termina con la riga @F @Verbatim @Begin @} @End @Verbatim .
+A scrap represent a part of the body of a macro and starts with the
+row @F @Verbatim @Begin @{ @End @Verbatim and ends with the row
+@F @Verbatim @Begin @} @End @Verbatim .
 @PP
 
-Uno scrap viene quindi letto con il codice seguente:
+A scrap can be read with this code:
 
 @d TSlitStream.ReadScrap
 @{
@@ -85,13 +86,14 @@ end;
 @End @Section
 
 @Section 
-@Title { Direttive }
+@Title { Directives }
 @Begin @PP
 
-La direttiva di definizione @F @Verbatim {@d} permette di definire una nuova macro, il cui
-nome segue la direttiva, con il contenuto dello scrap che segue. @PP
+The macro definition directive @F @Verbatim {@d} permit to create a
+new macro. The directive is followed by the name of the macro and the
+content of the macro is the content of the following scrap. @PP
 
-Per questo viene processata cos{@Char igrave}:
+The @F @Verbatim {@d} is readden with this code:
 
 @d processa direttiva d
 @{
