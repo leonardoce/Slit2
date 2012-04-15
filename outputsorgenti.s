@@ -3,11 +3,11 @@
 @Title { Creazione dei files sorgenti }
 @Begin @PP
 
-La lettura dei files non fa altro che creare i files sorgenti a partire dalle
-macro memorizzate nel magazzino. @PP
+This unit will create source code files using the content already
+added to the macro store. @PP
 
-La procedura @F {ProcessaFiles}, infatti, legge tutto il magazzino delle
-macro alla ricerca delle macro che devono generare dei files:
+The procedure @F {ProcessaFiles} read all the macro store and find the
+macro that define output files:
 
 @d procedure ProcessaFiles
 @{
@@ -34,13 +34,13 @@ begin
 end;
 @}
 
-Ogni file viene generato con lo scrap che corrisponde al suo nome. La
-procedura che scrive lo scrap divide in righe il codice dello scrap
-alla ricerca del riferimento ad una macro. @PP
+Every file is generated using the macro name. This procedure will
+divide the scrap in lines and will process directives including other
+macros. @PP
 
-Se il riferimento @Char egrave quello di una macro si richiama ricorsivamente
-per generare il file, altrimenti stampa la riga al livello di indentazione
-desiderato, che inizialmente @Char egrave 0. 
+If it finds a macro reference it will recursively call the same
+procedure processing the indentation level which, initially, is
+zero. @PP
 
 @d procedure ScriviScrapEspanso
 @{
@@ -77,8 +77,7 @@ begin
 end;
 @}
 
-Le righe del file sorgente vengono scritte ad una ad una leggendo
-dal magazzino delle macro:
+The line inside a file are written from the macro store:
 
 @d ScriviScrapEspanso, scrittura righe del file sorgente
 @{
@@ -114,7 +113,7 @@ begin
 end;
 @}
 
-L'indicazione del numero di riga viene calcolata se se opzioni la ammettono:
+The row number is calculated, if the parameters are saying so:
 
 @d ScriviScrapEspanso, calcolo indicazione del numero di riga
 @{
@@ -140,7 +139,7 @@ begin
 end;
 @}
 
-Riassumendo questo e' il programma principale:
+We are at the point to enounce the main file:
 
 @o slit.pas
 @{
@@ -170,4 +169,7 @@ var
   
   @<slit procedura principale@>
 @}
+
+Goodbye and happy literate programming!
+
 @End @Chapter
