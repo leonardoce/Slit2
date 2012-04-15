@@ -1,11 +1,10 @@
 # -*- mode:lout -*-
 @Chapter
-@Title { Backend di generazione della documentazione }
+@Title { Documentation generating backend }
 @Begin @LP
 
-Slit {@Char egrave} pensato per avere pi{@Char ugrave} formati per la documentazione. Per questo
-l'oggetto che gestisce l'output della documentazione viene modellato
-nel seguente modo:
+Slit can managed different documentation formats. The backend that
+manage the documentation output are designed in this way:
 
 @d TSlitOutput
 @{                                                  
@@ -18,8 +17,7 @@ public
 end;
 @}
 
-Con il metodo "ScriviScrap" {@Char egrave} possibile scrivere sulla documentazione uno
-"scrap" di codice.
+With the method @F ScriviScrap you can write to the documentation a scrap of code.
 
 @o slitoutput.pas
 @{
