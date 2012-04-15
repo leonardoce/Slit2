@@ -1,12 +1,12 @@
 # -*- mode:lout -*-
 @Chapter
-@Title { Driver per la generazione della documentazione }
+@Title { Documentation generator }
 @Begin @LP
 
-Questo driver viene agganciato al parser di Slit per generare la documentazione
-utilizzando uno fra i vari back-end disponibili. @PP
+This driver get bound to the parser to generate documentation using
+one of the predefined backend. @PP
 
-Il driver viene creato collegandolo ad un magazzino di macro:
+The driver is created with a macro store:
 
 @d TSlitStreamDriverGenerazioneDoc.CreateWithOutputStream
 @{
@@ -16,8 +16,8 @@ begin
 end;
 @}
 
-Alla ricezione di una definizione di macro questa viene scritta attraverso
-il backend:
+When a macro definition is received the macro definition must be
+written in the documentation using the backend:
 
 @d TSlitStreamDriverGenerazioneDoc.ProcessaDefinizioneMacro
 @{
@@ -28,8 +28,7 @@ begin
 end;
 @}
 
-Anche quando viene ricevuta una definizione di file questa viene 
-scritta attraverso il backend:
+The same happens whene a file definition is received:
 
 @d TSlitStreamDriverGenerazioneDoc.ProcessaDefinizioneFile
 @{
@@ -40,8 +39,7 @@ begin
 end;
 @}
 
-
-Quando invece si tratta di una aggiunta in coda ad un'altra macro:
+When a macro get added to the end of another:
 
 @d TSlitStreamDriverGenerazioneDoc.ProcessaAggiungiNellaMacro
 @{
@@ -52,7 +50,7 @@ begin
 end;
 @}
 
-Le righe di documentazione vengono passate direttamente:
+The documentation lines are directly wrote:
 
 @d TSlitStreamDriverGenerazioneDoc.ProcessaRigaDocumentazione
 @{
@@ -63,8 +61,8 @@ begin
 end;
 @}
 
-Le opzioni, per la generazione della documentazione, vengono semplicemente
-ignorate. @PP
+Parameters are simply ignored because are handled by the macro store
+driver: @PP
 
 @d TSlitStreamDriverGenerazioneDoc.ProcessaOpzione
 @{
@@ -74,8 +72,8 @@ begin
 end;
 @}
 
-La definizione della classe @F "TSlitStreamDriverGenerazioneDoc" e del file
-dove {@Char egrave} contenuta {@Char egrave} quindi la seguente:
+The definition of the class @F "TSlitStreamDriverGenerazioneDoc" and of the containing file
+is the following:
 
 @o driverdoc.pas
 @{
