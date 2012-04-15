@@ -1,4 +1,4 @@
-# :folding=explicit:mode=slitpascal: 
+# -*- mode:lout -*-
 @Chapter
 @Title { Backend di generazione della documentazione }
 @Begin @LP
