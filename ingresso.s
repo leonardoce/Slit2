@@ -107,16 +107,16 @@ begin
 end;
 @}
 
-All'interno di ogni definizione si pu{@Char ograve} richiamare un'altra macro con la sintassi
-@F @Verbatim { @<nomemacro@> }. Per ulteriori informazioni consultare il capitolo relativo all'output
-dei file sorgenti. @PP
+Inside every macro definition you can call another macro with the
+sintax @F @Verbatim { @<nomemacro@> }. @PP
 
-La direttiva @F @Verbatim { @o } {@Char egrave} equivalente ma la macro viene utilizzata per scrivere un file
-il cui nome {@Char egrave} quello della macro. @PP
+The directive @F @Verbatim { @o } {@Char egrave} is like the
+definition one but is used to write a file whose name is the name of
+the macro. @PP 
 
-L'unica cosa da osservare {@Char egrave} che il nome del file potrebbe essere racchiuso fra
-virtolette @F @Verbatim { "" }. In questo caso le virgolette devono essere rimosse
-dalla stringa del nome della macro. @PP
+The filename can be enclosed by quotation marks @F @Verbatim { ""
+}. When this is true the quotation marks must be removed from the
+filename. @PP
 
 @d processa direttiva o
 @{
@@ -135,11 +135,12 @@ begin
 end;  
 @}
 
-Anche la direttiva @F @Verbatim { @+ } @Char egrave piuttosto simile: infatti serve per
-aggiungere contenuto ad una macro gi{@Char agrave} definita. 
-Processare una direttiva @F @Verbatim {@+} @Char egrave molto simile a 
-processare una direttiva @F @Verbatim { @d }: dal punto di vista del parser
-basta solamente invocare una diversa funzione del driver:
+The directive @F @Verbatim { @+ } @Char egrave is somewhat similiar:
+is't used to add content to an existing macro. 
+To process an @I add directive we can use a process similiar to the
+processing of the definition directive: from the parser point of view
+the only difference is that he must call a different function of the
+driver.
 
 @d processa direttiva +
 @{
@@ -153,9 +154,9 @@ begin
 end;
 @}
 
-La direttiva @F @Verbatim { @i } permette invece di includere un file in un'altro e quindi
-richiama la lettura di un altro file sorgente utilizzando lo stesso magazzino
-di macro e lo stesso output: @PP
+The directive @F @Verbatim { @i } is used to include a file in the
+main file. This code will make the parser read another file using the
+same macro store and the same output: @PP
 
 @d processa direttiva i
 @{
@@ -167,20 +168,21 @@ temporaryStream.Process();
 FreeAndNil(temporaryStream);
 @}
 
-Il nome del file viene interpretato in modo relativo al file corrente. @PP
+The filename is interpresed as relative to the current file. @PP
 
-La direttiva @F @Verbatim { @# } ignora tutto quello che segue e pu{@Char ograve} venire utilizzata
-come commento. @PP
+The directive @F @Verbatim { @# } is the comment directive. All the
+content following this directive is ignored. @PP
 
-La direttiva @F @Verbatim { @x } invece passa a Slit una opzione, che viene gestita
-dal driver che @Char egrave agganciato al parser. @PP
+The directive @F @Verbatim { @x } is used to configure a parameter and
+is managed by the current driver: @PP
 
 @d processa direttiva x
 @{
 FDriver.ProcessaOpzione (MidStr(lineBuffer,3,Length(lineBuffer)-2));
 @}
 
-Se la riga letta non {@Char egrave} una direttiva allora questa viene direttamente scritta sull'output. @PP
+If the read row is not a directive then is interpreted as a
+documentation line: @PP
 
 @d TSlitStream.Process
 @{
@@ -239,10 +241,10 @@ end;
 @End @Section
 
 @Section
-@Title { Gestione del file di input }
+@Title { Streams }
 @Begin @PP
 
-Il file viene aperto quando il flusso viene costruito: 
+Every file is opened then the stream get created:
 
 @d TSlitStream.CreateForFile
 @{
@@ -262,7 +264,7 @@ begin
 end;
 @}
 
-e chiuso quando il flusso viene dismesso:
+and closed when the stream is destroyed:
 
 @d TSlitStream.Destroy
 @{
@@ -298,7 +300,7 @@ public
 end;
 @}
 
-Ci sono poi altre operazioni che richiamano semplicemente quelle primitive:
+The other operations call only the primitives of the stream:
 
 @d TSlitStream altre
 @{
@@ -325,7 +327,7 @@ end;
 @End @Section
 
 @Section
-@Title { Definizione dei flussi di ingresso }
+@Title { slitstream definition }
 @Begin @PP
 
 @o slitstream.pas
