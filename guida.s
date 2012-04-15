@@ -40,7 +40,7 @@ the number of macro that use the just define macro. @PP
 A macro can be not used too, in this case Slit advise the user at the end of the process of production
 of source files. @PP
 @End @Section
-@Section @Title { La direttiva "@o" e sintassi degli scrap }
+@Section @Title { The directive "@o" and the syntax of scraps }
 @Begin @PP
 The directive "@o" is very similar, according to the syntactic point of view, to that "@d".
 Infact is used to define a particular type of macro, which name is used to write a file. @PP

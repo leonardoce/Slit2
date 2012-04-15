@@ -193,7 +193,7 @@ end;
 @Section @Title { Driver definition }
 @Begin @PP
 
-The definition of the class @F @Verbatim TSlitStreamDriverMagazzino
+The definition of the class @F @Verbatim { TSlitStreamDriverMagazzino }
 and of the relative unit is following:
 
 @o drivermagazzino.pas
