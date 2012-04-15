@@ -1,4 +1,4 @@
-# :folding=explicit:mode=slitpascal:
+# -*- mode:lout -*-
 @Chapter
 @Title { Utilità per la gestione dei files html }
 @Begin @LP
