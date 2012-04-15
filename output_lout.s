@@ -107,13 +107,10 @@ writeln(handle, ' @Sym equivalence');
 
 @}
 
-Per ogni testata viene scritto un tag che serve per generare i link che portano
-alla definizione della macro. @PP
+For every macro name a tag is generated so Lout can generate links for
+every macro definition. @PP
 
-Ad ogni tag corrisponde un nome che non deve avere caratteri che non siano
-alfanumerici oppure underscore. @PP
-
-Per questo motivo viene usato, come tag, il progressivo della macro. @PP
+Every created tag has a name generated using an auto-incremented integer. @PP
 
 @d TSlitOutputLout scrivi tag
 @{
@@ -143,12 +140,7 @@ end;
 FreeAndNil(stringhe);
 @}
 
-Per ogni linea vengono separati gli spazi iniziali dal resto della stringa
-e gli spazi iniziali vengono inseriti prima del blocchi verbatim. @PP
-
-Se la riga che si va a scrivere {@Char egrave} un riferimento ad una macro
-allora viene evidenziata in grassetto e viene inserito un link alla
-definizione della macro. 
+If a line in a scraps represent a reference to a macro the link is written in bold face. @PP
 
 @d TSlitOutputLout.ScriviScrap processa linea
 @{
@@ -178,8 +170,7 @@ write(handle, stringaPulita);
 writeln(handle, '@','End @','Verbatim'); 
 @}
 
-Dopo aver scritto il codice viene scritto anche i riferimenti alle macro
-che usano questa. 
+At the end of a scrap we write also the cross-reference:
 
 @d TSlitOutputLout scrivi riferimenti
 @{
@@ -196,7 +187,7 @@ begin
 end;
 @}
 
-La scrittura di una macro {@Char egrave} quindi riassunta in questo codice:
+In summary this is the code to write a scrap:
 
 @d TSlitOutputLout.ScriviScrap
 @{
@@ -223,7 +214,7 @@ begin
 end;
 @}
 
-Riassumendo, il codice di gestione del formato Lout {@Char egrave} il seguente:
+This is the lout backend definition:
 
 @o slitlout.pas
 @{
