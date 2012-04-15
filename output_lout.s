@@ -1,3 +1,4 @@
+# -*- mode: lout -*-
 @Section
 @Title { Output in formato Lout }
 @Begin @PP
