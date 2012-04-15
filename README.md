@@ -25,7 +25,7 @@ example it can be used in Linux and in Windows.
 
 Slit can generate documentation in the following formats:
 
-* LOut [http://savannah.nongnu.org/projects/lout/]
+* LOut - http://savannah.nongnu.org/projects/lout/
 * HTML
 * Text files (using txt2tags) - http://txt2tags.org/
 
