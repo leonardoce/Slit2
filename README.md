@@ -41,28 +41,28 @@ brain use, you can write code.
 For example let's suppose you want to write a simple C program to say
 hello to the world. You could start with something like this:
 
-  @f main.c
-  @{
-  @<include lines@>
-  
-  int main(int argc, char **argv) {
-    @<will do something here@>
-  }
-  @}
+    @f main.c
+    @{
+    @<include lines@>
+    
+    int main(int argc, char **argv) {
+      @<will do something here@>
+    }
+    @}
 
 Well.. I want to print hello world using printf so I will need to
 include stdio.h:
 
-  @d include lines
-  @{
-  #include <stdio.h>
-  @}
-  
+    @d include lines
+    @{
+    #include <stdio.h>
+    @}
+    
 Yeah. Let's say hello to the world:
 
-  @d will do something here
-  @{
-  printf("Hello world!\n");
-  @}
-  
+    @d will do something here
+    @{
+    printf("Hello world!\n");
+    @}
+    
 
