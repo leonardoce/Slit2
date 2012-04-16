@@ -72,6 +72,16 @@ begin
 end;
 @}
 
+When a macro must be recalled from the store with the @I emit
+directive we must interact with the macro store and read the macro:
+
+@d TSlitStreamDriverGenerazioneDoc.ProcessEmitMacro
+@{
+procedure TSlitStreamDriverGenerazioneDoc.ProcessEmitMacro(macroName:String); 
+begin
+end;
+@}
+
 The definition of the class @F "TSlitStreamDriverGenerazioneDoc" and of the containing file
 is the following:
 
@@ -97,6 +107,8 @@ type
       scrapStartLine:Integer); override;
     procedure ProcessaRigaDocumentazione(riga:String);
       override;
+    procedure ProcessEmitMacro(macroName:String); 
+      override;
     procedure ProcessaOpzione(opzione:String);
       override;
   end;
@@ -108,6 +120,7 @@ implementation
   @<TSlitStreamDriverGenerazioneDoc.ProcessaRigaDocumentazione@>
   @<TSlitStreamDriverGenerazioneDoc.ProcessaOpzione@>
   @<TSlitStreamDriverGenerazioneDoc.ProcessaAggiungiNellaMacro@>
+  @<TSlitStreamDriverGenerazioneDoc.ProcessEmitMacro@>
   
 end.
 
