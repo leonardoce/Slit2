@@ -1,3 +1,4 @@
+# -*- mode:lout -*-
 @Chapter
 @Title { User guide}
 @Begin
@@ -203,6 +204,45 @@ like this:
 @F @Verbatim @Begin
 @x comment_markers /.pas/{/}/
 @End @Verbatim. @PP
+
+@End @Section
+
+@Section @Title { "@e" directive }
+@Begin @PP
+
+The @F "@e" directive insert in the documentation an already
+defined macro. This directive is useful to repeat macros more time in
+the documentation, without rewriting the code, and to enable reverse
+literate programming, reading macros directly from the source
+code. @PP
+
+It can be used in this way: @PP
+
+@F @Verbatim @Begin
+ @d my macro
+@{
+this is a little macro
+@}
+
+ @e my_macro
+
+and I will insert it another time:
+
+ @e my_macro
+@End @Verbatim. @PP
+
+@End @Section
+
+@Section @Title { "@r" directive }
+@Begin @PP
+
+The @F "@r" directive read macros directly from source
+files. This enable reverse literate programming: you can write your
+source code adding special markers that Slit will parse to directly
+create macros. @PP
+
+The macros created by the @F "@r" can be used in the
+documentation with the @F "@e" directive.
 
 @End @Section
 

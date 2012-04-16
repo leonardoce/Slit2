@@ -15,12 +15,12 @@ optionally followed by @I scraps. @PP
 @Begin @PP
 
 The Slit file parter reads the source files and uses a driver to
-process directives. In this war, we can use the parser to drive
+process directives. In this way, we can use the parser to drive
 different phases of the translation process. @PP
 
 Drivers share this structure:
 
-@d slitstream definizione TSlitStreamDriver
+@d TSlitStreamDriver definition
 @{
 TSlitStream = class;
 
@@ -275,7 +275,7 @@ begin
 end;
 @}
 
-@d slitstream definizione TSlitStream
+@d TSlitStream definition
 @{
 TSlitStream = class
 private
@@ -340,8 +340,8 @@ interface
   uses macrostore, slitoutput;
 
 type
-  @<slitstream definizione TSlitStreamDriver@>
-  @<slitstream definizione TSlitStream@>
+  @<TSlitStreamDriver definition@>
+  @<TSlitStream definition@>
 
 implementation
   uses sysutils, strutils, slitstatus;
