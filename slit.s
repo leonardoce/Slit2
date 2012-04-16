@@ -28,6 +28,7 @@ the code can be separed in pieces that compose the complete software too. To hav
 @i magazzino.s
 @i statocorrente.s
 @i ingresso.s
+@i sourceparser.s
 @i drivermagazzino.s
 @i drivergenerazionedoc.s
 @i outputdocumentazione.s
