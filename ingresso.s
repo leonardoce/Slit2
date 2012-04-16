@@ -1,7 +1,7 @@
 # -*- mode: lout -*-
 
 @Chapter
-@Title { Parser }
+@Title { Slit files parser }
 @Begin @LP
 
 Slit read text files made be text rows and directives.
