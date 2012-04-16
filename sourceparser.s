@@ -110,7 +110,22 @@ end;
 @Section @Title { Reading macros } 
 @Begin @PP
 
-
+@d TSourceStream.ProcessFile
+@{
+procedure TSourceStream.ProcessFile;
+var
+  currentLine : String;
+begin
+  while not Eof() do
+  begin
+    currentLine := NextLine;
+    if RowIsMarker (currentLine) then
+    begin
+      writeln (currentLine);
+    end;
+  end;
+end;
+@}
 
 @End @Section
 
@@ -196,6 +211,8 @@ private
 public
   constructor CreateForFile (fileName:String; MacroStore:TMacroStore);
   destructor Destroy; override;
+
+  procedure ProcessFile;
 end;
 @}
 
@@ -227,6 +244,7 @@ implementation
   @<TSourceStream.Destroy@>
   @<TSourceStream.NextLine@>
   @<TSourceStream.Eof@>
+  @<TSourceStream.ProcessFile@>
 end.
 @}
 
