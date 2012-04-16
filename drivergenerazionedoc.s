@@ -94,6 +94,15 @@ begin
 end;
 @}
 
+The directive to read another source file has no effect in this driver:
+
+@d TSlitStreamDriverGenerazioneDoc.ProcessReadSourceFile
+@{
+procedure TSlitStreamDriverGenerazioneDoc.ProcessReadSourceFile(fileName:String); 
+begin
+end;
+@}
+
 The definition of the class @F "TSlitStreamDriverGenerazioneDoc" and of the containing file
 is the following:
 
@@ -122,6 +131,8 @@ type
       override;
     procedure ProcessEmitMacro(macroName:String); 
       override;
+    procedure ProcessReadSourceFile(fileName:String); 
+      override;
     procedure ProcessaOpzione(opzione:String);
       override;
   end;
@@ -134,6 +145,7 @@ implementation
   @<TSlitStreamDriverGenerazioneDoc.ProcessaOpzione@>
   @<TSlitStreamDriverGenerazioneDoc.ProcessaAggiungiNellaMacro@>
   @<TSlitStreamDriverGenerazioneDoc.ProcessEmitMacro@>
+  @<TSlitStreamDriverGenerazioneDoc.ProcessReadSourceFile@>
   
 end.
 
