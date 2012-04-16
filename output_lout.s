@@ -89,6 +89,14 @@ The header get written like this:
 
 @d TSlitOutputLout scrivi testata
 @{
+{ Index support }
+write(handle, 'idx.tag.', cleanText(currentMacro.macroName), ' @Index {');
+if tipo=FileScrap then
+begin
+  write(handle, 'FILE ');
+end;
+write(handle, nome, ' } ');
+
 write(handle, '@Sym angleleft { BoldSlope } @Font @','Verbatim @Begin ');
 if tipo=FileScrap then
 begin
@@ -223,7 +231,7 @@ This is the lout backend definition:
 unit slitlout;
 
 interface
-  uses slitoutput, macrostore;
+  uses slitoutput, macrostore, htmlutils;
 
 type
   TSlitOutputLout = class(TSlitOutput)

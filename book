@@ -177,7 +177,7 @@
   # @InGlossaryFormat	{ @Body			} # format for @InGlossary
 
   # @MakeIndex		{ No			} # make index? Yes or No
-   @MakeIndex		{ No			} # make index? Yes or No
+   @MakeIndex		{ Yes			} # make index? Yes or No
   # @MakeIndex		{ Yes			} # make index? Yes or No
   # @IndexText		{ @Null			} # index initial text
   # @IndexFont		{			} # index entries font
