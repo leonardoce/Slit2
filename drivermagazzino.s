@@ -203,6 +203,17 @@ begin
 end;
 @}
 
+@d TSlitStreamDriverMagazzino.ProcessReadSourceFile
+@{
+procedure TSlitStreamDriverMagazzino.ProcessReadSourceFile(fileName:String);
+var
+  stream:TSourceStream;
+begin
+  stream := TSourceStream.CreateForFile (fileName, FMacroStore);
+  FreeAndNil (stream);
+end;
+@}
+
 @End @Section
 
 @Section @Title { Driver definition }
@@ -239,10 +250,12 @@ type
     procedure ProcessaOpzione(opzione:String);
       override;
     procedure GestioneOpzioneCommenti (opzione:String);
+    procedure ProcessReadSourceFile(fileName:String);
+      override;
   end;
 
 implementation
-  uses strutils, sysutils, slitstatus;
+  uses strutils, sysutils, slitstatus, slitsource;
 
   @<TSlitStreamDriverMagazzino.CreateWithMacroStore@>
   @<TSlitStreamDriverMagazzino.ProcessaDefinizioneMacro@>
@@ -252,6 +265,7 @@ implementation
   @<TSlitStreamDriverMagazzino.ProcessaAggiungiNellaMacro@>
   @<TSlitStreamDriverMagazzino.GestioneOpzioneCommenti@>
   @<TSlitStreamDriverMagazzino.ProcessEmitMacro@>
+  @<TSlitStreamDriverMagazzino.ProcessReadSourceFile@>
 end.
 @}
 
