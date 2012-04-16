@@ -8,7 +8,7 @@ Macro are memorized in the macro store.
 
 @d TMacroRecord
 @{
-EMacroType = ( FileMacro, ScrapMacro );
+EMacroType = ( FileMacro, ScrapMacro, ExternalMacro );
 
 RScrapLine = record
   Content:String;

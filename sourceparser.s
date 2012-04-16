@@ -215,7 +215,7 @@ CurrentMacroRecord := FMacroStore.GetMacro (tempMarkerName);
 
 if CurrentMacroRecord=Nil then
 begin
-  FMacroStore.StoreMacro (tempMarkerName, '', ScrapMacro, FFileName, FCurrentLine);
+  FMacroStore.StoreMacro (tempMarkerName, '', ExternalMacro, FFileName, FCurrentLine);
   CurrentMacroRecord := FMacroStore.GetMacro (tempMarkerName);
 end;
 @}

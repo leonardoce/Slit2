@@ -366,7 +366,8 @@ begin
   for i := 0 to store.MacroCount-1 do
   begin
     tempMacro := store.GetRecord( i );
-    if (tempMacro.macroUsersCount = 0) and (tempMacro.macroType <> FileMacro) then
+    if (tempMacro.macroUsersCount = 0) and (tempMacro.macroType <> FileMacro) 
+      and (tempMacro.macroType <> ExternalMacro) then
     begin
       LogErrorMessage('The macro ' + tempMacro.macroName + ' is never used.');
     end;
