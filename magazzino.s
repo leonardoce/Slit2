@@ -375,7 +375,7 @@ type
   @<TMacroStore@>
 
 implementation
-  uses SysUtils, Classes, StrUtils, slitstatus;
+  uses SysUtils, Classes, StrUtils, slitstatus, slitsource;
 
   @<TMacroStore.Create@>
   @<TMacroStore.StoreMacro@>

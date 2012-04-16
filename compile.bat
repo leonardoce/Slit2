@@ -15,6 +15,7 @@ if not exist bin mkdir bin
 pushd bin
 ..\bootstrap\slit ..\slit.s
 fpc -gl slit.pas
+if %ERRORLEVEL%==1 popd & goto end
 .\slit ..\slit.s
 fpc -gl slit.pas
 popd
@@ -28,4 +29,6 @@ pushd bin
 copy ..\book .
 lout slit.s.lout -o slit.ps -r4
 popd
+
+:end
 @echo on
