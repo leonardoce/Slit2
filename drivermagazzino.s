@@ -210,6 +210,7 @@ var
   stream:TSourceStream;
 begin
   stream := TSourceStream.CreateForFile (fileName, FMacroStore);
+  stream.ProcessFile;
   FreeAndNil (stream);
 end;
 @}
