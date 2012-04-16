@@ -35,6 +35,7 @@ public
     scrapStartLine:Integer); virtual; abstract;
   procedure ProcessaDefinizioneFile(nomeMacro:String; scrap:String; 
     scrapStartLine:Integer); virtual; abstract;
+  procedure ProcessEmitMacro(macroName:String); virtual; abstract;
   procedure ProcessaRigaDocumentazione(riga:String);
     virtual; abstract;
   procedure ProcessaOpzione(opzione:String);

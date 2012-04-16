@@ -190,6 +190,21 @@ end;
 
 @End @Section
 
+@Section @Title { Reverse literate programming support }
+@Begin @PP
+
+The @I emit directive is simply ignored: in fact it's only considered
+while generating the documentation. @PP
+
+@d TSlitStreamDriverMagazzino.ProcessEmitMacro
+@{
+procedure TSlitStreamDriverMagazzino.ProcessEmitMacro(macroName:String); 
+begin
+end;
+@}
+
+@End @Section
+
 @Section @Title { Driver definition }
 @Begin @PP
 
@@ -217,6 +232,8 @@ type
       scrapStartLine:Integer); override;
     procedure ProcessaDefinizioneFile(nomeMacro:String; scrap:String;
       scrapStartLine:Integer); override;
+    procedure ProcessEmitMacro(macroName:String); 
+      override;
     procedure ProcessaRigaDocumentazione(riga:String);
       override;
     procedure ProcessaOpzione(opzione:String);
@@ -234,6 +251,7 @@ implementation
   @<TSlitStreamDriverMagazzino.ProcessaOpzione@>
   @<TSlitStreamDriverMagazzino.ProcessaAggiungiNellaMacro@>
   @<TSlitStreamDriverMagazzino.GestioneOpzioneCommenti@>
+  @<TSlitStreamDriverMagazzino.ProcessEmitMacro@>
 end.
 @}
 
