@@ -94,7 +94,7 @@ The macro definition directive @F @Verbatim {@d} permit to create a
 new macro. The directive is followed by the name of the macro and the
 content of the macro is the content of the following scrap. @PP
 
-The @F @Verbatim {@d} is readden with this code:
+The @F @Verbatim {@d} is read with this code:
 
 @d processa direttiva d
 @{
