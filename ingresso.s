@@ -200,6 +200,19 @@ begin
 end;  
 @}
 
+The directive @F "@r" will read a source file to populate the macro
+store: @PP
+
+@d manage directive r
+@{
+macroName := Trim(MidStr(lineBuffer, 3, Length(lineBuffer)-2));
+if FDriver <> Nil then
+begin
+  FDriver.ProcessReadSourceFile(macroName);
+end;  
+@}
+
+
 If the read row is not a directive then is interpreted as a
 documentation line: @PP
 
@@ -231,6 +244,10 @@ begin
     else if AnsiStartsStr('@e ', lineBuffer) then
     begin
       @<manage directive e@>
+    end
+    else if AnsiStartsStr('@r ', lineBuffer) then
+    begin
+      @<manage directive r@>
     end
     else if AnsiStartsStr('@i ', lineBuffer) then
     begin

@@ -144,6 +144,12 @@ begin
 
   PrendiMarcatori (FFileName, FCommentStart, FCommentEnd);
 
+  if not FileExists(fileName) then
+  begin
+    writeln('The file ', fileName, ' doesn''t exists');
+    Abort;
+  end;
+
   Assign (handle, fileName);
   Reset (handle);
 end;
