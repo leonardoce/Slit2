@@ -150,7 +150,6 @@ begin
       begin
         @<TSourceStream.ProcessFile, closing marker@>
       end;
-      writeln (currentLine);
     end
     else
     begin
@@ -213,6 +212,12 @@ begin
 end;
 PushMacroName(tempMarkerName);
 CurrentMacroRecord := FMacroStore.GetMacro (tempMarkerName);
+
+if CurrentMacroRecord=Nil then
+begin
+  FMacroStore.StoreMacro (tempMarkerName, '', ScrapMacro, FFileName, FCurrentLine);
+  CurrentMacroRecord := FMacroStore.GetMacro (tempMarkerName);
+end;
 @}
 
 When the macro is closed we will check is the name of the closed macro
@@ -253,7 +258,7 @@ When we encounder a code line we must insert it in the macro store:
 @{
 if CurrentMacroRecord<>Nil then
 begin
-  CurrentMacroRecord.AddContent (tempMarkerName, FFileName, FCurrentLine);
+  CurrentMacroRecord.AddContent (currentLine, FFileName, FCurrentLine);
 end;
 @}
 
