@@ -89,7 +89,7 @@ begin
   end
   else
   begin
-    FOutputStream.ScriviScrap(AppendScrap, macroName, MRecord.MacroContent);    
+    FOutputStream.ScriviScrap(DefinitionScrap, macroName, MRecord.MacroContent);    
   end;
 end;
 @}
