@@ -69,6 +69,22 @@ begin
 end;
 @}
 
+This is the text front-end:
+
+@d TSlitOutputTxt
+@{
+TSlitOutputTxt = class(TSlitOutput)
+private
+  handle:Text;
+public
+  constructor CreateForFile(fileName:String);
+  destructor Destroy; override;
+
+  procedure ScriviScrap(tipo:EScrapType; nome, contenuto:String); override;
+  procedure PutLine(str:String); override;
+end;
+@}
+
 This is the definition of the text backend:
 
 @o slittxt.pas
@@ -82,16 +98,7 @@ interface
 
 type
 
-  TSlitOutputTxt = class(TSlitOutput)
-  private
-    handle:Text;
-  public
-    constructor CreateForFile(fileName:String);
-    destructor Destroy; override;
-
-    procedure ScriviScrap(tipo:EScrapType; nome, contenuto:String); override;
-    procedure PutLine(str:String); override;
-  end;
+  @<TSlitOutputTxt@>
 
 implementation
   uses sysutils, strutils, classes;
