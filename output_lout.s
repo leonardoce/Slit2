@@ -90,12 +90,24 @@ The header get written like this:
 @d TSlitOutputLout scrivi testata
 @{
 { Index support }
-write(handle, 'idx.tag.', cleanText(currentMacro.macroName), ' @Index {');
-if tipo=FileScrap then
+if (tipo<>FileScrap) and AnsiContainsStr(currentMacro.macroName, '.') then
 begin
-  write(handle, 'FILE ');
+  write(handle, 'idx.tag.', cleanText(currentMacro.macroName), ' @SubIndex {');
+  write(handle, MidStr(nome, NPos('.',nome,1), Length(nome)), ' } ');
+end
+else
+begin
+  if tipo=FileScrap then
+  begin
+    write(handle, 'file.idx.tag.', cleanText(currentMacro.macroName), ' @Index {');
+    write(handle, 'FILE ');
+  end
+  else
+  begin
+    write(handle, 'idx.tag.', cleanText(currentMacro.macroName), ' @Index {');
+  end;
+  write(handle, nome, ' } ');
 end;
-write(handle, nome, ' } ');
 
 write(handle, '@Sym angleleft { BoldSlope } @Font @','Verbatim @Begin ');
 if tipo=FileScrap then
@@ -222,6 +234,22 @@ begin
 end;
 @}
 
+This is the Lout frontend:
+
+@d TSlitOutputLout
+@{
+TSlitOutputLout = class(TSlitOutput)
+private
+  handle:Text;
+  FStore: TMacroStore;
+public
+  constructor CreateForFileAndStore(fileName:String; store:TMacroStore);
+  destructor Destroy; override;
+  procedure PutLine(str:String); override;
+  procedure ScriviScrap(tipo:EScrapType; nome, contenuto:String); override;
+end;
+@}
+
 This is the lout backend definition:
 
 @o slitlout.pas
@@ -234,16 +262,7 @@ interface
   uses slitoutput, macrostore, htmlutils;
 
 type
-  TSlitOutputLout = class(TSlitOutput)
-  private
-    handle:Text;
-    FStore: TMacroStore;
-  public
-    constructor CreateForFileAndStore(fileName:String; store:TMacroStore);
-    destructor Destroy; override;
-    procedure PutLine(str:String); override;
-    procedure ScriviScrap(tipo:EScrapType; nome, contenuto:String); override;
-  end;
+  @<TSlitOutputLout@>
 
 implementation
   uses sysutils, strutils, classes, slitstatus;
