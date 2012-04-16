@@ -20,7 +20,7 @@ different phases of the translation process. @PP
 
 Drivers share this structure:
 
-@d TSlitStreamDriver definition
+@d TSlitStreamDriver
 @{
 TSlitStream = class;
 
@@ -297,7 +297,7 @@ begin
 end;
 @}
 
-@d TSlitStream definition
+@d TSlitStream
 @{
 TSlitStream = class
 private
@@ -324,7 +324,7 @@ end;
 
 The other operations call only the primitives of the stream:
 
-@d TSlitStream altre
+@d TSlitStream.others
 @{
 function TSlitStream.NextLine:String;
 var
@@ -362,8 +362,8 @@ interface
   uses macrostore, slitoutput;
 
 type
-  @<TSlitStreamDriver definition@>
-  @<TSlitStream definition@>
+  @<TSlitStreamDriver@>
+  @<TSlitStream@>
 
 implementation
   uses sysutils, strutils, slitstatus;
@@ -372,7 +372,7 @@ implementation
   @<TSlitStream.Destroy@>
   @<TSlitStream.ReadScrap@>
   @<TSlitStream.Process@>
-  @<TSlitStream altre@>
+  @<TSlitStream.others@>
 end.
 @}
 @End @Section
