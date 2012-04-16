@@ -1,6 +1,6 @@
 # -*- mode:lout -*-
 @Section
-@Title { Output in formato testo }
+@Title { Text output }
 @Begin @PP
 
 Slit can also write text files. The format used is designed to use the
