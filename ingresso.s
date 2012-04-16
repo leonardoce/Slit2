@@ -182,6 +182,23 @@ is managed by the current driver: @PP
 FDriver.ProcessaOpzione (MidStr(lineBuffer,3,Length(lineBuffer)-2));
 @}
 
+The directive @F "@e" can be used to emit, multiple times, a macro:
+
+@d manage directive e
+@{
+macroName := Trim(MidStr(lineBuffer, 3, Length(lineBuffer)-2));
+
+if AnsiStartsStr('"', macroName) and AnsiEndsStr('"', macroName) then
+begin
+  macroName := MidStr(macroName, 2, Length(macroName)-2);
+end;
+
+if FDriver <> Nil then
+begin
+  FDriver.ProcessEmitMacro(macroName);
+end;  
+@}
+
 If the read row is not a directive then is interpreted as a
 documentation line: @PP
 
@@ -209,6 +226,10 @@ begin
     else if AnsiStartsStr('@o ', lineBuffer) then
     begin
       @<processa direttiva o@>
+    end
+    else if AnsiStartsStr('@e ', lineBuffer) then
+    begin
+      @<manage directive e@>
     end
     else if AnsiStartsStr('@i ', lineBuffer) then
     begin
