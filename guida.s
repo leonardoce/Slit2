@@ -380,7 +380,7 @@ Now the documentation can be generated:
 @{
 streamOutputDocumentazione := CreaStreamOutputDaOpzioni(ParamStr(1), store);
 driverScriviDocumentazione :=
-  TSlitStreamDriverGenerazioneDoc.CreateWithOutputStream( streamOutputDocumentazione );
+  TSlitStreamDriverGenerazioneDoc.Create( streamOutputDocumentazione, store );
 
 stream.Driver := driverScriviDocumentazione;
 stream.Process();

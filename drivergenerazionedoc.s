@@ -8,11 +8,12 @@ one of the predefined backend. @PP
 
 The driver is created with a macro store:
 
-@d TSlitStreamDriverGenerazioneDoc.CreateWithOutputStream
+@d TSlitStreamDriverGenerazioneDoc.Create
 @{
-constructor TSlitStreamDriverGenerazioneDoc.CreateWithOutputStream(output:TSlitOutput);
+constructor TSlitStreamDriverGenerazioneDoc.Create(output:TSlitOutput; store:TMacroStore);
 begin
   FOutputStream := output;
+  FMacroStore := store;
 end;
 @}
 
@@ -78,7 +79,18 @@ directive we must interact with the macro store and read the macro:
 @d TSlitStreamDriverGenerazioneDoc.ProcessEmitMacro
 @{
 procedure TSlitStreamDriverGenerazioneDoc.ProcessEmitMacro(macroName:String); 
+var
+  MRecord : TMacroRecord;
 begin
+  MRecord := FMacroStore.GetMacro (macroName);
+  if MRecord=Nil then
+  begin
+    LogErrorMessage ('This macro is unknown: <' + macroName + '>');
+  end
+  else
+  begin
+    FOutputStream.ScriviScrap(AppendScrap, macroName, MRecord.MacroContent);    
+  end;
 end;
 @}
 
@@ -92,13 +104,14 @@ is the following:
 unit driverdoc;
 
 interface
-  uses slitoutput, slitstream, macrostore;
+  uses slitoutput, slitstream, macrostore, slitstatus;
 
 type
   TSlitStreamDriverGenerazioneDoc = class(TSlitStreamDriver)
     FOutputStream: TSlitOutput;
+    FMacroStore: TMacroStore;
   public
-    constructor CreateWithOutputStream(output:TSlitOutput);
+    constructor Create(output:TSlitOutput; store:TMacroStore);
     procedure ProcessaDefinizioneMacro(nomeMacro:String; scrap:String; 
       scrapStartLine:Integer); override;
     procedure ProcessaDefinizioneFile(nomeMacro:String; scrap:String; 
@@ -114,7 +127,7 @@ type
   end;
 
 implementation
-  @<TSlitStreamDriverGenerazioneDoc.CreateWithOutputStream@>
+  @<TSlitStreamDriverGenerazioneDoc.Create@>
   @<TSlitStreamDriverGenerazioneDoc.ProcessaDefinizioneMacro@>
   @<TSlitStreamDriverGenerazioneDoc.ProcessaDefinizioneFile@>
   @<TSlitStreamDriverGenerazioneDoc.ProcessaRigaDocumentazione@>
