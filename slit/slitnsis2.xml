@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+
+<MODE>
+	<PROPS>
+		<!--PROPERTY NAME="commentStart" VALUE="&lt;" />
+		<PROPERTY NAME="commentEnd" VALUE="&gt;" /-->
+	</PROPS>
+
+	<RULES IGNORE_CASE="TRUE">
+		<!-- Java -->
+		<SPAN TYPE="MARKUP" DELEGATE="nsis2::MAIN">
+			<BEGIN>@{</BEGIN>
+			<END>@}</END>
+		</SPAN>
+
+    <SEQ_REGEXP TYPE="KEYWORD1">@[A-Za-z]+</SEQ_REGEXP>    
+		
+		<EOL_SPAN TYPE="FUNCTION">@d </EOL_SPAN>
+		
+		<EOL_SPAN TYPE="FUNCTION">@o </EOL_SPAN>
+	</RULES>
+</MODE>
