@@ -42,6 +42,7 @@ end.
 @i output_html.s
 @i output_txt.s
 @i output_lout.s
+@i output_tex.s
 
 @EndSections
 @End @Chapter

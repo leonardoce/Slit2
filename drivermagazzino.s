@@ -128,6 +128,10 @@ begin
   begin
     SetNomeProcessoreInformazioni ('txt');
   end
+  else if opzione='output_tex' then
+  begin
+    SetNomeProcessoreInformazioni ('tex');
+  end
   else if opzione='section_markers' then
   begin
     SetGenerazioneMarcatoriAbilitata(true);

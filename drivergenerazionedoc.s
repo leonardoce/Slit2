@@ -89,6 +89,7 @@ begin
   end
   else
   begin
+    MRecord.IsEnounced := True;
     FOutputStream.ScriviScrap(DefinitionScrap, macroName, MRecord.MacroContent);    
   end;
 end;

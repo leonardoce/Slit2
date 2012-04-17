@@ -63,104 +63,62 @@ The macro name is written in italic inside angular brackets. @PP
 
 The header is written like this:
 
-@d TSlitOutputTeX scrivi testata
+@d TSlitOutputTeX.header
 @{
-write(handle, '\ll ');
-if tipo=FileScrap then
-begin
-  write(handle, 'FILE ');
-end;
-write(handle, nome, ' @','End @','Verbatim ');
-
-write(handle, '@I {', currentMacro.macroProgr, ' } ');
-
-write(handle, ' @Sym angleright'); 
-if tipo=AppendScrap then
-begin
-  write(handle, ' @Sym plus');
-end;
-writeln(handle, ' @Sym equivalence');
-
+writeln(handle, '\vbox {');
+writeln(handle, '\vskip 20 pt');
+writeln(handle, '\parindent = 0 pt');
+writeln(handle, '\parskip = 0 pt');
+writeln(handle, '$ \ll $ { \textbf ', currentMacro.macroName, ' } { \itshape ', 
+  currentMacro.macroProgr ,' } $ \gg \equiv $');
+writeln(handle, '\begin{quote}');
+writeln(handle, '\begin{verbatim}');
 @}
 
-For every macro name a tag is generated so Lout can generate links for
-every macro definition. @PP
+For every macro name a tag is generated for cross-reference sake. @PP
 
-Every created tag has a name generated using an auto-incremented integer. @PP
-
-@d TSlitOutputTeX scrivi tag
+@d TSlitOutputTeX.tag
 @{
-writeln(handle, '@PageMark { ', currentMacro.macroProgr, ' } ');
+writeln(handle, '\label{tag:', currentMacro.macroProgr, '} ');
 @}
 
-Il codice scritto dall'utente viene inserito fra blocchi
-verbatim ovvero fra @Verbatim { "@Verbatim @Begin" } e @Verbatim { "@End @Verbatim" }. @PP 
+This section will write source code:
 
-Tutto il codice {@Char egrave} racchiuso fra @Verbatim { "@LeftDisplay lines @Break" }, che permette
-di rendere l'indentazione significativa. @PP
-
-Il codice viene prima diviso in linee e gli spazi che vengono prima del
-primo scritto vengono isolati dal codice perch{@Char eacute} sono significativi per
-la versione: @PP
-
-@d TSlitOutputTeX scrivi codice
+@d TSlitOutputTeX.code
 @{
 stringhe := TStringList.Create;
 stringhe.Text := contenuto;
 
 for i := 0 to stringhe.Count-1 do
 begin
-  @<TSlitOutputTeX.ScriviScrap processa linea@>
+  writeln(handle, stringhe.Strings[i]);
 end;
 
 FreeAndNil(stringhe);
 @}
 
-If a line in a scraps represent a reference to a macro the link is written in bold face. @PP
+At the end of a scrap we write also write the cross-reference:
 
-@d TSlitOutputTeX.ScriviScrap processa linea
+@d TSlitOutputTeX.refs
 @{
-spazi := Length( stringhe.Strings[i] );
-spazi := spazi - Length(TrimLeft(stringhe.Strings[i]));
-for j := 1 to spazi do
-begin
-  write(handle, ' ');
-end;
-write(handle, '   ');
-
-stringaPulita := Trim(stringhe.Strings[i]);
-if AnsiStartsStr('@<', stringaPulita) and
-   AnsiEndsStr('@>', stringaPulita) then
-begin
-  nomeDefinizione := MidStr(stringaPulita, 3, Length(stringaPulita)-4);
-  macroTemp := FStore.GetMacro( nomeDefinizione );
-  if macroTemp<>Nil then
-  begin
-    write(handle, '@I { ', macroTemp.macroProgr, ' } @CrossLink ');
-    stringaPulita := '<' + nomeDefinizione + ' ' + IntToStr(macroTemp.macroProgr) + '>';
-  end;
-end;
-
-write(handle, '@','Verbatim @','Begin ');
-write(handle, stringaPulita);
-writeln(handle, '@','End @','Verbatim'); 
-@}
-
-At the end of a scrap we write also the cross-reference:
-
-@d TSlitOutputTeX scrivi riferimenti
-@{
+writeln(handle, '\end{verbatim}');
 if currentMacro.macroUsersCount <> 0 then
 begin
-  write(handle, '{ -1p setsmallcaps 0.9 } @Font { ');
-  write(handle, 'Usata da: ');
+  writeln(handle, 'Used by: ');
   for i:=0 to currentMacro.macroUsersCount-1 do
   begin
-    write(handle, ' { ', currentMacro.macroUsers[i], ' } @CrossLink { ');
-    write(handle, currentMacro.macroUsers[i], ' } ');
+    writeln(handle, '\hyperref[tag:', currentMacro.macroUsers[i], '] {', currentMacro.macroUsers[i], '}');
   end;
-  write(handle, ' } ');
 end;
+@}
+
+The footer is plain simple:
+
+@d TSlitOutputTeX.footer
+@{
+writeln(handle, '\end{quote}');
+writeln(handle, '\vskip 20 pt');
+writeln(handle, '}');
 @}
 
 In summary this is the code to write a scrap:
@@ -170,22 +128,19 @@ In summary this is the code to write a scrap:
 procedure TSlitOutputTeX.ScriviScrap(tipo:EScrapType; nome, contenuto:String);
 var
   stringhe:TStringList;
-  spazi:integer;
-  stringaPulita, nomeDefinizione: String;
-  i, j:integer;
-  currentMacro, macroTemp: TMacroRecord;  
+  i:integer;
+  currentMacro: TMacroRecord;  
 begin
   currentMacro := FStore.GetMacro(nome);
 
   if currentMacro<>Nil then
   begin
-    @<TSlitOutputTeX scrivi tag@>
+    @<TSlitOutputTeX.tag@>
     
-    writeln(handle, '@LeftDisplay lines @Break {');  
-    @<TSlitOutputTeX scrivi testata@>
-    @<TSlitOutputTeX scrivi codice@>
-    @<TSlitOutputTeX scrivi riferimenti@>
-    writeln(handle, '}');
+    @<TSlitOutputTeX.header@>
+    @<TSlitOutputTeX.code@>
+    @<TSlitOutputTeX.refs@>
+    @<TSlitOutputTeX.footer@>
   end;
 end;
 @}

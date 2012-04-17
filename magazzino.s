@@ -23,6 +23,7 @@ private
   FMacroLinesCount:Integer;
   FMacroProgr:Integer;
   FMacroType:EMacroType;
+  FEnounced:Boolean;
 
   procedure AddLine (Content:String; FileCorrente:String; LineaCorrente:Integer);
   function ReadMacroContent:String;
@@ -41,6 +42,7 @@ public
   procedure AddContent (Content:String; FileCorrente:String; LineaCorrente:Integer);
   property MacroLinesCount:integer read FMacroLinesCount;
   property MacroLine[idx:Integer]:RScrapLine read GetMacroLine;
+  property IsEnounced:Boolean read FEnounced write FEnounced;
 end;
 @}
 
