@@ -50,7 +50,11 @@ begin
   begin
     NomeProcessoreInformazioni := 'txt';
   end
-  else
+  else if value='tex' then
+  begin
+    NomeProcessoreInformazioni := 'tex';
+  end
+  else  
   begin
     raise Exception.Create('Nome processore informazioni non conosciuto: ' +
       value);
@@ -76,6 +80,10 @@ begin
   else if NomeProcessoreInformazioni='html' then
   begin
     Result := TSlitOutputHtml.CreateForFile (NomeFile);
+  end
+  else if NomeProcessoreInformazioni='tex' then
+  begin
+    Result := TSlitOutputTex.CreateForFileAndStore (NomeFile, store);
   end
   else
   begin
@@ -404,7 +412,7 @@ procedure PrendiMarcatori (NomeFile:String; var Inizio:String; var Fine:String);
 
 implementation
 
-uses sysutils, slithtml, slitlout, slittxt, strutils;
+uses sysutils, slithtml, slitlout, slittxt, slittex, strutils;
 
 type
   @<slitstatus, RInformazioniLinguaggi@>
