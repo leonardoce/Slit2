@@ -58,7 +58,7 @@ begin
 end;
 @}
 
-The scrapt must be formatted in a particular way to make Lout handle them correctly.
+The scrap must be formatted in a particular way to make Lout handle them correctly.
 The macro name is written in italic inside angular brackets. @PP
 
 The header is written like this:
