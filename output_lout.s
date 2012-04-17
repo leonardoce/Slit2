@@ -137,15 +137,8 @@ Every created tag has a name generated using an auto-incremented integer. @PP
 writeln(handle, '@PageMark { ', currentMacro.macroProgr, ' } ');
 @}
 
-Il codice scritto dall'utente viene inserito fra blocchi
-verbatim ovvero fra @Verbatim { "@Verbatim @Begin" } e @Verbatim { "@End @Verbatim" }. @PP 
-
-Tutto il codice {@Char egrave} racchiuso fra @Verbatim { "@LeftDisplay lines @Break" }, che permette
-di rendere l'indentazione significativa. @PP
-
-Il codice viene prima diviso in linee e gli spazi che vengono prima del
-primo scritto vengono isolati dal codice perch{@Char eacute} sono significativi per
-la versione: @PP
+Source code is enclosed in verbatim blocks and the generated LOut
+source code makes indentation significative. @PP
 
 @d TSlitOutputLout scrivi codice
 @{
