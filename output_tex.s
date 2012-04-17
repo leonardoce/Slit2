@@ -48,7 +48,7 @@ var
 
 begin
   tempStr := Trim(str);
-  if (AnsiStartsStr('% ', tempStr))
+  if (AnsiStartsStr('% ', tempStr)) then
   begin
     writeln (handle, '% ', GetCurrentParsingFile(), ':',
       GetCurrentParsingLine() );
@@ -208,11 +208,11 @@ end;
 
 This is the lout backend definition:
 
-@o slitlout.pas
+@o slittex.pas
 @{
 {$MODE OBJFPC}
 {$H+}
-unit slitlout;
+unit slittex;
 
 interface
   uses slitoutput, macrostore, htmlutils;
