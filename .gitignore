@@ -1,0 +1,9 @@
+bin
+dist
+*.o
+*.ppu
+*.exe
+bootstrap/slit
+*~
+\#*\#
+.\#*
