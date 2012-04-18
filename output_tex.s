@@ -69,7 +69,8 @@ writeln(handle, '\vbox {');
 writeln(handle, '\vskip 20 pt');
 writeln(handle, '\parindent = 0 pt');
 writeln(handle, '\parskip = 0 pt');
-writeln(handle, '$ \ll $ { \textbf ', currentMacro.macroName, ' } { \itshape ', 
+writeln(handle, '$ \ll $ { \textbf ', 
+	EscapeSpecialCharacters(currentMacro.macroName), ' } { \itshape ', 
   currentMacro.macroProgr ,' } $ \gg \equiv $');
 writeln(handle, '\begin{quote}');
 writeln(handle, '\begin{verbatim}');
@@ -160,6 +161,7 @@ public
   destructor Destroy; override;
   procedure PutLine(str:String); override;
   procedure ScriviScrap(tipo:EScrapType; nome, contenuto:String); override;
+  function EscapeSpecialCharacters(orig:String):String; (*TODO  # $ % & ~ _ ^ \ { }*)
 end;
 @}
 
