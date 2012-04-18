@@ -82,7 +82,9 @@ For every macro name a tag is generated for cross-reference sake. @PP
 writeln(handle, '\label{tag:', currentMacro.macroProgr, '} ');
 @}
 
-This section will write source code:
+This section will write source code. LaTex won't insert tab characters
+in verbatim section. So tabs must be expanded to spaces. Here we suppose
+that tab characters are represented by 4 spaces.
 
 @d TSlitOutputTeX.code
 @{
@@ -91,7 +93,7 @@ stringhe.Text := contenuto;
 
 for i := 0 to stringhe.Count-1 do
 begin
-  writeln(handle, stringhe.Strings[i]);
+  writeln(handle, StringReplace(stringhe.Strings[i],#9,'    ',[rfReplaceAll]));
 end;
 
 FreeAndNil(stringhe);
