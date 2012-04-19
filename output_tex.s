@@ -115,6 +115,54 @@ begin
 end;
 @}
 
+When we write strings in the documentation we must escape TeX special 
+characters with this function:
+
+@d TSlitOutputTeX.EscapeSpecialCharacters
+@{
+function TSlitOutputTeX.EscapeSpecialCharacters(orig:String):String;
+  @<TSlitOutputTeX.IsCharSpecial@>  
+
+var    
+  i:Integer;
+  buffer:String;
+  
+begin
+  buffer := '';
+  
+  for i:=1 to Length(orig) do
+  begin
+    if IsCharSpecial(orig[i]) then
+    begin
+      buffer := buffer + '\';
+    end;
+    buffer := buffer + orig[i];
+  end;
+  
+  Result := buffer;
+end;
+@}
+
+Special characters are identified here:
+
+@d TSlitOutputTeX.IsCharSpecial
+@{
+function IsCharSpecial (v:Char):Boolean;
+begin
+  if v='#' then      Result:=True
+  else if v='$' then Result:=True
+  else if v='%' then Result:=True
+  else if v='&' then Result:=True
+  else if v='~' then Result:=True
+  else if v='_' then Result:=True
+  else if v='^' then Result:=True
+  else if v='\' then Result:=True
+  else if v='{' then Result:=True
+  else if v='}' then Result:=True
+  else               Result:=False;
+end;
+@}
+
 The footer is plain simple:
 
 @d TSlitOutputTeX.footer
@@ -161,7 +209,7 @@ public
   destructor Destroy; override;
   procedure PutLine(str:String); override;
   procedure ScriviScrap(tipo:EScrapType; nome, contenuto:String); override;
-  function EscapeSpecialCharacters(orig:String):String; (*TODO  # $ % & ~ _ ^ \ { }*)
+  function EscapeSpecialCharacters(orig:String):String;
 end;
 @}
 
@@ -186,6 +234,7 @@ implementation
   @<TSlitOutputTeX.Destroy@>
   @<TSlitOutputTeX.PutLine@>
   @<TSlitOutputTeX.ScriviScrap@>
+  @<TSlitOutputTeX.EscapeSpecialCharacters@>
 
 end.
 @}
