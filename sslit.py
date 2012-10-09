@@ -1,5 +1,8 @@
 #>
-# Simple Slit implementation.
+# This is an implementation of a bare literate programming tool.
+# This literate programming style doesn't support macros not file
+# generation.
+#<
 import sys
 
 def tabToSpaces(row):
@@ -42,7 +45,6 @@ class TextStatus(Status):
 
     elif len(row)>=self._firstLine:
       if row.startswith(self._prefix):
-        print "pre", "<"+self._prefix+">"
         row = row[len(self._prefix)+1:]
 
       self.output(row)
