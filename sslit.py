@@ -18,20 +18,16 @@ import sys
 # must came before a particular "documentation start" marker and must 
 # be followed by a particular "documentation end" marker.
 #
-# A documentation start line must:
-# 
-# * be long 3 characters or less;
-# * end with a `>` sign.
+# A documentation start line must be long 3 characters or less and ending 
+# with a `>` sign.
 #<
 
 def isDocumentationStart(line):
 	return len(line)<=3 and line.endswith(">")
 
 #>
-# A documentation end line must:
-#
-# * be long 3 characters or less;
-# * end or start with a `<` sign.
+# A documentation end line must be long 3 characters or less and ending 
+# or starting with a `<` sign.
 #<
 
 def isDocumentationEnd(line):
