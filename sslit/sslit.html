@@ -1,0 +1,86 @@
+<h1 id="bare-literate-programming-tool">Bare literate programming tool</h1>
+<pre><code>import sys</code></pre>
+<p>This is an implementation of a bare literate programming tool. This literate programming style doesn't support macros not file generation.</p>
+<p>To cut a long story short, this literate programming tool extracts MarkDown-style comments from a source code. The code, instead, is formatted as a preformatted block.</p>
+<p>To recognize markdown-documentation from source code the documentation must came before a particular &quot;documentation start&quot; marker and must be followed by a particular &quot;documentation end&quot; marker.</p>
+<p>A documentation start line must be long 3 characters or less and ending with a <code>&gt;</code> sign.</p>
+<pre><code>def isDocumentationStart(line):
+    return len(line)&lt;=3 and line.endswith(&quot;&gt;&quot;)</code></pre>
+<p>A documentation end line must be long 3 characters or less and ending or starting with a <code>&lt;</code> sign.</p>
+<pre><code>def isDocumentationEnd(line):
+    return len(line)&lt;=3 and (line.endswith(&quot;&lt;&quot;) or line.startswith(&quot;&lt;&quot;))</code></pre>
+<h2 id="documentation-extractor">Documentation extractor</h2>
+<p>The documentation extractor is implemented as a simple state machine which can be in code-status or in documentation-status. Every state machine status can output the extracted documentation:</p>
+<pre><code>class Status(object):
+  def output(self, s):
+    print s</code></pre>
+<h3 id="code-status">Code status</h3>
+<p>The code status outputs, before the source code, 4 spaces. This is the MarkDown syntax for a code block. The first line of a code block is used to calculate a common prefix for all the lines of the code block.</p>
+<p>This renders correctly source code with a common indentation level.</p>
+<pre><code>class CodeStatus(Status):
+  def __init__(self):
+    self._firstLine = True
+
+  def process(self, row):
+    if self._firstLine:
+      self._firstCol = len(row) - len(row.lstrip())
+      self._firstLine = False
+      row = row.lstrip()
+
+    elif len(row)&gt;=self._firstLine:
+      row = row[self._firstCol:]
+
+    self.output(&quot;    &quot; + row)</code></pre>
+<h3 id="documentation-status">Documentation status</h3>
+<p>The documentation status simply output the documentation as-is without a common prefix (if exists):</p>
+<pre><code>class TextStatus(Status):
+  def __init__(self):
+    self._firstLine = True
+    self._prefix = None
+
+  def process(self, row):
+    if self._firstLine:
+      self._firstLine = False
+      self._prefix = row[:-1]
+      row = row.lstrip()
+
+    elif len(row)&gt;=self._firstLine:
+      if row.startswith(self._prefix):
+        row = row[len(self._prefix)+1:]
+
+      self.output(row)</code></pre>
+<h3 id="state-machine">State machine</h3>
+<p>The current status is changed when the program see a documentation start/end line:</p>
+<pre><code>def process(fileName):
+  status = CodeStatus()
+
+  for row in open(fileName):
+    row = row.rstrip()
+    row = tabToSpaces(row)
+
+    if isDocumentationStart(row.strip()):
+      status = TextStatus()
+      status.process(row)
+    elif isDocumentationEnd(row.strip()):
+      status = CodeStatus()
+    else:
+      status.process(row)</code></pre>
+<h2 id="utilities">Utilities</h2>
+<p>To calculate the common prefix of a documentation block the source code lines are considerated with tabs expanded to 4 spaces:</p>
+<pre><code>def tabToSpaces(row):
+  result = &quot;&quot;
+  while len(row)&gt;0 and row[0]==&#39;\t&#39;:
+    result += &quot;    &quot;
+    row = row[1:]
+  result += row
+  return result</code></pre>
+<h2 id="starting-point">Starting point</h2>
+<p>The script file implements only a file filter: it takes an input file parameter and write, on the standard output device, the extracted documentation:</p>
+<pre><code>def main():
+  if len(sys.argv)!=2:
+    print &quot;Use:&quot;, sys.argv[0], &quot;&lt;in&gt;&quot;
+    return
+  else:
+    process(sys.argv[1])
+
+if __name__==&quot;__main__&quot;: main()</code></pre>
