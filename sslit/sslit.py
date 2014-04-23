@@ -1,3 +1,4 @@
+#!/usr/bin/env python2
 #>
 # Bare literate programming tool
 # ==============================
